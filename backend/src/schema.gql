@@ -2,6 +2,51 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type ErrorType {
+  code: String
+  message: String!
+}
+
+input LoginDto {
+  email: String!
+  password: String!
+}
+
+type LoginResponse {
+  error: ErrorType
+  user: User
+}
+
+type Mutation {
+  login(registerInput: LoginDto!): LoginResponse!
+  logout: String!
+  refreshToken: String!
+  register(registerInput: RegisterDto!): RegisterResponse!
+}
+
 type Query {
-  temp: String!
+  hello: String!
+}
+
+input RegisterDto {
+  confirmPassword: String!
+  email: String!
+  fullname: String!
+  password: String!
+}
+
+type RegisterResponse {
+  error: ErrorType
+  user: User
+}
+
+type User {
+  bio: String
+  createdAt: String!
+  email: String!
+  fullname: String!
+  id: Int!
+  image: String
+  password: String!
+  updatedAt: String!
 }

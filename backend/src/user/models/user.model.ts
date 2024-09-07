@@ -22,8 +22,8 @@ export class User {
   password: string;
 
   @Field(() => String)
-  createdAt: string;
+  createdAt: Date;
 
   @Field(() => String)
-  updatedAt: string;
+  updatedAt: Date;
 }

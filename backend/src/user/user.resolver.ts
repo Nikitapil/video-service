@@ -6,6 +6,8 @@ import { RegisterDto } from '../auth/dto/register.dto';
 import { Request, Response } from 'express';
 import { LoginDto } from '../auth/dto/login.dto';
 import { LoginResponse } from '../auth/types/LoginResponse';
+import { UseFilters } from '@nestjs/common';
+import { GraphQlErrorFilter } from '../filters/custom-exception.filter';
 
 @Resolver()
 export class UserResolver {
@@ -15,6 +17,7 @@ export class UserResolver {
   ) {}
 
   @Mutation(() => RegisterResponse)
+  @UseFilters(GraphQlErrorFilter)
   register(
     @Args('registerInput') registerDto: RegisterDto,
     @Context() context: { res: Response }
@@ -24,7 +27,7 @@ export class UserResolver {
 
   @Mutation(() => LoginResponse)
   login(
-    @Args('registerInput') loginDto: LoginDto,
+    @Args('loginInput') loginDto: LoginDto,
     @Context() context: { res: Response }
   ): Promise<LoginResponse> {
     return this.authService.login(loginDto, context.res);

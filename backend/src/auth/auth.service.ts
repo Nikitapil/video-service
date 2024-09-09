@@ -101,7 +101,9 @@ export class AuthService {
 
     // TODO вынести это в валидатор в дто
     if (registerDto.password !== registerDto.confirmPassword) {
-      throw new BadRequestException('Passwords are not equal');
+      throw new BadRequestException({
+        confirmPassword: 'Passwords are not equal'
+      });
     }
 
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);

@@ -1,8 +1,8 @@
 import {useState} from "react";
-import {useGeneralStore} from "../stores/generalStore.ts";
+import {useGeneralStore} from "../stores/generalStore";
 import {ImCross} from "react-icons/im";
-import Register from "./Register.tsx";
-import Login from "./Login.tsx";
+import Register from "./Register";
+import Login from "./Login";
 
 const AuthModal = () => {
   const [isRegisterMode, setIsRegisterMode] = useState(false);

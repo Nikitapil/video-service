@@ -96,7 +96,9 @@ export class AuthService {
     });
 
     if (existingUser) {
-      throw new BadRequestException('User already exists');
+      throw new BadRequestException({
+        email: 'Email Already in use'
+      });
     }
 
     // TODO вынести это в валидатор в дто
@@ -122,7 +124,9 @@ export class AuthService {
   async login(loginDto: LoginDto, response: Response) {
     const user = await this.validateUser(loginDto);
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new BadRequestException({
+        invalidCredentials: 'Invalid credentials'
+      });
     }
     return this.issueTokens(user, response);
   }

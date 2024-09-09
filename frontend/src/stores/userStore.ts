@@ -26,7 +26,7 @@ export const useUserStore = create<User & UserActions>()(
   devtools(
     persist((set) => ({
       ...initialState,
-      setUser: (user: User) => set({ ...user }),
+      setUser: (user: User) => set({ ...initialState, ...user }),
       logout: () => set({ ...initialState })
     }), {name: 'userStore'}),
   )

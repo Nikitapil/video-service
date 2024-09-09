@@ -16,7 +16,8 @@ const Register = () => {
     confirmPassword: ''
   });
 
-  const [registerFn, { loading, error, data }] = useMutation<RegisterUserMutation, RegisterUserMutationVariables>(REGISTER_USER)
+  // TODO use loading and watch what is in the error
+  const [registerFn] = useMutation<RegisterUserMutation, RegisterUserMutationVariables>(REGISTER_USER)
 
   const setUser = useUserStore(state => state.setUser)
   const setIsLoginOpen = useGeneralStore(state => state.setIsLoginOpen)
@@ -25,7 +26,7 @@ const Register = () => {
     setErrors({})
 
     try {
-      await registerFn({
+      const {data} = await registerFn({
         variables: {
           ...registerData
         }

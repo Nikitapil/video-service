@@ -9,6 +9,7 @@ import { LoginResponse } from '../auth/types/LoginResponse';
 import { UseFilters } from '@nestjs/common';
 import { GraphQlErrorFilter } from '../filters/custom-exception.filter';
 
+@UseFilters(GraphQlErrorFilter)
 @Resolver()
 export class UserResolver {
   constructor(
@@ -17,7 +18,6 @@ export class UserResolver {
   ) {}
 
   @Mutation(() => RegisterResponse)
-  @UseFilters(GraphQlErrorFilter)
   register(
     @Args('registerInput') registerDto: RegisterDto,
     @Context() context: { res: Response }

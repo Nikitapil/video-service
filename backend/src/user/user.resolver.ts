@@ -8,6 +8,7 @@ import { LoginDto } from '../auth/dto/login.dto';
 import { LoginResponse } from '../auth/types/LoginResponse';
 import { UseFilters } from '@nestjs/common';
 import { GraphQlErrorFilter } from '../filters/custom-exception.filter';
+import { User } from './models/user.model';
 
 @UseFilters(GraphQlErrorFilter)
 @Resolver()
@@ -45,8 +46,8 @@ export class UserResolver {
     return this.authService.refreshToken(context.req, context.res);
   }
 
-  @Query(() => String)
-  hello() {
-    return '';
+  @Query(() => [User])
+  getUsers() {
+    return this.userService.getUsers();
   }
 }

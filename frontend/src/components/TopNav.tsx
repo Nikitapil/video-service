@@ -61,7 +61,7 @@ const TopNav = () => {
             </div>
           )}
 
-          <div className="flex items-center">
+          <div className="flex gap-2 items-center">
             <BsFillSendFill size="25" color="#161724" />
             <BiMessageDetail size="25" color="#161724" />
 

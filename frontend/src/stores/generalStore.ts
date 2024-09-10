@@ -3,7 +3,7 @@ import { devtools, persist } from 'zustand/middleware'
 
 export interface GeneralState {
   isLoginOpen: boolean;
-  isEdiProfileOpen: boolean;
+  isEditProfileOpen: boolean;
   selectedPosts: null;
   ids: null;
   posts: null;
@@ -18,12 +18,12 @@ export const useGeneralStore = create<GeneralState & GeneralActions>()(
   devtools(
     persist((set) => ({
       isLoginOpen: false,
-      isEdiProfileOpen: false,
+      isEditProfileOpen: false,
       selectedPosts: null,
       ids: null,
       posts: null,
       setIsLoginOpen: (isLoginOpen: boolean) => set({ isLoginOpen: isLoginOpen }),
-      setIsEditProfileOpen: () => set((state) => ({  isEdiProfileOpen: !state.isEdiProfileOpen })),
+      setIsEditProfileOpen: () => set((state) => ({  isEditProfileOpen: !state.isEditProfileOpen })),
     }), {name: 'generalStore'}),
   )
 )

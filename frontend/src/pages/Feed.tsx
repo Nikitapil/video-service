@@ -1,8 +1,10 @@
+import MainLayout from "../layouts/MainLayout.tsx";
+
 const Feed = () => {
   return (
-    <div>
+    <MainLayout>
       Feed
-    </div>
+    </MainLayout>
   );
 };
 

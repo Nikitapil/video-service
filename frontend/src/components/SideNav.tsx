@@ -42,7 +42,9 @@ const SideNav = () => {
         <ul>
           {displayedUsers?.map(user => (
             <li key={user.id} className="cursor-pointer">
-              <MenuItemSuggested user={user} />
+              <Link to={`/profile/${user.id}`}>
+                <MenuItemSuggested user={user} />
+              </Link>
             </li>
           ))}
         </ul>

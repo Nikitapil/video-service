@@ -89,13 +89,13 @@ const TopNav = () => {
                 </Link>
 
                 {user.id && (
-                  <div
-                    className="flex items-center gap-1.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-all duration-300"
+                  <button
+                    className="flex items-center w-full gap-1.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-all duration-300"
                     onClick={handleLogout}
                   >
                     <GrLogout size="20" color="#161724"/>
                     <span className="font-semibold text-sm">Log out</span>
-                  </div>
+                  </button>
                 )}
               </div>}
             </div>

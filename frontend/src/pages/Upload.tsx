@@ -18,6 +18,7 @@ const Upload = () => {
   const [caption, setCaption] = useState("");
   const [errorType, setErrorType] = useState<string | null>(null);
 
+  // TODO unused Ref
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {

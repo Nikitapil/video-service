@@ -16,14 +16,4 @@ export class User {
 
   @Field(() => String)
   email: string;
-
-  // TODO delete password field from response
-  @Field(() => String)
-  password: string;
-
-  @Field(() => String)
-  createdAt: Date;
-
-  @Field(() => String)
-  updatedAt: Date;
 }

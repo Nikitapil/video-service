@@ -75,11 +75,8 @@ scalar Upload
 
 type User {
   bio: String
-  createdAt: String!
   email: String!
   fullname: String!
   id: Int!
   image: String
-  password: String!
-  updatedAt: String!
 }

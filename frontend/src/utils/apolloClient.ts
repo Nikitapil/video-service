@@ -12,7 +12,7 @@ const refreshToken = async (client: ApolloClient<NormalizedCacheObject>) => {
       `
     })
 
-    const newAccessToken = data?.accessToken
+    const newAccessToken = data?.refreshToken
     if (!newAccessToken) {
       throw new Error('New access token not received')
     }

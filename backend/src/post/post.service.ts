@@ -10,6 +10,7 @@ import { Post } from '@prisma/client';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostDetails } from './types/post-details.type';
 import { PostType } from './types/post.type';
+import { unlinkSync, mkdirSync, existsSync } from 'fs';
 
 @Injectable()
 export class PostService {
@@ -29,6 +30,11 @@ export class PostService {
     const videoPath = `/files/${videoName}`;
     const stream = video.createReadStream();
     const outputPath = `public${videoPath}`;
+
+    if (!existsSync('public/files')) {
+      mkdirSync('public/files', { recursive: true });
+    }
+
     const writeStream = createWriteStream(outputPath);
     stream.pipe(writeStream);
 
@@ -89,8 +95,7 @@ export class PostService {
     }
 
     try {
-      const fs = await import('fs');
-      fs.unlinkSync(`public${post.video}`);
+      unlinkSync(`public${post.video}`);
 
       await this.prismaService.post.delete({
         where: { id }

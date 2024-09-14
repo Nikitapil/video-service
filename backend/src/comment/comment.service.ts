@@ -24,7 +24,14 @@ export class CommentService {
   }
 
   async createComment(data: CreateCommentDto): Promise<CommentType> {
-    // TODO проверка на существование поста
+    const post = await this.prismaService.post.findUnique({
+      where: { id: data.postId }
+    });
+
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
     return this.prismaService.comment.create({
       data,
       include: {

@@ -1,5 +1,5 @@
 import UploadLayout from "../layouts/UploadLayout.tsx";
-import {ChangeEvent, DragEvent, useEffect, useRef, useState} from "react";
+import {ChangeEvent, DragEvent, useEffect, useState} from "react";
 import {useMutation} from "@apollo/client";
 import {CREATE_POST} from "../graphql/mutations/CreatePost.ts";
 import UploadError from "../components/UploadError.tsx";
@@ -12,14 +12,10 @@ import {GiBoxCutter} from "react-icons/gi";
 const Upload = () => {
   const [fileData, setFileData] = useState<File | null>(null);
   const [fileDisplay, setFileDisplay] = useState<string | null>(null);
-  const [show, setShow] = useState<boolean>(false);
   const [errors, setErrors] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [caption, setCaption] = useState("");
   const [errorType, setErrorType] = useState<string | null>(null);
-
-  // TODO unused Ref
-  const fileRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -70,7 +66,6 @@ const Upload = () => {
       setIsUploading(true)
       await createPost()
       setIsUploading(false)
-      setShow(true)
       discard()
     } catch (e) {
       console.log(e)
@@ -128,7 +123,6 @@ const Upload = () => {
                 </div>
 
                 <input
-                  ref={fileRef}
                   type="file"
                   id="fileInput"
                   className="hidden"

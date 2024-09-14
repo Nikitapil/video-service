@@ -45,9 +45,13 @@ export class PostResolver {
     return this.postService.getPosts(skip, take);
   }
 
+  @UseGuards(GraphQLAuthGuard)
   @Mutation(() => String)
-  async deletePost(@Args('id') id: number): Promise<void> {
-    return this.postService.deletePost(id);
+  async deletePost(
+    @Context() context: { req: Request },
+    @Args('id') id: number
+  ): Promise<void> {
+    return this.postService.deletePost(id, context.req.user.sub);
   }
 
   @Query(() => [PostType])

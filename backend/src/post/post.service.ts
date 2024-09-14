@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  NotAcceptableException,
   NotFoundException
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
@@ -85,7 +86,7 @@ export class PostService {
     });
   }
 
-  async deletePost(id: number): Promise<void> {
+  async deletePost(id: number, userId: number): Promise<void> {
     const post = await this.prismaService.post.findUnique({
       where: { id }
     });
@@ -94,7 +95,9 @@ export class PostService {
       throw new NotFoundException('Post not found');
     }
 
-    // TODO проверка что пост принадлежит пользователю
+    if (post.userId !== userId) {
+      throw new NotAcceptableException();
+    }
 
     try {
       unlinkSync(`public${post.video}`);

@@ -2,6 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type CommentType {
+  createdAt: String!
+  id: Int!
+  post: PostType!
+  text: String!
+  updatedAt: String!
+  user: User!
+}
+
 type ErrorType {
   code: String
   message: String!
@@ -24,6 +33,7 @@ type LoginResponse {
 }
 
 type Mutation {
+  createComment(postId: Float!, text: String!): CommentType!
   createPost(text: String!, video: Upload!): PostType!
   deletePost(id: Float!): String!
   login(loginInput: LoginDto!): LoginResponse!
@@ -52,6 +62,7 @@ type PostType {
 }
 
 type Query {
+  getCommentsByPostId(postId: Float!): [CommentType!]!
   getPostById(id: Float!): PostDetails!
   getPosts(skip: Int! = 0, take: Int! = 1): [PostType!]!
   getPostsByUserId(userId: Float!): [PostType!]!

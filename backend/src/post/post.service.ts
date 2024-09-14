@@ -94,6 +94,8 @@ export class PostService {
       throw new NotFoundException('Post not found');
     }
 
+    // TODO проверка что пост принадлежит пользователю
+
     try {
       unlinkSync(`public${post.video}`);
 

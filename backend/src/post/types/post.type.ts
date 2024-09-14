@@ -17,7 +17,7 @@ export class PostType {
   video: string;
 
   @Field(() => User)
-  user: User;
+  user?: User;
 
   @Field(() => [LikeType], { nullable: true })
   likes?: LikeType[];

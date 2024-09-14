@@ -9,6 +9,7 @@ import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
 import { LikeModule } from './like/like.module';
 import {ServeStaticModule} from "@nestjs/serve-static";
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import {ServeStaticModule} from "@nestjs/serve-static";
     AuthModule,
     UserModule,
     PostModule,
-    LikeModule
+    LikeModule,
+    CommentModule
   ],
   controllers: [],
   providers: []

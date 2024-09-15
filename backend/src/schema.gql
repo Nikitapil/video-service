@@ -35,11 +35,14 @@ type LoginResponse {
 type Mutation {
   createComment(postId: Float!, text: String!): CommentType!
   createPost(text: String!, video: Upload!): PostType!
+  deleteComment(id: Float!): String!
   deletePost(id: Float!): String!
+  likePost(postId: Float!): LikeType!
   login(loginInput: LoginDto!): LoginResponse!
   logout: String!
   refreshToken: String!
   register(registerInput: RegisterDto!): RegisterResponse!
+  unlikePost(postId: Float!): String!
 }
 
 type PostDetails {

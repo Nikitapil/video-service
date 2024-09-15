@@ -27,4 +27,13 @@ export class CommentResolver {
       userId: context.req.user.sub
     });
   }
+
+  @UseGuards(GraphQLAuthGuard)
+  @Mutation(() => String)
+  deleteComment(
+    @Args('id') id: number,
+    @Context() context: { req: Request }
+  ): Promise<void> {
+    return this.commentService.deleteComment(id, context.req.user.sub);
+  }
 }

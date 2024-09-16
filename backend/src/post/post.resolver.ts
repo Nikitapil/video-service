@@ -33,7 +33,9 @@ export class PostResolver {
   }
 
   @Query(() => PostDetails)
-  async getPostById(@Args('id') id: number): Promise<PostDetails> {
+  async getPostById(
+    @Args('id', { type: () => Int }) id: number
+  ): Promise<PostDetails> {
     return this.postService.getPostById(id);
   }
 
@@ -49,13 +51,15 @@ export class PostResolver {
   @Mutation(() => String)
   async deletePost(
     @Context() context: { req: Request },
-    @Args('id') id: number
+    @Args('id', { type: () => Int }) id: number
   ): Promise<void> {
     return this.postService.deletePost(id, context.req.user.sub);
   }
 
   @Query(() => [PostType])
-  async getPostsByUserId(@Args('userId') userId: number): Promise<PostType[]> {
+  async getPostsByUserId(
+    @Args('userId', { type: () => Int }) userId: number
+  ): Promise<PostType[]> {
     return this.postService.getPostsByUserId(userId);
   }
 }

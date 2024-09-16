@@ -33,16 +33,16 @@ type LoginResponse {
 }
 
 type Mutation {
-  createComment(postId: Float!, text: String!): CommentType!
+  createComment(postId: Int!, text: String!): CommentType!
   createPost(text: String!, video: Upload!): PostType!
-  deleteComment(id: Float!): String!
-  deletePost(id: Float!): String!
-  likePost(postId: Float!): LikeType!
+  deleteComment(id: Int!): String!
+  deletePost(id: Int!): String!
+  likePost(postId: Int!): LikeType!
   login(loginInput: LoginDto!): LoginResponse!
   logout: String!
   refreshToken: String!
   register(registerInput: RegisterDto!): RegisterResponse!
-  unlikePost(postId: Float!): String!
+  unlikePost(postId: Int!): String!
 }
 
 type PostDetails {
@@ -65,10 +65,10 @@ type PostType {
 }
 
 type Query {
-  getCommentsByPostId(postId: Float!): [CommentType!]!
-  getPostById(id: Float!): PostDetails!
+  getCommentsByPostId(postId: Int!): [CommentType!]!
+  getPostById(id: Int!): PostDetails!
   getPosts(skip: Int! = 0, take: Int! = 1): [PostType!]!
-  getPostsByUserId(userId: Float!): [PostType!]!
+  getPostsByUserId(userId: Int!): [PostType!]!
   getUsers: [User!]!
 }
 

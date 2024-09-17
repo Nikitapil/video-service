@@ -11,6 +11,11 @@ type CommentType {
   user: User!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type ErrorType {
   code: String
   message: String!
@@ -46,7 +51,7 @@ type Mutation {
 }
 
 type PostDetails {
-  createdAt: String!
+  createdAt: DateTime!
   id: Int!
   likes: [LikeType!]
   otherPostIds: [Int!]
@@ -56,7 +61,7 @@ type PostDetails {
 }
 
 type PostType {
-  createdAt: String!
+  createdAt: DateTime!
   id: Int!
   likes: [LikeType!]
   text: String!

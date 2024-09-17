@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, GraphQLISODateTime } from '@nestjs/graphql';
 import { User } from '../../user/models/user.model';
 import { LikeType } from '../../like/types/like.type';
 
@@ -10,7 +10,7 @@ export class PostType {
   @Field(() => String)
   text: string;
 
-  @Field(() => String)
+  @Field(() => GraphQLISODateTime)
   createdAt: Date;
 
   @Field(() => String)

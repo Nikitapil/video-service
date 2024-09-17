@@ -25,6 +25,9 @@ import {ImCross, ImSpinner2} from "react-icons/im";
 import {BiChevronDown, BiChevronUp} from "react-icons/bi";
 import tikTokLogo from '../assets/images/tiktok-logo-small.png'
 import avatarPlaceholder from "../assets/images/avatar-placeholder.png";
+import {MdOutlineDeleteForever} from "react-icons/md";
+import {BsMusicNoteBeamed} from "react-icons/bs";
+import {AiFillHeart} from "react-icons/ai";
 
 const Post = () => {
   const { id } = useParams<{ id: string }>();
@@ -213,33 +216,56 @@ const Post = () => {
         </div>
       )}
 
-      <div
-        className="lg:max-w-[550px] relative w-full h-full bg-white"
-      >
-        <div className="py-7" />
+      {dataPost?.getPostById && (
+        <div
+          className="lg:max-w-[550px] relative w-full h-full bg-white"
+        >
+          <div className="py-7"/>
 
-        <div className="flex items-center justify-between px-8">
-          <div className="flex items-center">
-            <Link to="/">
-              <img
+          <div className="flex items-center justify-between px-8">
+            <div className="flex items-center">
+              <Link to="/">
+               <img
                 src={userImageSrc}
                 alt="avatar"
                 width="40"
                 className="rounded-full lg:mx-0 mx-auto"
-              />
-            </Link>
+               />
+              </Link>
 
-            <div className="ml-3 pt-0.5">
-              <div className="text-[17px] font-semibold">User name</div>
-              <div className="text-[13] font-light">
-                {dataPost?.getPostById.user.fullname}
-                <span className="relative top-[6px] text-[30px] pr-0.5">•</span>
+              <div className="ml-3 pt-0.5">
+                <div className="text-[17px] font-semibold">User name</div>
+                  <div className="text-[13] font-light">
+                    {dataPost?.getPostById.user.fullname}
+                    <span className="relative top-[6px] text-[30px] pr-0.5">•</span>
+                    <span className="font-medium">
+                      {new Date(dataPost?.getPostById?.createdAt).toLocaleString()}
+                    </span>
+                </div>
               </div>
             </div>
+
+            <MdOutlineDeleteForever size="25" className="cursor-pointer" />
           </div>
-        </div>
+
+          <div className="px-6 mt-4 text-sm">{ dataPost.getPostById.text }</div>
+
+          <div className="flex items-center gap-1 px-8 mt-4 text-sm font-bold">
+            <BsMusicNoteBeamed size="17" />
+            Original sound - {dataPost?.getPostById.user.fullname}
+          </div>
+
+          <div className="flex items-center px-8 mt-8">
+            <button
+              className="rounded-full bg-gray-700 p-1.5 hover:bg-gray-800 transition-all duration-300"
+              onClick={() => (isLiked ? handleRemoveLike() : handleLikePost())}
+            >
+              <AiFillHeart size="25" color={isLiked ? 'red' : 'black'} />
+            </button>
+          </div>
 
       </div>
+      )}
     </div>
   );
 };

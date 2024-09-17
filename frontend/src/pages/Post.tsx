@@ -151,6 +151,7 @@ const Post = () => {
   const handleRemoveLike = async () => {
     await unlikePostFn()
     removeLike(postIdInt)
+    console.log(likedPosts)
   }
 
   const handleLikePost = async () => {
@@ -160,7 +161,7 @@ const Post = () => {
       likePost(data?.likePost)
     }
   }
-// TODO useMemo
+// TODO get this from backend in post model
   const isLiked = likedPosts.some(likedPost => likedPost.userId === loggedInUserId)
 
   const userImageSrc = useMemo(() => dataPost?.getPostById.user.image || avatarPlaceholder, [dataPost])

@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  // TODO filter private user fields
+  // TODO filter private user fields and not return posts
   getUsers() {
     return this.prismaService.user.findMany({
       include: {

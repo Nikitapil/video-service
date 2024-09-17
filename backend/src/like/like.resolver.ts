@@ -1,4 +1,4 @@
-import {Args, Context, Int, Mutation, Resolver} from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Resolver } from '@nestjs/graphql';
 import { LikeService } from './like.service';
 import { LikeType } from './types/like.type';
 import { Request } from 'express';
@@ -15,17 +15,19 @@ export class LikeResolver {
     @Args('postId', { type: () => Int }) postId: number,
     @Context() context: { req: Request }
   ): Promise<LikeType> {
+    console.log(postId, context.req.user.sub);
     return this.likeService.likePost({
       postId,
       userId: context.req.user.sub
     });
   }
 
-  @Mutation(() => String)
+  @Mutation(() => LikeType)
   unlikePost(
     @Args('postId', { type: () => Int }) postId: number,
     @Context() context: { req: Request }
   ) {
+    console.log(postId, context.req.user.sub);
     return this.likeService.unlikePost({
       postId,
       userId: context.req.user.sub

@@ -218,7 +218,7 @@ const Post = () => {
           </div>
 
             <div
-              className="lg:max-w-[550px] relative w-full h-full bg-white"
+              className="lg:max-w-[550px] relative w-full h-full bg-white flex flex-col"
             >
               <div className="py-7"/>
 
@@ -280,7 +280,7 @@ const Post = () => {
                 </div>
               </div>
 
-              <div className="bg-[#f8f8f8] z-0 w-full h-[calc(100% - 273px)] border-t-2 overflow-auto">
+              <div className="bg-[#f8f8f8] z-0 w-full flex-1 border-t-2 overflow-auto">
                 <div className="pt-2" />
 
                 {data?.getCommentsByPostId.length === 0 && (
@@ -299,10 +299,45 @@ const Post = () => {
                             width="40"
                           />
                         </Link>
+
+                        <div className="ml-14 pt-0.5 w-full">
+                          <div className="text-[10px] font-semibold flex items-center justify-between">
+                            User name
+                            {comment.user.id === loggedInUserId && (
+                              <MdOutlineDeleteForever
+                                className="cursor-pointer"
+                                size="25"
+                                onClick={() => handleDeleteComment(comment.id)}
+                              />
+                            )}
+                          </div>
+                          <div className="text-[15px] font-light">{ comment.text }</div>
+                        </div>
                       </div>
                     ))
                   }
                 </div>
+
+                <div className="mb-28" />
+              </div>
+
+              <div className="absolute flex items-center justify-between bottom-0 bg-white h-[85px] lg:max-w-[550px] w-full py-5 px-8 border-t-2">
+                <div className="border-2 border-gray-400 flex items-center rounded-lg w-full lg:max-w-[420px] bg-[#f1f1f2]">
+                  <input
+                    className="bg-[#f1f1f2] text-[px] outline-none w-full lg:max-w-[420px] p-2 rounded-lg"
+                    type="text"
+                    placeholder="Add a comment..."
+                    onChange={e => setComment(e.target.value)}
+                  />
+                </div>
+
+                <button
+                  className="text-[#f02c56] cursor-pointer font-semibold text-sm ml-5 pr-1 disabled:text-gray-400 disabled:cursor-not-allowed"
+                  disabled={!comment}
+                  onClick={addComment}
+                >
+                  Post
+                </button>
               </div>
 
             </div>

@@ -26,7 +26,7 @@ import {BiChevronDown, BiChevronUp} from "react-icons/bi";
 import tikTokLogo from '../assets/images/tiktok-logo-small.png'
 import avatarPlaceholder from "../assets/images/avatar-placeholder.png";
 import {MdOutlineDeleteForever} from "react-icons/md";
-import {BsMusicNoteBeamed} from "react-icons/bs";
+import {BsFillChatDotsFill, BsMusicNoteBeamed} from "react-icons/bs";
 import {AiFillHeart} from "react-icons/ai";
 
 const Post = () => {
@@ -205,67 +205,108 @@ const Post = () => {
       )}
 
       {dataPost?.getPostById && (
-        <div className="bg-black bg-opacity-90 lg:min-w-[480px]">
-          <video
-            src={`http://localhost:3000${dataPost.getPostById.video}`}
-            className="h-screen mx-auto"
-            controls
-            autoPlay
-            muted
-            loop
-          ></video>
-        </div>
-      )}
+        <>
+          <div className="bg-black bg-opacity-90 lg:min-w-[480px]">
+            <video
+              src={`http://localhost:3000${dataPost.getPostById.video}`}
+              className="h-screen mx-auto"
+              controls
+              autoPlay
+              muted
+              loop
+            ></video>
+          </div>
 
-      {dataPost?.getPostById && (
-        <div
-          className="lg:max-w-[550px] relative w-full h-full bg-white"
-        >
-          <div className="py-7"/>
+            <div
+              className="lg:max-w-[550px] relative w-full h-full bg-white"
+            >
+              <div className="py-7"/>
 
-          <div className="flex items-center justify-between px-8">
-            <div className="flex items-center">
-              <Link to="/">
-               <img
-                src={userImageSrc}
-                alt="avatar"
-                width="40"
-                className="rounded-full lg:mx-0 mx-auto"
-               />
-              </Link>
+              <div className="flex items-center justify-between px-8">
+                <div className="flex items-center">
+                  <Link to="/">
+                    <img
+                      src={userImageSrc}
+                      alt="avatar"
+                      width="40"
+                      className="rounded-full lg:mx-0 mx-auto"
+                    />
+                  </Link>
 
-              <div className="ml-3 pt-0.5">
-                <div className="text-[17px] font-semibold">User name</div>
-                  <div className="text-[13] font-light">
-                    {dataPost?.getPostById.user.fullname}
-                    <span className="relative top-[6px] text-[30px] pr-0.5">•</span>
-                    <span className="font-medium">
+                  <div className="ml-3 pt-0.5">
+                    <div className="text-[17px] font-semibold">User name</div>
+                    <div className="text-[13] font-light">
+                      {dataPost?.getPostById.user.fullname}
+                      <span className="relative top-[6px] text-[30px] pr-0.5">•</span>
+                      <span className="font-medium">
                       {new Date(dataPost?.getPostById?.createdAt).toLocaleString()}
                     </span>
+                    </div>
+                  </div>
+                </div>
+
+                <MdOutlineDeleteForever size="25" className="cursor-pointer"/>
+              </div>
+
+              <div className="px-6 mt-4 text-sm">{dataPost.getPostById.text}</div>
+
+              <div className="flex items-center gap-1 px-8 mt-4 text-sm font-bold">
+                <BsMusicNoteBeamed size="17"/>
+                Original sound - {dataPost?.getPostById.user.fullname}
+              </div>
+
+              <div className="flex items-center px-8 mt-8">
+                <div className="pb-4 text-center flex items-center">
+                  <button
+                    className="rounded-full bg-gray-200 p-2 hover:bg-gray-300 transition-all duration-300"
+                    onClick={() => (isLiked ? handleRemoveLike() : handleLikePost())}
+                  >
+                    <AiFillHeart size="25" color={isLiked ? 'red' : 'black'}/>
+                  </button>
+                  <span className="text-xs pl-2 pr-4 text-gray-800 font-semibold">
+                    {dataPost?.getPostById.likes?.length}
+                  </span>
+                </div>
+
+                <div className="pb-4 text-center flex items-center">
+                  <button
+                    className="rounded-full bg-gray-200 p-2 hover:bg-gray-300 transition-all duration-300"
+                  >
+                    <BsFillChatDotsFill size="25" color="black"/>
+                  </button>
+                  <span className="text-xs pl-2 pr-4 text-gray-800 font-semibold">
+                    {data?.getCommentsByPostId?.length}
+                  </span>
                 </div>
               </div>
+
+              <div className="bg-[#f8f8f8] z-0 w-full h-[calc(100% - 273px)] border-t-2 overflow-auto">
+                <div className="pt-2" />
+
+                {data?.getCommentsByPostId.length === 0 && (
+                  <div className="text-center mt-6 text-xl text-gray-500">No comments...</div>
+                )}
+
+                <div className="flex flex-col items-center justify-between px-8 mt-4">
+                  {
+                    data?.getCommentsByPostId.map((comment) => (
+                      <div className="flex items-center relative w-full" key={comment.id}>
+                        <Link to="/">
+                          <img
+                            className="absolute top-0 rounded-full lg:mx-0 mx-auto"
+                            src={comment.user.image || avatarPlaceholder}
+                            alt="avatar"
+                            width="40"
+                          />
+                        </Link>
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+
             </div>
-
-            <MdOutlineDeleteForever size="25" className="cursor-pointer" />
-          </div>
-
-          <div className="px-6 mt-4 text-sm">{ dataPost.getPostById.text }</div>
-
-          <div className="flex items-center gap-1 px-8 mt-4 text-sm font-bold">
-            <BsMusicNoteBeamed size="17" />
-            Original sound - {dataPost?.getPostById.user.fullname}
-          </div>
-
-          <div className="flex items-center px-8 mt-8">
-            <button
-              className="rounded-full bg-gray-700 p-1.5 hover:bg-gray-800 transition-all duration-300"
-              onClick={() => (isLiked ? handleRemoveLike() : handleLikePost())}
-            >
-              <AiFillHeart size="25" color={isLiked ? 'red' : 'black'} />
-            </button>
-          </div>
-
-      </div>
+        </>
       )}
     </div>
   );

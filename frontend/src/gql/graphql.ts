@@ -61,7 +61,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createComment: CommentType;
   createPost: PostType;
-  deleteComment: Scalars['String']['output'];
+  deleteComment?: Maybe<Scalars['String']['output']>;
   deletePost: Scalars['String']['output'];
   likePost: LikeType;
   login: LoginResponse;
@@ -207,7 +207,7 @@ export type DeleteCommentMutationVariables = Exact<{
 }>;
 
 
-export type DeleteCommentMutation = { __typename?: 'Mutation', deleteComment: string };
+export type DeleteCommentMutation = { __typename?: 'Mutation', deleteComment?: string | null };
 
 export type LikePostMutationVariables = Exact<{
   postId: Scalars['Int']['input'];
@@ -345,7 +345,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createComment: CommentType;
   createPost: PostType;
-  deleteComment: Scalars['String']['output'];
+  deleteComment?: Maybe<Scalars['String']['output']>;
   deletePost: Scalars['String']['output'];
   likePost: LikeType;
   login: LoginResponse;
@@ -491,7 +491,7 @@ export type DeleteCommentMutationVariables = Exact<{
 }>;
 
 
-export type DeleteCommentMutation = { __typename?: 'Mutation', deleteComment: string };
+export type DeleteCommentMutation = { __typename?: 'Mutation', deleteComment?: string | null };
 
 export type LikePostMutationVariables = Exact<{
   postId: Scalars['Int']['input'];

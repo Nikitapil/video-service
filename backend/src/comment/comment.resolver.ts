@@ -10,7 +10,9 @@ export class CommentResolver {
   constructor(private readonly commentService: CommentService) {}
 
   @Query(() => [CommentType])
-  getCommentsByPostId(@Args('postId', { type: () => Int }) postId: number): Promise<CommentType[]> {
+  getCommentsByPostId(
+    @Args('postId', { type: () => Int }) postId: number
+  ): Promise<CommentType[]> {
     return this.commentService.getCommentsByPostId(postId);
   }
 
@@ -29,7 +31,7 @@ export class CommentResolver {
   }
 
   @UseGuards(GraphQLAuthGuard)
-  @Mutation(() => String)
+  @Mutation(() => String, { nullable: true })
   deleteComment(
     @Args('id', { type: () => Int }) id: number,
     @Context() context: { req: Request }

@@ -40,7 +40,7 @@ type LoginResponse {
 type Mutation {
   createComment(postId: Int!, text: String!): CommentType!
   createPost(text: String!, video: Upload!): PostType!
-  deleteComment(id: Int!): String!
+  deleteComment(id: Int!): String
   deletePost(id: Int!): String!
   likePost(postId: Int!): LikeType!
   login(loginInput: LoginDto!): LoginResponse!

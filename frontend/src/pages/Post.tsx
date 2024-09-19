@@ -327,6 +327,7 @@ const Post = () => {
                     className="bg-[#f1f1f2] text-[px] outline-none w-full lg:max-w-[420px] p-2 rounded-lg"
                     type="text"
                     placeholder="Add a comment..."
+                    value={comment}
                     onChange={e => setComment(e.target.value)}
                   />
                 </div>

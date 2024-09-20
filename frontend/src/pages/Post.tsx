@@ -168,32 +168,6 @@ const Post = () => {
 
   return (
     <div className="fixed lg:flex justify-between z-50 top-0 left-0 w-full h-full bg-black lg:overflow-hidden overflow-auto">
-      <div className="lg:w-[calc(100% - 540px)] w-full h-full relative">
-        <Link to="/"
-              className="absolute z-20 m-5 rounded-full hover:bg-gray-800 bg-gray-700 p-1.5 transition-all duration-300">
-          <ImCross color="#fff" size="27"/>
-        </Link>
-
-        <button
-          className="absolute z-20 right-4 top-4 flex items-center justify-center rounded-full bg-gray-700 p-1.5 hover:bg-gray-800 transition-all duration-300"
-          onClick={loopThroughPostsUp}
-        >
-          <BiChevronUp color="#fff" size="30"/>
-        </button>
-
-        <button
-          className="absolute z-20 right-4 top-20 flex items-center justify-center rounded-full bg-gray-700 p-1.5 hover:bg-gray-800 transition-all duration-300"
-          onClick={loopThroughPostsDown}
-        >
-          <BiChevronDown color="#fff" size="30"/>
-        </button>
-        <img
-          src={tikTokLogo}
-          alt="tik-tok-logo"
-          className="absolute top-[18px] left-[70px] max-w-[80px] rounded-full lg:mx-0 mx-auto"
-        />
-      </div>
-
       {!isLoaded && (
         <div className="absolute top-0 flex items-center justify-center bg-black bg-opacity-70 h-screen w-full">
           <ImSpinner2
@@ -201,31 +175,56 @@ const Post = () => {
             color="#fff"
             size="100"
           />
-      </div>
+        </div>
       )}
-
       {dataPost?.getPostById && (
         <>
-          <div className="bg-black bg-opacity-90 lg:min-w-[480px]">
-            <video
-              src={`http://localhost:3000${dataPost.getPostById.video}`}
-              className="h-screen mx-auto"
-              controls
-              autoPlay
-              muted
-              loop
-            ></video>
+          <div className="lg:w-[calc(100% - 540px)] w-full h-full relative">
+            <Link to="/"
+                  className="absolute z-20 m-5 rounded-full hover:bg-gray-800 bg-gray-700 p-1.5 transition-all duration-300">
+              <ImCross color="#fff" size="27"/>
+            </Link>
+
+            <button
+              className="absolute z-20 right-4 top-4 flex items-center justify-center rounded-full bg-gray-700 p-1.5 hover:bg-gray-800 transition-all duration-300"
+              onClick={loopThroughPostsUp}
+            >
+              <BiChevronUp color="#fff" size="30"/>
+            </button>
+
+            <button
+              className="absolute z-20 right-4 top-20 flex items-center justify-center rounded-full bg-gray-700 p-1.5 hover:bg-gray-800 transition-all duration-300"
+              onClick={loopThroughPostsDown}
+            >
+              <BiChevronDown color="#fff" size="30"/>
+            </button>
+            <img
+              src={tikTokLogo}
+              alt="tik-tok-logo"
+              className="absolute top-[18px] left-[70px] max-w-[80px] rounded-full lg:mx-0 mx-auto"
+            />
+
+            <div className="bg-black bg-opacity-90 lg:min-w-[480px]">
+              <video
+                src={`http://localhost:3000${dataPost.getPostById.video}`}
+                className="h-screen mx-auto"
+                controls
+                autoPlay
+                muted
+                loop
+              ></video>
+            </div>
           </div>
 
-            <div
-              className="lg:max-w-[550px] relative w-full h-full bg-white flex flex-col"
-            >
-              <div className="py-7"/>
+          <div
+            className="lg:max-w-[550px] relative w-full h-full bg-white flex flex-col"
+          >
+            <div className="py-7"/>
 
-              <div className="flex items-center justify-between px-8">
-                <div className="flex items-center">
-                  <Link to="/">
-                    <img
+            <div className="flex items-center justify-between px-8">
+              <div className="flex items-center">
+                <Link to="/">
+                <img
                       src={userImageSrc}
                       alt="avatar"
                       width="40"
@@ -322,9 +321,9 @@ const Post = () => {
               </div>
 
               <div className="absolute flex items-center justify-between bottom-0 bg-white h-[85px] lg:max-w-[550px] w-full py-5 px-8 border-t-2">
-                <div className="border-2 border-gray-400 flex items-center rounded-lg w-full lg:max-w-[420px] bg-[#f1f1f2]">
+                <div className="flex items-center rounded-lg w-full lg:max-w-[420px] bg-[#f1f1f2] has-[input:focus]:border has-[input:focus]:border-gray-400">
                   <input
-                    className="bg-[#f1f1f2] text-[px] outline-none w-full lg:max-w-[420px] p-2 rounded-lg"
+                    className="bg-[#f1f1f2] border-none outline-none w-full lg:max-w-[420px] p-2 rounded-lg"
                     type="text"
                     placeholder="Add a comment..."
                     value={comment}

@@ -6,6 +6,7 @@ export const GET_POSTS_BY_USER_ID = gql`
             id
             text
             video
+            createdAt
             user {
                 fullname
                 email

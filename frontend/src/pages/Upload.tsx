@@ -62,7 +62,6 @@ const Upload = () => {
 
   const handleCreatePost = async () => {
     try {
-      console.log(fileData)
       setIsUploading(true)
       await createPost()
       setIsUploading(false)

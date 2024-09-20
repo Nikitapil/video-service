@@ -15,7 +15,6 @@ export class LikeResolver {
     @Args('postId', { type: () => Int }) postId: number,
     @Context() context: { req: Request }
   ): Promise<LikeType> {
-    console.log(postId, context.req.user.sub);
     return this.likeService.likePost({
       postId,
       userId: context.req.user.sub
@@ -27,7 +26,6 @@ export class LikeResolver {
     @Args('postId', { type: () => Int }) postId: number,
     @Context() context: { req: Request }
   ) {
-    console.log(postId, context.req.user.sub);
     return this.likeService.unlikePost({
       postId,
       userId: context.req.user.sub

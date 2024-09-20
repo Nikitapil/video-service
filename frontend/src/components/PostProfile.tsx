@@ -5,7 +5,6 @@ const PostProfile = ({ post }: { post:PostType }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const onMouseEnter = () => {
-    console.log('here')
     videoRef.current?.play();
   }
 

@@ -37,7 +37,6 @@ const Feed = () => {
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if(entries[0].isIntersecting) {
-        console.log('observer triggeed')
         loadMorePosts()
       }
     }, { threshold: 1 })

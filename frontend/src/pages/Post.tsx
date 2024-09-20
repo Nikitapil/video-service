@@ -151,7 +151,6 @@ const Post = () => {
   const handleRemoveLike = async () => {
     await unlikePostFn()
     removeLike(postIdInt)
-    console.log(likedPosts)
   }
 
   const handleLikePost = async () => {

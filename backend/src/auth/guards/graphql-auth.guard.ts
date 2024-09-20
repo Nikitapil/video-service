@@ -33,7 +33,6 @@ export class GraphQLAuthGuard implements CanActivate {
 
       return true;
     } catch (e) {
-      console.log('here');
       throw new UnauthorizedException();
     }
   }

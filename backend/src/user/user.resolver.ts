@@ -6,9 +6,10 @@ import { RegisterDto } from '../auth/dto/register.dto';
 import { Request, Response } from 'express';
 import { LoginDto } from '../auth/dto/login.dto';
 import { LoginResponse } from '../auth/types/LoginResponse';
-import { UseFilters } from '@nestjs/common';
+import { UseFilters, UseGuards } from '@nestjs/common';
 import { GraphQlErrorFilter } from '../filters/custom-exception.filter';
 import { User } from './models/user.model';
+import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 
 @UseFilters(GraphQlErrorFilter)
 @Resolver()
@@ -49,5 +50,26 @@ export class UserResolver {
   @Query(() => [User])
   getUsers() {
     return this.userService.getUsers();
+  }
+
+  @UseGuards(GraphQlErrorFilter)
+  @Mutation(() => User)
+  async updateUser(
+    @Context() context: { req: Request },
+    @Args('fullname', { type: () => String, nullable: true }) fullname?: string,
+    @Args('bio', { type: () => String, nullable: true }) bio?: string,
+    @Args('image', { type: () => GraphQLUpload, nullable: true })
+    image?: FileUpload
+  ) {
+    let imageUrl;
+    if (image) {
+      imageUrl = await this.userService.storeImageAndGetUrl(image);
+    }
+
+    return this.userService.updateProfile(context.req.user.sub, {
+      fullname,
+      bio,
+      image: imageUrl
+    });
   }
 }

@@ -1,7 +1,7 @@
 import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { PostService } from './post.service';
 import { PostType } from './types/post.type';
-import { GraphQLUpload } from 'graphql-upload-ts';
+import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 // import GraphQLUpload from 'graphql-upload/graphqlUpload.mjs';
 import { Request } from 'express';
 import { UseGuards } from '@nestjs/common';
@@ -17,7 +17,7 @@ export class PostResolver {
   @Mutation(() => PostType)
   async createPost(
     @Context() context: { req: Request },
-    @Args({ name: 'video', type: () => GraphQLUpload }) video: any,
+    @Args({ name: 'video', type: () => GraphQLUpload }) video: FileUpload,
     @Args('text') text: string
   ) {
     const userId = context.req.user.sub;

@@ -1,9 +1,9 @@
 import {createBrowserRouter} from "react-router-dom";
-import Feed from "../pages/Feed.tsx";
-import Upload from "../pages/Upload.tsx";
-import Profile from "../pages/Profile.tsx";
-import Post from "../pages/Post.tsx";
-import ProtectedRoutes from "../components/ProtectedRoutes.tsx";
+import Feed from "../modules/feed/pages/Feed.tsx";
+import Upload from "../modules/upload/pages/Upload.tsx";
+import Profile from "../modules/profile/pages/Profile.tsx";
+import Post from "../modules/post/pages/Post.tsx";
+import ProtectedRoutes from "../modules/shared/auth/components/ProtectedRoutes.tsx";
 
 export const router = createBrowserRouter([
   {

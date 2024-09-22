@@ -1,5 +1,5 @@
 import {ReactNode} from "react";
-import TopNav from "../components/TopNav.tsx";
+import TopNav from "./components/TopNav.tsx";
 
 const UploadLayout = ({children}: { children: ReactNode }) => {
   return (

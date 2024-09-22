@@ -1,5 +1,5 @@
-import { create } from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
+import { create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 
 export interface User {
   id: number | null;
@@ -19,15 +19,18 @@ const initialState: User = {
   fullname: '',
   email: '',
   bio: '',
-  image: '',
-} as const
+  image: ''
+} as const;
 
 export const useUserStore = create<User & UserActions>()(
   devtools(
-    persist((set) => ({
-      ...initialState,
-      setUser: (user: User) => set({ ...initialState, ...user }),
-      logout: () => set({ ...initialState })
-    }), {name: 'userStore'}),
+    persist(
+      (set) => ({
+        ...initialState,
+        setUser: (user: User) => set({ ...initialState, ...user }),
+        logout: () => set({ ...initialState })
+      }),
+      { name: 'userStore' }
+    )
   )
-)
+);

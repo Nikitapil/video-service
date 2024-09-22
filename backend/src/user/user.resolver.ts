@@ -10,6 +10,7 @@ import { UseFilters, UseGuards } from '@nestjs/common';
 import { GraphQlErrorFilter } from '../filters/custom-exception.filter';
 import { User } from './models/user.model';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
+import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
 
 @UseFilters(GraphQlErrorFilter)
 @Resolver()
@@ -52,7 +53,7 @@ export class UserResolver {
     return this.userService.getUsers();
   }
 
-  @UseGuards(GraphQlErrorFilter)
+  @UseGuards(GraphQLAuthGuard)
   @Mutation(() => User)
   async updateUser(
     @Context() context: { req: Request },

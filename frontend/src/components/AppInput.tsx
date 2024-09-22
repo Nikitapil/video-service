@@ -1,11 +1,21 @@
-import {InputHTMLAttributes, useEffect, useRef} from "react";
+import { InputHTMLAttributes, useEffect, useRef } from 'react';
 
 interface AppInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  error: string,
-  max?: number
+  error?: string;
+  max?: number;
 }
 
-const AppInput = ({ placeholder, type, max, error, autoFocus, onChange, value, name, ...otherProps }: AppInputProps) => {
+const AppInput = ({
+  placeholder,
+  type,
+  max,
+  error,
+  autoFocus,
+  onChange,
+  value,
+  name,
+  ...otherProps
+}: AppInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   // TODO check this useEffect, if input native autofocus works remove this useless effect

@@ -35,7 +35,7 @@ export default [...fixupConfigRules(compat.extends(
     },
 
     rules: {
-        "no-unused-vars": ["error", {
+        "@typescript-eslint/no-unused-vars": ["error", {
             vars: "all",
             args: "after-used",
             ignoreRestSiblings: true,

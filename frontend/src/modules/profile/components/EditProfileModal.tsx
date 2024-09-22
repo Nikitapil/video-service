@@ -7,9 +7,9 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_PROFILE } from '../mutations/UpdateUserProfile.ts';
 import { UpdateUserProfileMutation, UpdateUserProfileMutationVariables } from '../../../gql/graphql.ts';
 import { AiOutlineClose } from 'react-icons/ai';
-import avatarPlaceholder from '../../../assets/images/avatar-placeholder.png';
 import { BsFillPencilFill } from 'react-icons/bs';
 import AppInput from '../../../components/ui/AppInput.tsx';
+import UserAvatar from '../../shared/components/UserAvatar.tsx';
 
 const EditProfileModal = () => {
   const user = useUserStore();
@@ -29,7 +29,7 @@ const EditProfileModal = () => {
   const cropperRef = useRef<ReactCropperElement>(null);
 
   const imgSrc = useMemo(() => {
-    return croppedImage ?? (user.image || avatarPlaceholder);
+    return croppedImage ?? user.image;
   }, [user, croppedImage]);
 
   const [updateUserProfile] = useMutation<UpdateUserProfileMutation, UpdateUserProfileMutationVariables>(
@@ -121,10 +121,9 @@ const EditProfileModal = () => {
                 htmlFor="image"
                 className="relative cursor-pointer"
               >
-                <img
-                  src={imgSrc}
-                  alt="avatar"
-                  className="rounded-full img-preview object-cover w-20 h-20"
+                <UserAvatar
+                  image={imgSrc}
+                  className="!w-20 img-preview object-cover"
                 />
 
                 <div className="absolute bottom-0 right-0 rounded-full flex items-center justify-center bg-white shadow-xl border border-gray-300 p-1 w-[32px] h-[32px]">

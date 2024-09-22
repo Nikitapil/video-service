@@ -1,25 +1,22 @@
 import { PostType } from '../../../gql/graphql.ts';
-import { useMemo, useRef } from 'react';
-import avatarPlaceholder from '../../../assets/images/avatar-placeholder.png';
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { BsMusicNoteBeamed } from 'react-icons/bs';
 import { AiFillHeart } from 'react-icons/ai';
 import tikTokLogoWhite from '../../../assets/images/tiktok-logo-white.png';
 import { IoIosShareAlt } from 'react-icons/io';
 import { IoChatbubbleEllipses } from 'react-icons/io5';
+import UserAvatar from '../../shared/components/UserAvatar.tsx';
 
 const PostFeed = ({ post }: { post: PostType }) => {
   const video = useRef<HTMLVideoElement | null>(null);
 
-  const userImageSrc = useMemo(() => post.user.image || avatarPlaceholder, [post]);
-
   return (
     <div className="flex border-b py-6">
       <div className="cursor-pointer">
-        <img
-          src={userImageSrc}
-          alt="avatar"
-          className="rounded-full w-[33px] lg:w-[60px]"
+        <UserAvatar
+          image={post.user.image}
+          className="lg:w-14"
         />
       </div>
       <div className="pl-3 w-full px-4">

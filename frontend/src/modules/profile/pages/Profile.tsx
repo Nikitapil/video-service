@@ -1,6 +1,5 @@
 import { useUserStore } from '../../shared/auth/stores/userStore.ts';
 import { useMemo } from 'react';
-import avatarPlaceholder from '../../../assets/images/avatar-placeholder.png';
 import MainLayout from '../../../layouts/main/MainLayout.tsx';
 import { useQuery } from '@apollo/client';
 import { GET_POSTS_BY_USER_ID } from '../queries/GetPostsByUserId.ts';
@@ -9,6 +8,7 @@ import { GetPostsByUserIdQuery, GetPostsByUserIdQueryVariables } from '../../../
 import { BsFillPencilFill } from 'react-icons/bs';
 import { useGeneralStore } from '../../shared/stores/generalStore.ts';
 import PostProfile from '../components/PostProfile.tsx';
+import UserAvatar from '../../shared/components/UserAvatar.tsx';
 
 const Profile = () => {
   const { id } = useParams();
@@ -26,16 +26,13 @@ const Profile = () => {
     }
   );
 
-  const userImageSrc = useMemo(() => user.image || avatarPlaceholder, [user]);
-
   return (
     <MainLayout>
       <div className="pt-[90px] pl-[80px] lg:pr-0 pr-2 max-w-full 2xl:mx-auto">
         <div className="flex">
-          <img
-            src={userImageSrc}
-            alt="avatar"
-            className="w-[100px] h-[100px] rounded-full object-cover"
+          <UserAvatar
+            image={user.image}
+            className="w-24 h-24 object-cover"
           />
 
           <div className="ml-5 w-full">

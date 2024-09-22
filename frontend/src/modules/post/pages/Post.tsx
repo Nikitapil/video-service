@@ -26,10 +26,10 @@ import { UNLIKE_POST } from '../../shared/likes/mutations/UnlikePost.ts';
 import { ImCross, ImSpinner2 } from 'react-icons/im';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
 import tikTokLogo from '../../../assets/images/tiktok-logo-small.png';
-import avatarPlaceholder from '../../../assets/images/avatar-placeholder.png';
 import { MdOutlineDeleteForever } from 'react-icons/md';
 import { BsFillChatDotsFill, BsMusicNoteBeamed } from 'react-icons/bs';
 import { AiFillHeart } from 'react-icons/ai';
+import UserAvatar from '../../shared/components/UserAvatar.tsx';
 
 const Post = () => {
   const { id } = useParams<{ id: string }>();
@@ -48,35 +48,29 @@ const Post = () => {
 
   const postIdInt = useMemo(() => Number(id), [id]);
 
-  const { data: dataPost, loading: loadingPost } = useQuery<GetPostByIdQuery, GetPostByIdQueryVariables>(
-    GET_POST_BY_ID,
-    {
-      variables: {
-        id: postIdInt
-      },
-      onCompleted: () => {
-        setIsLoaded(true);
-      }
+  const { data: dataPost } = useQuery<GetPostByIdQuery, GetPostByIdQueryVariables>(GET_POST_BY_ID, {
+    variables: {
+      id: postIdInt
+    },
+    onCompleted: () => {
+      setIsLoaded(true);
     }
-  );
+  });
 
-  const [createComment, { data: commentsData }] = useMutation<CreateCommentMutation, CreateCommentMutationVariables>(
-    CREATE_COMMENT,
-    {
-      variables: {
-        postId: postIdInt,
-        text: comment
-      },
-      refetchQueries: [
-        {
-          query: GET_COMMENTS_BY_POST_ID,
-          variables: {
-            postId: postIdInt
-          }
+  const [createComment] = useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CREATE_COMMENT, {
+    variables: {
+      postId: postIdInt,
+      text: comment
+    },
+    refetchQueries: [
+      {
+        query: GET_COMMENTS_BY_POST_ID,
+        variables: {
+          postId: postIdInt
         }
-      ]
-    }
-  );
+      }
+    ]
+  });
 
   const [deleteComment] = useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DELETE_COMMENT, {
     refetchQueries: [
@@ -117,11 +111,7 @@ const Post = () => {
     ]
   });
 
-  const {
-    data,
-    loading: loadingComments,
-    refetch
-  } = useQuery<GetCommentsByPostIdQuery, GetCommentsByPostIdQueryVariables>(GET_COMMENTS_BY_POST_ID, {
+  const { data } = useQuery<GetCommentsByPostIdQuery, GetCommentsByPostIdQueryVariables>(GET_COMMENTS_BY_POST_ID, {
     variables: {
       postId: postIdInt
     }
@@ -174,8 +164,6 @@ const Post = () => {
   };
   // TODO get this from backend in post model
   const isLiked = likedPosts.some((likedPost) => likedPost.userId === loggedInUserId);
-
-  const userImageSrc = useMemo(() => dataPost?.getPostById.user.image || avatarPlaceholder, [dataPost]);
 
   return (
     <div className="fixed lg:flex justify-between z-50 top-0 left-0 w-full h-full bg-black lg:overflow-hidden overflow-auto">
@@ -244,11 +232,9 @@ const Post = () => {
             <div className="flex items-center justify-between px-8">
               <div className="flex items-center">
                 <Link to="/">
-                  <img
-                    src={userImageSrc}
-                    alt="avatar"
-                    width="40"
-                    className="rounded-full lg:mx-0 mx-auto"
+                  <UserAvatar
+                    image={dataPost?.getPostById.user.image}
+                    className="w-10"
                   />
                 </Link>
 
@@ -318,11 +304,9 @@ const Post = () => {
                     key={comment.id}
                   >
                     <Link to="/">
-                      <img
-                        className="absolute top-0 rounded-full lg:mx-0 mx-auto"
-                        src={comment.user.image || avatarPlaceholder}
-                        alt="avatar"
-                        width="40"
+                      <UserAvatar
+                        image={comment.user.image}
+                        className="w-10"
                       />
                     </Link>
 

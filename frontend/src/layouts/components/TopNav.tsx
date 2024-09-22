@@ -1,18 +1,17 @@
 import tikTokLogo from '../../assets/images/tiktok-logo.png';
-import avatarPlaceholder from '../../assets/images/avatar-placeholder.png';
 import { useGeneralStore } from '../../modules/shared/stores/generalStore.ts';
 import { useUserStore } from '../../modules/shared/auth/stores/userStore.ts';
 import { useMutation } from '@apollo/client';
 import { LOGOUT_USER } from '../../modules/shared/auth/mutations/Logout.ts';
 import { Link } from 'react-router-dom';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { AiOutlineSearch, AiOutlineUpload } from 'react-icons/ai';
 import { BsFillPersonFill, BsFillSendFill } from 'react-icons/bs';
 import { BiMessageDetail } from 'react-icons/bi';
 import { GrLogout } from 'react-icons/gr';
+import UserAvatar from '../../modules/shared/components/UserAvatar.tsx';
 // TODO hide non user button
 const TopNav = () => {
-  const isLoginOpen = useGeneralStore((state) => state.isLoginOpen);
   const setIsLoginOpen = useGeneralStore((state) => state.setIsLoginOpen);
   const user = useUserStore();
   const logout = useUserStore((state) => state.logout);
@@ -28,8 +27,6 @@ const TopNav = () => {
       console.log(e);
     }
   };
-
-  const userImageSrc = useMemo(() => user.image || avatarPlaceholder, [user]);
 
   return (
     <div className="bg-white fixed z-30 flex items-center w-full border-b h-[61px]">
@@ -95,12 +92,7 @@ const TopNav = () => {
                 className="mt-1"
                 onClick={() => setShowMenu((prev) => !prev)}
               >
-                <img
-                  src={userImageSrc}
-                  alt="avatar"
-                  className="rounded-full"
-                  width="33"
-                />
+                <UserAvatar image={user.image} />
               </button>
 
               {showMenu && (

@@ -7,6 +7,7 @@ export const UPDATE_PROFILE = gql`
       fullname
       bio
       image
+      email
     }
   }
 `;

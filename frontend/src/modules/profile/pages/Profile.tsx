@@ -13,7 +13,7 @@ import UserAvatar from '../../shared/components/UserAvatar.tsx';
 const Profile = () => {
   const { id } = useParams();
   const pageUserId = useMemo(() => Number(id), [id]);
-  const user = useUserStore();
+  const user = useUserStore((state) => state.user);
   const isEditModalOpen = useGeneralStore((state) => state.isEditProfileOpen);
   const setIsEditModalOpen = useGeneralStore((state) => state.setIsEditProfileOpen);
 
@@ -26,29 +26,33 @@ const Profile = () => {
     }
   );
 
+  if (!user) {
+    return null;
+  }
+
   return (
     <MainLayout>
-      <div className="pt-[90px] pl-[80px] lg:pr-0 pr-2 max-w-full 2xl:mx-auto">
+      <div className="max-w-full pl-[80px] pr-2 pt-[90px] lg:pr-0 2xl:mx-auto">
         <div className="flex">
           <UserAvatar
             image={user.image}
-            className="!w-24 !h-24 object-cover"
+            className="!h-24 !w-24 object-cover"
           />
 
           <div className="ml-5 w-full">
-            <div className="text-[30px] font-bold truncate">User name</div>
-            <div className="text-[18px] truncate">{user.fullname}</div>
+            <div className="truncate text-[30px] font-bold">User name</div>
+            <div className="truncate text-[18px]">{user.fullname}</div>
             <button
-              className="flex items-center rounded-md py-1.5 px-3.5 mt-3 text-[15px] font-semibold border hover:bg-gray-100 transition-all duration-300"
+              className="mt-3 flex items-center rounded-md border px-3.5 py-1.5 text-[15px] font-semibold transition-all duration-300 hover:bg-gray-100"
               onClick={setIsEditModalOpen}
             >
               <BsFillPencilFill
                 size="18"
-                className="mt-0.5 mr-1"
+                className="mr-1 mt-0.5"
               />
               <div>Edit Profile</div>
             </button>
-            <button className="flex items-center rounded-md py-1.5 px-8 mt-3 text-[15px] text-white font-semibold bg-[#f02c56]">
+            <button className="mt-3 flex items-center rounded-md bg-[#f02c56] px-8 py-1.5 text-[15px] font-semibold text-white">
               Follow
             </button>
           </div>
@@ -57,24 +61,24 @@ const Profile = () => {
         <div className="flex items-center pt-4">
           <div className="mr-4">
             <span className="font-bold">10k</span>
-            <span className="text-gray-500 font-light text-[15px] pl-1.5">Following</span>
+            <span className="pl-1.5 text-[15px] font-light text-gray-500">Following</span>
           </div>
 
           <div className="mr-4">
             <span className="font-bold">10k</span>
-            <span className="text-gray-500 font-light text-[15px] pl-1.5">Followers</span>
+            <span className="pl-1.5 text-[15px] font-light text-gray-500">Followers</span>
           </div>
         </div>
 
-        <div className="pt-5 mr-4 text-gray-500 font-light text-[15px] max-w-[500px]">This is the bio section</div>
+        <div className="mr-4 max-w-[500px] pt-5 text-[15px] font-light text-gray-500">This is the bio section</div>
 
-        <div className="flex w-full items-center pt-4 border-b">
-          <div className="flex-1 text-center py-5 text-[17px] font-semibold border-b-2 border-b-black">Videos</div>
+        <div className="flex w-full items-center border-b pt-4">
+          <div className="flex-1 border-b-2 border-b-black py-5 text-center text-[17px] font-semibold">Videos</div>
 
-          <div className="text-center text-gray-500 py-5 text-[17px] font-semibold flex-1">Liked</div>
+          <div className="flex-1 py-5 text-center text-[17px] font-semibold text-gray-500">Liked</div>
         </div>
 
-        <div className="mt-4 grid 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-3">
+        <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
           {data?.getPostsByUserId.map((post) => (
             <PostProfile
               key={post.id}

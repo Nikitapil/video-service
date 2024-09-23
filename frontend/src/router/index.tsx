@@ -1,9 +1,9 @@
-import {createBrowserRouter} from "react-router-dom";
-import Feed from "../modules/feed/pages/Feed.tsx";
-import Upload from "../modules/upload/pages/Upload.tsx";
-import Profile from "../modules/profile/pages/Profile.tsx";
-import Post from "../modules/post/pages/Post.tsx";
-import ProtectedRoutes from "../modules/shared/auth/components/ProtectedRoutes.tsx";
+import { createBrowserRouter } from 'react-router-dom';
+import Feed from '../modules/feed/pages/Feed.tsx';
+import Upload from '../modules/upload/pages/Upload.tsx';
+import Profile from '../modules/profile/pages/Profile.tsx';
+import Post from '../modules/post/pages/Post.tsx';
+import ProtectedRoutes from '../modules/shared/auth/components/ProtectedRoutes.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -24,10 +24,18 @@ export const router = createBrowserRouter([
   },
   {
     path: '/profile/:id',
-    element: <Profile />
+    element: (
+      <ProtectedRoutes>
+        <Profile />
+      </ProtectedRoutes>
+    )
   },
   {
     path: '/post/:id',
-    element: <Post />
+    element: (
+      <ProtectedRoutes>
+        <Post />
+      </ProtectedRoutes>
+    )
   }
-])
+]);

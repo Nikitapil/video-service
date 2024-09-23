@@ -12,7 +12,7 @@ import AppInput from '../../../components/ui/AppInput.tsx';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
 
 const EditProfileModal = () => {
-  const user = useUserStore();
+  const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
   const setIsEditProfileOpen = useGeneralStore((state) => state.setIsEditProfileOpen);
 
@@ -22,14 +22,14 @@ const EditProfileModal = () => {
   const [croppedImage, setCroppedImage] = useState<string | undefined>();
 
   const [file, setFile] = useState<File | null>();
-  const [username, setUsername] = useState<string>(user.fullname);
-  const [bio, setBio] = useState<string>(user.bio ?? '');
+  const [username, setUsername] = useState<string>(user?.fullname || '');
+  const [bio, setBio] = useState<string>(user?.bio ?? '');
 
   const [croppingDone, setCroppingDone] = useState<boolean>(false);
   const cropperRef = useRef<ReactCropperElement>(null);
 
   const imgSrc = useMemo(() => {
-    return croppedImage ?? user.image;
+    return croppedImage ?? user?.image;
   }, [user, croppedImage]);
 
   const [updateUserProfile] = useMutation<UpdateUserProfileMutation, UpdateUserProfileMutationVariables>(
@@ -77,12 +77,7 @@ const EditProfileModal = () => {
       }
     });
 
-    setUser({
-      id: response.data?.updateUser.id || null,
-      fullname: response.data?.updateUser.fullname || '',
-      bio: response.data?.updateUser.bio || '',
-      image: response.data?.updateUser.image || ''
-    });
+    setUser(response.data?.updateUser || null);
 
     setIsEditProfileOpen();
   };
@@ -101,9 +96,9 @@ const EditProfileModal = () => {
   }, [username, bio]);
 
   return (
-    <div className="fixed flex justify-center pt-5 z-50 top-0 left-0 w-full h-full bg-black bg-opacity-50 overflow-auto">
-      <div className="max-w-[700px] mx-3 p-4 rounded-lg mb-10 relative bg-white w-full h-fit">
-        <div className="justify-between w-full p-5 left-0 border-b border-b-gray-300 absolute flex items-center">
+    <div className="fixed left-0 top-0 z-50 flex h-full w-full justify-center overflow-auto bg-black bg-opacity-50 pt-5">
+      <div className="relative mx-3 mb-10 h-fit w-full max-w-[700px] rounded-lg bg-white p-4">
+        <div className="absolute left-0 flex w-full items-center justify-between border-b border-b-gray-300 p-5">
           <div className="text-[22px] font-medium">Edit Profile</div>
           <button onClick={() => setIsEditProfileOpen()}>
             <AiOutlineClose size="25" />
@@ -111,8 +106,8 @@ const EditProfileModal = () => {
         </div>
 
         <div className="mt-16">
-          <div className="flex flex-col border-b sm:h-[145px] h-[160px] px-1.5 sm:py-7 py-4 w-full">
-            <div className="font-semibold text-[15px] sm:mb-0 mb-1 text-gray-700 sm:w-[160px] sm:mx-auto text-center">
+          <div className="flex h-[160px] w-full flex-col border-b px-1.5 py-4 sm:h-[145px] sm:py-7">
+            <div className="mb-1 text-center text-[15px] font-semibold text-gray-700 sm:mx-auto sm:mb-0 sm:w-[160px]">
               Profile photo
             </div>
 
@@ -123,10 +118,10 @@ const EditProfileModal = () => {
               >
                 <UserAvatar
                   image={imgSrc}
-                  className="!w-20 img-preview object-cover"
+                  className="img-preview !w-20 object-cover"
                 />
 
-                <div className="absolute bottom-0 right-0 rounded-full flex items-center justify-center bg-white shadow-xl border border-gray-300 p-1 w-[32px] h-[32px]">
+                <div className="absolute bottom-0 right-0 flex h-[32px] w-[32px] items-center justify-center rounded-full border border-gray-300 bg-white p-1 shadow-xl">
                   <BsFillPencilFill
                     size="17"
                     className="mx-auto"
@@ -143,13 +138,13 @@ const EditProfileModal = () => {
             </div>
           </div>
 
-          <div className="flex flex-col border-b px-1.5 py-2 mt-1.5 w-full">
-            <div className="font-semibold text-[15px] sm:mb-0 mb-1 text-gray-700 sm:w-[160px] sm:mx-auto text-center">
+          <div className="mt-1.5 flex w-full flex-col border-b px-1.5 py-2">
+            <div className="mb-1 text-center text-[15px] font-semibold text-gray-700 sm:mx-auto sm:mb-0 sm:w-[160px]">
               Username
             </div>
 
             <div className="flex items-center justify-center">
-              <div className="sm:w-[60%] w-full max-w-md">
+              <div className="w-full max-w-md sm:w-[60%]">
                 <AppInput
                   value={username}
                   placeholder="Username"
@@ -158,7 +153,7 @@ const EditProfileModal = () => {
                   onChange={(e) => setUsername(e.target.value)}
                 />
 
-                <div className="text-[11px] text-gray-500 mt-4 text-center">
+                <div className="mt-4 text-center text-[11px] text-gray-500">
                   Username can only contain letters, numbers, underscores. Changing your username will also change your
                   profile link.
                 </div>
@@ -166,15 +161,15 @@ const EditProfileModal = () => {
             </div>
           </div>
 
-          <div className="flex flex-col border-b px-1.5 py-2 mt-1.5 w-full">
-            <div className="font-semibold text-[15px] sm:mb-0 mb-1 text-gray-700 sm:w-[160px] sm:mx-auto text-center">
+          <div className="mt-1.5 flex w-full flex-col border-b px-1.5 py-2">
+            <div className="mb-1 text-center text-[15px] font-semibold text-gray-700 sm:mx-auto sm:mb-0 sm:w-[160px]">
               Bio
             </div>
 
             <div className="flex items-center justify-center">
-              <div className="sm:w-[60%] w-full max-w-md">
+              <div className="w-full max-w-md sm:w-[60%]">
                 <textarea
-                  className="resize-none w-full bg-[#f1f1f2] text-gray-800 border border-gray-300 rounded-md py-2.5 px-3 outline-none"
+                  className="w-full resize-none rounded-md border border-gray-300 bg-[#f1f1f2] px-3 py-2.5 text-gray-800 outline-none"
                   cols={30}
                   rows={4}
                   maxLength={80}
@@ -182,14 +177,14 @@ const EditProfileModal = () => {
                   onChange={(e) => setBio(e.target.value)}
                 ></textarea>
 
-                <div className="text-[11px] text-gray-500 text-right">{bio.length}/80</div>
+                <div className="text-right text-[11px] text-gray-500">{bio.length}/80</div>
               </div>
             </div>
           </div>
         </div>
 
         {uploadedImage && !croppedImage && (
-          <div className="w-full h-[430px] absolute top-20 left-0">
+          <div className="absolute left-0 top-20 h-[430px] w-full">
             <Cropper
               ref={cropperRef}
               style={{ height: '100%', width: '100%' }}
@@ -207,27 +202,27 @@ const EditProfileModal = () => {
           </div>
         )}
 
-        <div className="p-5 left-0 bottom-0 border-t border-t-gray-300 w-full">
+        <div className="bottom-0 left-0 w-full border-t border-t-gray-300 p-5">
           <div className="flex items-center justify-end">
             <button
-              className="flex items-center border rounded-sm px-3 py-[6px] hover:bg-gray-100 transition-all duration-300"
+              className="flex items-center rounded-sm border px-3 py-[6px] transition-all duration-300 hover:bg-gray-100"
               onClick={setIsEditProfileOpen}
             >
-              <span className="px-2 font-medium text-[15px]">Cancel</span>
+              <span className="px-2 text-[15px] font-medium">Cancel</span>
             </button>
             {!uploadedImage || croppingDone ? (
               <button
-                className="flex items-center bg-[#f02c56] text-white border rounded-md ml-3 px-3 py-[6px]"
+                className="ml-3 flex items-center rounded-md border bg-[#f02c56] px-3 py-[6px] text-white"
                 onClick={cropAndUpdateImage}
               >
-                <span className="mx-4 font-medium text-[15px]">Apply</span>
+                <span className="mx-4 text-[15px] font-medium">Apply</span>
               </button>
             ) : (
               <button
-                className="flex items-center bg-[#f02c56] text-white border rounded-md ml-3 px-3 py-[6px]"
+                className="ml-3 flex items-center rounded-md border bg-[#f02c56] px-3 py-[6px] text-white"
                 onClick={saveCroppedImage}
               >
-                <span className="mx-4 font-medium text-[15px]">Save crop</span>
+                <span className="mx-4 text-[15px] font-medium">Save crop</span>
               </button>
             )}
           </div>

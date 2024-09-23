@@ -31,11 +31,7 @@ const Login = () => {
       });
 
       if (data?.login.user) {
-        setUser({
-          id: data?.login.user.id,
-          email: data?.login.user.email,
-          fullname: data?.login.user.fullname
-        });
+        setUser(data.login.user);
 
         setIsLoginOpen(false);
       }

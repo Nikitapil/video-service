@@ -33,11 +33,7 @@ const Register = () => {
       });
 
       if (data?.register.user) {
-        setUser({
-          id: data?.register.user.id,
-          email: data?.register.user.email,
-          fullname: data?.register.user.fullname
-        });
+        setUser(data.register.user);
 
         setIsLoginOpen(false);
       }

@@ -1,33 +1,28 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+import { User } from '../../../../gql/graphql.tsx';
 
-export interface User {
-  id: number | null;
-  fullname: string;
-  email?: string;
-  bio?: string;
-  image?: string;
+export type UserStoreUser = User | null;
+
+export interface UserStoreState {
+  user: UserStoreUser;
 }
 
 export interface UserActions {
-  setUser: (user: User) => void;
+  setUser: (user: UserStoreUser) => void;
   logout: () => void;
 }
 
-const initialState: User = {
-  id: null,
-  fullname: '',
-  email: '',
-  bio: '',
-  image: ''
+const initialState: UserStoreState = {
+  user: null
 } as const;
 
-export const useUserStore = create<User & UserActions>()(
+export const useUserStore = create<UserStoreState & UserActions>()(
   devtools(
     persist(
       (set) => ({
         ...initialState,
-        setUser: (user: User) => set({ ...initialState, ...user }),
+        setUser: (user: UserStoreUser) => set({ ...initialState, user }),
         logout: () => set({ ...initialState })
       }),
       { name: 'userStore' }

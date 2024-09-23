@@ -43,7 +43,7 @@ const Post = () => {
   const likePost = usePostStore((state) => state.likePost);
   const removeLike = usePostStore((state) => state.removeLike);
 
-  const loggedInUserId = useUserStore((state) => state.id);
+  const loggedInUserId = useUserStore((state) => state.user?.id);
 
   const postIdInt = useMemo(() => Number(id), [id]);
 
@@ -165,11 +165,11 @@ const Post = () => {
   const isLiked = likedPosts.some((likedPost) => likedPost.userId === loggedInUserId);
 
   return (
-    <div className="fixed lg:flex justify-between z-50 top-0 left-0 w-full h-full bg-black lg:overflow-hidden overflow-auto">
+    <div className="fixed left-0 top-0 z-50 h-full w-full justify-between overflow-auto bg-black lg:flex lg:overflow-hidden">
       {!isLoaded && (
-        <div className="absolute top-0 flex items-center justify-center bg-black bg-opacity-70 h-screen w-full">
+        <div className="absolute top-0 flex h-screen w-full items-center justify-center bg-black bg-opacity-70">
           <ImSpinner2
-            className="animate-spin ml-1"
+            className="ml-1 animate-spin"
             color="#fff"
             size="100"
           />
@@ -177,10 +177,10 @@ const Post = () => {
       )}
       {dataPost?.getPostById && (
         <>
-          <div className="lg:w-[calc(100% - 540px)] w-full h-full relative">
+          <div className="lg:w-[calc(100% - 540px)] relative h-full w-full">
             <Link
               to="/"
-              className="absolute z-20 m-5 rounded-full hover:bg-gray-800 bg-gray-700 p-1.5 transition-all duration-300"
+              className="absolute z-20 m-5 rounded-full bg-gray-700 p-1.5 transition-all duration-300 hover:bg-gray-800"
             >
               <ImCross
                 color="#fff"
@@ -189,7 +189,7 @@ const Post = () => {
             </Link>
 
             <button
-              className="absolute z-20 right-4 top-4 flex items-center justify-center rounded-full bg-gray-700 p-1.5 hover:bg-gray-800 transition-all duration-300"
+              className="absolute right-4 top-4 z-20 flex items-center justify-center rounded-full bg-gray-700 p-1.5 transition-all duration-300 hover:bg-gray-800"
               onClick={loopThroughPostsUp}
             >
               <BiChevronUp
@@ -199,7 +199,7 @@ const Post = () => {
             </button>
 
             <button
-              className="absolute z-20 right-4 top-20 flex items-center justify-center rounded-full bg-gray-700 p-1.5 hover:bg-gray-800 transition-all duration-300"
+              className="absolute right-4 top-20 z-20 flex items-center justify-center rounded-full bg-gray-700 p-1.5 transition-all duration-300 hover:bg-gray-800"
               onClick={loopThroughPostsDown}
             >
               <BiChevronDown
@@ -211,7 +211,7 @@ const Post = () => {
             <div className="bg-black bg-opacity-90 lg:min-w-[480px]">
               <video
                 src={`http://localhost:3000${dataPost.getPostById.video}`}
-                className="h-screen mx-auto"
+                className="mx-auto h-screen"
                 controls
                 autoPlay
                 muted
@@ -220,7 +220,7 @@ const Post = () => {
             </div>
           </div>
 
-          <div className="lg:max-w-[550px] relative w-full h-full bg-white flex flex-col">
+          <div className="relative flex h-full w-full flex-col bg-white lg:max-w-[550px]">
             <div className="py-7" />
 
             <div className="flex items-center justify-between px-8">
@@ -234,9 +234,9 @@ const Post = () => {
 
                 <div className="ml-3 pt-0.5">
                   <div className="text-[17px] font-semibold">User name</div>
-                  <div className="text-[13] font-light">
+                  <div className="font-light text-[13]">
                     {dataPost?.getPostById.user.fullname}
-                    <span className="relative top-[6px] text-[30px] pr-0.5">•</span>
+                    <span className="relative top-[6px] pr-0.5 text-[30px]">•</span>
                     <span className="font-medium">{new Date(dataPost?.getPostById?.createdAt).toLocaleString()}</span>
                   </div>
                 </div>
@@ -248,17 +248,17 @@ const Post = () => {
               />
             </div>
 
-            <div className="px-6 mt-4 text-sm">{dataPost.getPostById.text}</div>
+            <div className="mt-4 px-6 text-sm">{dataPost.getPostById.text}</div>
 
-            <div className="flex items-center gap-1 px-8 mt-4 text-sm font-bold">
+            <div className="mt-4 flex items-center gap-1 px-8 text-sm font-bold">
               <BsMusicNoteBeamed size="17" />
               Original sound - {dataPost?.getPostById.user.fullname}
             </div>
 
-            <div className="flex items-center px-8 mt-8">
-              <div className="pb-4 text-center flex items-center">
+            <div className="mt-8 flex items-center px-8">
+              <div className="flex items-center pb-4 text-center">
                 <button
-                  className="rounded-full bg-gray-200 p-2 hover:bg-gray-300 transition-all duration-300"
+                  className="rounded-full bg-gray-200 p-2 transition-all duration-300 hover:bg-gray-300"
                   onClick={() => (isLiked ? handleRemoveLike() : handleLikePost())}
                 >
                   <AiFillHeart
@@ -266,35 +266,35 @@ const Post = () => {
                     color={isLiked ? 'red' : 'black'}
                   />
                 </button>
-                <span className="text-xs pl-2 pr-4 text-gray-800 font-semibold">
+                <span className="pl-2 pr-4 text-xs font-semibold text-gray-800">
                   {dataPost?.getPostById.likes?.length}
                 </span>
               </div>
 
-              <div className="pb-4 text-center flex items-center">
-                <button className="rounded-full bg-gray-200 p-2 hover:bg-gray-300 transition-all duration-300">
+              <div className="flex items-center pb-4 text-center">
+                <button className="rounded-full bg-gray-200 p-2 transition-all duration-300 hover:bg-gray-300">
                   <BsFillChatDotsFill
                     size="25"
                     color="black"
                   />
                 </button>
-                <span className="text-xs pl-2 pr-4 text-gray-800 font-semibold">
+                <span className="pl-2 pr-4 text-xs font-semibold text-gray-800">
                   {data?.getCommentsByPostId?.length}
                 </span>
               </div>
             </div>
 
-            <div className="bg-[#f8f8f8] z-0 w-full flex-1 border-t-2 overflow-auto">
+            <div className="z-0 w-full flex-1 overflow-auto border-t-2 bg-[#f8f8f8]">
               <div className="pt-2" />
 
               {data?.getCommentsByPostId.length === 0 && (
-                <div className="text-center mt-6 text-xl text-gray-500">No comments...</div>
+                <div className="mt-6 text-center text-xl text-gray-500">No comments...</div>
               )}
 
-              <div className="flex flex-col items-center justify-between px-8 mt-4">
+              <div className="mt-4 flex flex-col items-center justify-between px-8">
                 {data?.getCommentsByPostId.map((comment) => (
                   <div
-                    className="flex items-center relative w-full"
+                    className="relative flex w-full items-center"
                     key={comment.id}
                   >
                     <Link to="/">
@@ -304,8 +304,8 @@ const Post = () => {
                       />
                     </Link>
 
-                    <div className="ml-14 pt-0.5 w-full">
-                      <div className="text-[10px] font-semibold flex items-center justify-between">
+                    <div className="ml-14 w-full pt-0.5">
+                      <div className="flex items-center justify-between text-[10px] font-semibold">
                         User name
                         {comment.user.id === loggedInUserId && (
                           <MdOutlineDeleteForever
@@ -324,10 +324,10 @@ const Post = () => {
               <div className="mb-28" />
             </div>
 
-            <div className="absolute flex items-center justify-between bottom-0 bg-white h-[85px] lg:max-w-[550px] w-full py-5 px-8 border-t-2">
-              <div className="flex items-center rounded-lg w-full lg:max-w-[420px] bg-[#f1f1f2] has-[input:focus]:border has-[input:focus]:border-gray-400">
+            <div className="absolute bottom-0 flex h-[85px] w-full items-center justify-between border-t-2 bg-white px-8 py-5 lg:max-w-[550px]">
+              <div className="flex w-full items-center rounded-lg bg-[#f1f1f2] has-[input:focus]:border has-[input:focus]:border-gray-400 lg:max-w-[420px]">
                 <input
-                  className="bg-[#f1f1f2] border-none outline-none w-full lg:max-w-[420px] p-2 rounded-lg"
+                  className="w-full rounded-lg border-none bg-[#f1f1f2] p-2 outline-none lg:max-w-[420px]"
                   type="text"
                   placeholder="Add a comment..."
                   value={comment}
@@ -336,7 +336,7 @@ const Post = () => {
               </div>
 
               <button
-                className="text-[#f02c56] cursor-pointer font-semibold text-sm ml-5 pr-1 disabled:text-gray-400 disabled:cursor-not-allowed"
+                className="ml-5 cursor-pointer pr-1 text-sm font-semibold text-[#f02c56] disabled:cursor-not-allowed disabled:text-gray-400"
                 disabled={!comment}
                 onClick={addComment}
               >

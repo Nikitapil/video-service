@@ -1,4 +1,3 @@
-import { useGeneralStore } from '../../modules/shared/stores/generalStore.ts';
 import { useUserStore } from '../../modules/shared/auth/stores/userStore.ts';
 import { useMutation } from '@apollo/client';
 import { LOGOUT_USER } from '../../modules/shared/auth/mutations/Logout.ts';
@@ -12,10 +11,11 @@ import UserAvatar from '../../modules/shared/components/UserAvatar.tsx';
 import Logo from '../../components/Logo.tsx';
 // TODO hide non user button
 const TopNav = () => {
-  const setIsLoginOpen = useGeneralStore((state) => state.setIsLoginOpen);
-  const user = useUserStore();
+  const user = useUserStore((state) => state.user);
   const logout = useUserStore((state) => state.logout);
   const [logoutUser] = useMutation(LOGOUT_USER);
+
+  console.log(user)
 
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
@@ -28,20 +28,24 @@ const TopNav = () => {
     }
   };
 
+  if (!user) {
+    return null;
+  }
+
   return (
-    <div className="bg-white fixed z-30 flex items-center w-full border-b h-[61px]">
-      <div className="container mx-auto flex items-center justify-between w-full px-6">
+    <div className="fixed z-30 flex h-[61px] w-full items-center border-b bg-white">
+      <div className="container mx-auto flex w-full items-center justify-between px-6">
         <Link to="/">
           <Logo />
         </Link>
 
-        <div className="hidden md:flex items-center bg-[#f1f1f1] p-1 rounded-full max-w-[380px]">
+        <div className="hidden max-w-[380px] items-center rounded-full bg-[#f1f1f1] p-1 md:flex">
           <input
             type="text"
-            className="w-full pl-3 my-2 bg-transparent placeholder-[#838383] text-[15px] outline-none"
+            className="my-2 w-full bg-transparent pl-3 text-[15px] placeholder-[#838383] outline-none"
             placeholder="Search accounts"
           />
-          <div className="px-3 py-1 items-center border-l border-l-gray-300">
+          <div className="items-center border-l border-l-gray-300 px-3 py-1">
             <AiOutlineSearch
               size="20"
               color="#838383"
@@ -49,30 +53,19 @@ const TopNav = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 min-w-[275px] max-w-[320px] w-full">
+        <div className="flex w-full min-w-[275px] max-w-[320px] items-center justify-end gap-3">
           <Link
             to="/upload"
-            className="flex items-center border rounded-sm px-3 py-[6px] hover:bg-gray-100"
+            className="flex items-center rounded-sm border px-3 py-[6px] hover:bg-gray-100"
           >
             <AiOutlineUpload
               size="20"
               color="#161724"
             />
-            <span className="px-2 font-medium text-[15px] text-[#161724]">Upload</span>
+            <span className="px-2 text-[15px] font-medium text-[#161724]">Upload</span>
           </Link>
 
-          {!user.id && (
-            <div className="flex items-center">
-              <button
-                className="flex items-center bg-[#f02c56] text-white border rounded-md px-3 py-[6px] min-w-[110px]"
-                onClick={() => setIsLoginOpen(true)}
-              >
-                Sign in
-              </button>
-            </div>
-          )}
-
-          <div className="flex gap-2 items-center">
+          <div className="flex items-center gap-2">
             <BsFillSendFill
               size="25"
               color="#161724"
@@ -91,29 +84,29 @@ const TopNav = () => {
               </button>
 
               {showMenu && (
-                <div className="absolute bg-white rounded-lg py-1.5 w-[200px] shadow-xl border top-[43px] -right-2">
+                <div className="absolute -right-2 top-[43px] w-[200px] rounded-lg border bg-white py-1.5 shadow-xl">
                   <Link
                     to={`/profile/${user.id}`}
-                    className="flex items-center gap-1.5 px-3 py-2 hover:bg-gray-100 transition-all duration-300"
+                    className="flex items-center gap-1.5 px-3 py-2 transition-all duration-300 hover:bg-gray-100"
                     onClick={() => setShowMenu(false)}
                   >
                     <BsFillPersonFill
                       size="20"
                       color="#161724"
                     />
-                    <span className="font-semibold text-sm">Profile</span>
+                    <span className="text-sm font-semibold">Profile</span>
                   </Link>
 
                   {user.id && (
                     <button
-                      className="flex items-center w-full gap-1.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-all duration-300"
+                      className="flex w-full items-center gap-1.5 px-4 py-2 text-sm text-gray-700 transition-all duration-300 hover:bg-gray-100 hover:text-gray-900"
                       onClick={handleLogout}
                     >
                       <GrLogout
                         size="20"
                         color="#161724"
                       />
-                      <span className="font-semibold text-sm">Log out</span>
+                      <span className="text-sm font-semibold">Log out</span>
                     </button>
                   )}
                 </div>

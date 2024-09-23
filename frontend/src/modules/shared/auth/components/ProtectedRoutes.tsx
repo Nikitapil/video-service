@@ -1,31 +1,15 @@
-import {ReactNode, useEffect} from "react";
-import {useUserStore} from "../stores/userStore.ts";
-import {useNavigate} from "react-router-dom";
-import {useGeneralStore} from "../../stores/generalStore.ts";
+import { ReactNode } from 'react';
+import { useUserStore } from '../stores/userStore.ts';
+import AuthModal from './AuthModal.tsx';
 
 const ProtectedRoutes = ({ children }: { children: ReactNode }) => {
-  const user = useUserStore(state => state)
-  const navigate = useNavigate();
-  const setLoginIsOpen = useGeneralStore(state => state.setIsLoginOpen)
+  const user = useUserStore((state) => state.user);
 
-  useEffect(() => {
-    if (!user.id) {
-      navigate("/");
-      setLoginIsOpen(true)
-    }
-  }, [user.id, navigate, setLoginIsOpen, user]);
-
-  if (!user.id) {
-    return (
-      <div>No Access</div>
-    )
+  if (!user) {
+    return <AuthModal />;
   }
 
-  return (
-    <>
-      { children }
-    </>
-  );
+  return <>{children}</>;
 };
 
 export default ProtectedRoutes;

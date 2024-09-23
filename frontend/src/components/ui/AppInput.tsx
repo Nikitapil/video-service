@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, useEffect, useRef } from 'react';
+import { InputHTMLAttributes } from 'react';
 
 interface AppInputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
@@ -16,19 +16,9 @@ const AppInput = ({
   name,
   ...otherProps
 }: AppInputProps) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  // TODO check this useEffect, if input native autofocus works remove this useless effect
-  useEffect(() => {
-    if (autoFocus) {
-      inputRef.current?.focus();
-    }
-  }, [autoFocus]);
-
   return (
     <div>
       <input
-        ref={inputRef}
         type={type}
         placeholder={placeholder}
         maxLength={max}
@@ -36,9 +26,9 @@ const AppInput = ({
         onChange={onChange}
         name={name}
         {...otherProps}
-        className="block w-full bg-[#F0F0F0] text-gray-800 border border-gray-300 rounded-md py-2.5 px-3 outline-none focus:bg-white transition-all duration-300"
+        className="common-transition block w-full rounded-md border border-gray-300 bg-indigo-50 px-3 py-2.5 text-gray-900 outline-none focus:bg-white"
       />
-      {error && <span className="text-red-500 text-[14px] font-semibold">{error}</span>}
+      {error && <span className="text-sm font-semibold text-red-500">{error}</span>}
     </div>
   );
 };

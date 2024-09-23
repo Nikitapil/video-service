@@ -32,7 +32,7 @@ const Profile = () => {
         <div className="flex">
           <UserAvatar
             image={user.image}
-            className="w-24 h-24 object-cover"
+            className="!w-24 !h-24 object-cover"
           />
 
           <div className="ml-5 w-full">

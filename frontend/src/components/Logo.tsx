@@ -8,7 +8,8 @@ const Logo = () => {
         alt="logo"
         className="w-7"
       />
-      <span className="text-black text-lg">Video Service</span>
+
+      <span className="text-lg text-black">Video Service</span>
     </div>
   );
 };

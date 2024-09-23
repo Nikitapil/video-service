@@ -13,20 +13,21 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "\n  query GetUsers {\n    getUsers {\n      id\n      fullname\n      email\n      image\n    }\n  }\n": types.GetUsersDocument,
+    "\n  query GetPosts($skip: Int!, $take: Int!) {\n    getPosts(skip: $skip, take: $take) {\n      id\n      text\n      video\n      createdAt\n      user {\n        id\n        fullname\n        email\n      }\n      likes {\n        id\n        userId\n        postId\n      }\n    }\n  }\n": types.GetPostsDocument,
     "\n  mutation CreateComment($text: String!, $postId: Int!) {\n      createComment(text: $text, postId: $postId) {\n          text\n          id\n          createdAt\n          user {\n              id\n              fullname\n              email\n          }\n          post {\n              id\n              text\n              video\n          }\n      }\n  }\n": types.CreateCommentDocument,
-    "\n  mutation CreatePost($text: String!, $video: Upload!) {\n    createPost(text: $text, video: $video) {\n      id\n      text\n      video\n    }\n  }\n": types.CreatePostDocument,
     "\n    mutation DeleteComment($id: Int!) {\n        deleteComment(id: $id)\n    }\n": types.DeleteCommentDocument,
-    "\n  mutation LikePost($postId: Int!) {\n    likePost(postId: $postId) {\n      id\n      postId\n      userId\n    }\n  }\n": types.LikePostDocument,
+    "\n    query GetCommentsByPostId($postId: Int!) {\n        getCommentsByPostId(postId: $postId) {\n            id\n            text\n            createdAt\n            user {\n                id\n                fullname\n                email\n                image\n            }\n            post {\n                id\n                text\n                video\n            }\n        }\n    }\n": types.GetCommentsByPostIdDocument,
+    "\nquery GetPostById($id: Int!) {\n    getPostById(id: $id) {\n        id\n        text\n        video\n        createdAt\n        user {\n            id\n            email\n            fullname\n            image\n        }\n        likes {\n            id\n            userId\n            postId\n        },\n        otherPostIds\n    }\n}": types.GetPostByIdDocument,
+    "\n  mutation UpdateUserProfile($fullname: String, $bio: String, $image: Upload) {\n    updateUser(fullname: $fullname, bio: $bio, image: $image) {\n      id\n      fullname\n      bio\n      image\n    }\n  }\n": types.UpdateUserProfileDocument,
+    "\n    query getPostsByUserId($userId: Int!) {\n        getPostsByUserId(userId: $userId) {\n            id\n            text\n            video\n            createdAt\n            user {\n                fullname\n                email\n                id\n            }\n        }\n    }\n": types.GetPostsByUserIdDocument,
     "\n    mutation LoginUser($email: String!, $password: String!) {\n        login(loginInput: {email: $email, password: $password}) {\n            user {\n                email\n                id\n                fullname\n            }\n        }\n    }\n": types.LoginUserDocument,
     "\n    mutation LogoutUser {\n        logout\n    }\n": types.LogoutUserDocument,
     "\n    mutation RegisterUser(\n        $fullname: String!,\n        $email: String!, \n        $password: String!\n        $confirmPassword: String!\n    ) {\n        register(\n            registerInput: {\n                fullname: $fullname,\n                email: $email,\n                password: $password\n                confirmPassword: $confirmPassword\n            }\n        ) {\n            user {\n                id\n                fullname\n                email\n            }\n        }\n    }\n": types.RegisterUserDocument,
+    "\n  mutation LikePost($postId: Int!) {\n    likePost(postId: $postId) {\n      id\n      postId\n      userId\n    }\n  }\n": types.LikePostDocument,
     "\n    mutation UnlikePost($postId: Int!) {\n        unlikePost(postId: $postId) {\n            id\n        }\n    }\n": types.UnlikePostDocument,
-    "\n  mutation UpdateUserProfile($fullname: String, $bio: String, $image: Upload) {\n    updateUser(fullname: $fullname, bio: $bio, image: $image) {\n      id\n      fullname\n      bio\n      image\n    }\n  }\n": types.UpdateUserProfileDocument,
-    "\n    query GetCommentsByPostId($postId: Int!) {\n        getCommentsByPostId(postId: $postId) {\n            id\n            text\n            createdAt\n            user {\n                id\n                fullname\n                email\n                image\n            }\n            post {\n                id\n                text\n                video\n            }\n        }\n    }\n": types.GetCommentsByPostIdDocument,
-    "\nquery GetPostById($id: Int!) {\n    getPostById(id: $id) {\n        id\n        text\n        video\n        createdAt\n        user {\n            id\n            email\n            fullname\n            image\n        }\n        likes {\n            id\n            userId\n            postId\n        },\n        otherPostIds\n    }\n}": types.GetPostByIdDocument,
-    "\n    query GetPosts($skip: Int!, $take: Int!) {\n        getPosts(skip: $skip, take: $take) {\n            id\n            text\n            video\n            createdAt\n            user {\n                id\n                fullname\n                email\n            }\n            likes {\n                id\n                userId\n                postId\n            }\n        }\n    }\n": types.GetPostsDocument,
-    "\n    query getPostsByUserId($userId: Int!) {\n        getPostsByUserId(userId: $userId) {\n            id\n            text\n            video\n            createdAt\n            user {\n                fullname\n                email\n                id\n            }\n        }\n    }\n": types.GetPostsByUserIdDocument,
-    "\n  query GetUsers {\n    getUsers {\n      id\n      fullname\n      email\n      image\n    }\n  }\n": types.GetUsersDocument,
+    "\n  mutation CreatePost($text: String!, $video: Upload!) {\n    createPost(text: $text, video: $video) {\n      id\n      text\n      video\n    }\n  }\n": types.CreatePostDocument,
+    "\n        mutation RefreshToken {\n          refreshToken\n        }\n      ": types.RefreshTokenDocument,
 };
 
 /**
@@ -46,11 +47,15 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation CreateComment($text: String!, $postId: Int!) {\n      createComment(text: $text, postId: $postId) {\n          text\n          id\n          createdAt\n          user {\n              id\n              fullname\n              email\n          }\n          post {\n              id\n              text\n              video\n          }\n      }\n  }\n"): (typeof documents)["\n  mutation CreateComment($text: String!, $postId: Int!) {\n      createComment(text: $text, postId: $postId) {\n          text\n          id\n          createdAt\n          user {\n              id\n              fullname\n              email\n          }\n          post {\n              id\n              text\n              video\n          }\n      }\n  }\n"];
+export function graphql(source: "\n  query GetUsers {\n    getUsers {\n      id\n      fullname\n      email\n      image\n    }\n  }\n"): (typeof documents)["\n  query GetUsers {\n    getUsers {\n      id\n      fullname\n      email\n      image\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation CreatePost($text: String!, $video: Upload!) {\n    createPost(text: $text, video: $video) {\n      id\n      text\n      video\n    }\n  }\n"): (typeof documents)["\n  mutation CreatePost($text: String!, $video: Upload!) {\n    createPost(text: $text, video: $video) {\n      id\n      text\n      video\n    }\n  }\n"];
+export function graphql(source: "\n  query GetPosts($skip: Int!, $take: Int!) {\n    getPosts(skip: $skip, take: $take) {\n      id\n      text\n      video\n      createdAt\n      user {\n        id\n        fullname\n        email\n      }\n      likes {\n        id\n        userId\n        postId\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetPosts($skip: Int!, $take: Int!) {\n    getPosts(skip: $skip, take: $take) {\n      id\n      text\n      video\n      createdAt\n      user {\n        id\n        fullname\n        email\n      }\n      likes {\n        id\n        userId\n        postId\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation CreateComment($text: String!, $postId: Int!) {\n      createComment(text: $text, postId: $postId) {\n          text\n          id\n          createdAt\n          user {\n              id\n              fullname\n              email\n          }\n          post {\n              id\n              text\n              video\n          }\n      }\n  }\n"): (typeof documents)["\n  mutation CreateComment($text: String!, $postId: Int!) {\n      createComment(text: $text, postId: $postId) {\n          text\n          id\n          createdAt\n          user {\n              id\n              fullname\n              email\n          }\n          post {\n              id\n              text\n              video\n          }\n      }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -58,7 +63,19 @@ export function graphql(source: "\n    mutation DeleteComment($id: Int!) {\n    
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation LikePost($postId: Int!) {\n    likePost(postId: $postId) {\n      id\n      postId\n      userId\n    }\n  }\n"): (typeof documents)["\n  mutation LikePost($postId: Int!) {\n    likePost(postId: $postId) {\n      id\n      postId\n      userId\n    }\n  }\n"];
+export function graphql(source: "\n    query GetCommentsByPostId($postId: Int!) {\n        getCommentsByPostId(postId: $postId) {\n            id\n            text\n            createdAt\n            user {\n                id\n                fullname\n                email\n                image\n            }\n            post {\n                id\n                text\n                video\n            }\n        }\n    }\n"): (typeof documents)["\n    query GetCommentsByPostId($postId: Int!) {\n        getCommentsByPostId(postId: $postId) {\n            id\n            text\n            createdAt\n            user {\n                id\n                fullname\n                email\n                image\n            }\n            post {\n                id\n                text\n                video\n            }\n        }\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nquery GetPostById($id: Int!) {\n    getPostById(id: $id) {\n        id\n        text\n        video\n        createdAt\n        user {\n            id\n            email\n            fullname\n            image\n        }\n        likes {\n            id\n            userId\n            postId\n        },\n        otherPostIds\n    }\n}"): (typeof documents)["\nquery GetPostById($id: Int!) {\n    getPostById(id: $id) {\n        id\n        text\n        video\n        createdAt\n        user {\n            id\n            email\n            fullname\n            image\n        }\n        likes {\n            id\n            userId\n            postId\n        },\n        otherPostIds\n    }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation UpdateUserProfile($fullname: String, $bio: String, $image: Upload) {\n    updateUser(fullname: $fullname, bio: $bio, image: $image) {\n      id\n      fullname\n      bio\n      image\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateUserProfile($fullname: String, $bio: String, $image: Upload) {\n    updateUser(fullname: $fullname, bio: $bio, image: $image) {\n      id\n      fullname\n      bio\n      image\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    query getPostsByUserId($userId: Int!) {\n        getPostsByUserId(userId: $userId) {\n            id\n            text\n            video\n            createdAt\n            user {\n                fullname\n                email\n                id\n            }\n        }\n    }\n"): (typeof documents)["\n    query getPostsByUserId($userId: Int!) {\n        getPostsByUserId(userId: $userId) {\n            id\n            text\n            video\n            createdAt\n            user {\n                fullname\n                email\n                id\n            }\n        }\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -74,31 +91,19 @@ export function graphql(source: "\n    mutation RegisterUser(\n        $fullname
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  mutation LikePost($postId: Int!) {\n    likePost(postId: $postId) {\n      id\n      postId\n      userId\n    }\n  }\n"): (typeof documents)["\n  mutation LikePost($postId: Int!) {\n    likePost(postId: $postId) {\n      id\n      postId\n      userId\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n    mutation UnlikePost($postId: Int!) {\n        unlikePost(postId: $postId) {\n            id\n        }\n    }\n"): (typeof documents)["\n    mutation UnlikePost($postId: Int!) {\n        unlikePost(postId: $postId) {\n            id\n        }\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation UpdateUserProfile($fullname: String, $bio: String, $image: Upload) {\n    updateUser(fullname: $fullname, bio: $bio, image: $image) {\n      id\n      fullname\n      bio\n      image\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateUserProfile($fullname: String, $bio: String, $image: Upload) {\n    updateUser(fullname: $fullname, bio: $bio, image: $image) {\n      id\n      fullname\n      bio\n      image\n    }\n  }\n"];
+export function graphql(source: "\n  mutation CreatePost($text: String!, $video: Upload!) {\n    createPost(text: $text, video: $video) {\n      id\n      text\n      video\n    }\n  }\n"): (typeof documents)["\n  mutation CreatePost($text: String!, $video: Upload!) {\n    createPost(text: $text, video: $video) {\n      id\n      text\n      video\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetCommentsByPostId($postId: Int!) {\n        getCommentsByPostId(postId: $postId) {\n            id\n            text\n            createdAt\n            user {\n                id\n                fullname\n                email\n                image\n            }\n            post {\n                id\n                text\n                video\n            }\n        }\n    }\n"): (typeof documents)["\n    query GetCommentsByPostId($postId: Int!) {\n        getCommentsByPostId(postId: $postId) {\n            id\n            text\n            createdAt\n            user {\n                id\n                fullname\n                email\n                image\n            }\n            post {\n                id\n                text\n                video\n            }\n        }\n    }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\nquery GetPostById($id: Int!) {\n    getPostById(id: $id) {\n        id\n        text\n        video\n        createdAt\n        user {\n            id\n            email\n            fullname\n            image\n        }\n        likes {\n            id\n            userId\n            postId\n        },\n        otherPostIds\n    }\n}"): (typeof documents)["\nquery GetPostById($id: Int!) {\n    getPostById(id: $id) {\n        id\n        text\n        video\n        createdAt\n        user {\n            id\n            email\n            fullname\n            image\n        }\n        likes {\n            id\n            userId\n            postId\n        },\n        otherPostIds\n    }\n}"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n    query GetPosts($skip: Int!, $take: Int!) {\n        getPosts(skip: $skip, take: $take) {\n            id\n            text\n            video\n            createdAt\n            user {\n                id\n                fullname\n                email\n            }\n            likes {\n                id\n                userId\n                postId\n            }\n        }\n    }\n"): (typeof documents)["\n    query GetPosts($skip: Int!, $take: Int!) {\n        getPosts(skip: $skip, take: $take) {\n            id\n            text\n            video\n            createdAt\n            user {\n                id\n                fullname\n                email\n            }\n            likes {\n                id\n                userId\n                postId\n            }\n        }\n    }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n    query getPostsByUserId($userId: Int!) {\n        getPostsByUserId(userId: $userId) {\n            id\n            text\n            video\n            createdAt\n            user {\n                fullname\n                email\n                id\n            }\n        }\n    }\n"): (typeof documents)["\n    query getPostsByUserId($userId: Int!) {\n        getPostsByUserId(userId: $userId) {\n            id\n            text\n            video\n            createdAt\n            user {\n                fullname\n                email\n                id\n            }\n        }\n    }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  query GetUsers {\n    getUsers {\n      id\n      fullname\n      email\n      image\n    }\n  }\n"): (typeof documents)["\n  query GetUsers {\n    getUsers {\n      id\n      fullname\n      email\n      image\n    }\n  }\n"];
+export function graphql(source: "\n        mutation RefreshToken {\n          refreshToken\n        }\n      "): (typeof documents)["\n        mutation RefreshToken {\n          refreshToken\n        }\n      "];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

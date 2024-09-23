@@ -3,7 +3,6 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { BsMusicNoteBeamed } from 'react-icons/bs';
 import { AiFillHeart } from 'react-icons/ai';
-import tikTokLogoWhite from '../../../assets/images/tiktok-logo-white.png';
 import { IoIosShareAlt } from 'react-icons/io';
 import { IoChatbubbleEllipses } from 'react-icons/io5';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
@@ -51,13 +50,6 @@ const PostFeed = ({ post }: { post: PostType }) => {
               autoPlay
               className="rounded-xl object-cover mx-auto h-full"
             ></video>
-
-            <img
-              src={tikTokLogoWhite}
-              alt="tiktok logo"
-              className="absolute right-2 bottom-14"
-              width="90"
-            />
           </div>
 
           <div className="self-end flex items-center gap-2">

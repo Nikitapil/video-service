@@ -5,7 +5,6 @@ import { CREATE_POST } from '../mutations/CreatePost.ts';
 import UploadError from '../components/UploadError.tsx';
 import { FiUploadCloud } from 'react-icons/fi';
 import mobileCase from '../../../assets/images/mobile-case.png';
-import tikTokLogo from '../../../assets/images/tiktok-logo-white.png';
 import { IoCheckmarkDoneCircleOutline } from 'react-icons/io5';
 import { GiBoxCutter } from 'react-icons/gi';
 import { GET_ALL_POSTS } from '../../feed/queries/GetPosts.ts';
@@ -138,12 +137,6 @@ const Upload = () => {
                       src={mobileCase}
                       alt="mobile case"
                       className="absolute z-20 pointer-events-none"
-                    />
-                    <img
-                      src={tikTokLogo}
-                      alt="tik-tok logo"
-                      className="absolute right-4 bottom-6 z-20"
-                      width="90"
                     />
 
                     <video

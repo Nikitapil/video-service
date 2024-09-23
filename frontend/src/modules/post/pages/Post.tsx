@@ -25,7 +25,6 @@ import { LIKE_POST } from '../../shared/likes/mutations/LikePost.ts';
 import { UNLIKE_POST } from '../../shared/likes/mutations/UnlikePost.ts';
 import { ImCross, ImSpinner2 } from 'react-icons/im';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
-import tikTokLogo from '../../../assets/images/tiktok-logo-small.png';
 import { MdOutlineDeleteForever } from 'react-icons/md';
 import { BsFillChatDotsFill, BsMusicNoteBeamed } from 'react-icons/bs';
 import { AiFillHeart } from 'react-icons/ai';
@@ -208,11 +207,6 @@ const Post = () => {
                 size="30"
               />
             </button>
-            <img
-              src={tikTokLogo}
-              alt="tik-tok-logo"
-              className="absolute top-[18px] left-[70px] max-w-[80px] rounded-full lg:mx-0 mx-auto"
-            />
 
             <div className="bg-black bg-opacity-90 lg:min-w-[480px]">
               <video

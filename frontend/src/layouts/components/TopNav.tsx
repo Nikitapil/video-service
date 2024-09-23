@@ -1,4 +1,3 @@
-import tikTokLogo from '../../assets/images/tiktok-logo.png';
 import { useGeneralStore } from '../../modules/shared/stores/generalStore.ts';
 import { useUserStore } from '../../modules/shared/auth/stores/userStore.ts';
 import { useMutation } from '@apollo/client';
@@ -10,6 +9,7 @@ import { BsFillPersonFill, BsFillSendFill } from 'react-icons/bs';
 import { BiMessageDetail } from 'react-icons/bi';
 import { GrLogout } from 'react-icons/gr';
 import UserAvatar from '../../modules/shared/components/UserAvatar.tsx';
+import Logo from '../../components/Logo.tsx';
 // TODO hide non user button
 const TopNav = () => {
   const setIsLoginOpen = useGeneralStore((state) => state.setIsLoginOpen);
@@ -32,12 +32,7 @@ const TopNav = () => {
     <div className="bg-white fixed z-30 flex items-center w-full border-b h-[61px]">
       <div className="container mx-auto flex items-center justify-between w-full px-6">
         <Link to="/">
-          <img
-            src={tikTokLogo}
-            alt="tik-tok-logo"
-            width="100"
-            height="100"
-          />
+          <Logo />
         </Link>
 
         <div className="hidden md:flex items-center bg-[#f1f1f1] p-1 rounded-full max-w-[380px]">

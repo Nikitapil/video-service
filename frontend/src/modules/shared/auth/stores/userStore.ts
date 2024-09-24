@@ -1,31 +1,33 @@
 import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { devtools } from 'zustand/middleware';
 import { User } from '../../../../gql/graphql.tsx';
 
 export type UserStoreUser = User | null;
 
 export interface UserStoreState {
   user: UserStoreUser;
+  isAuthLoading: boolean;
 }
 
 export interface UserActions {
   setUser: (user: UserStoreUser) => void;
   logout: () => void;
+  setIsAuthLoading: (isLoading: boolean) => void;
 }
 
 const initialState: UserStoreState = {
-  user: null
+  user: null,
+  isAuthLoading: false
 } as const;
 
 export const useUserStore = create<UserStoreState & UserActions>()(
-  devtools(
-    persist(
-      (set) => ({
-        ...initialState,
-        setUser: (user: UserStoreUser) => set({ ...initialState, user }),
-        logout: () => set({ ...initialState })
-      }),
-      { name: 'userStore' }
-    )
-  )
+  devtools((set) => ({
+    ...initialState,
+    setUser: (user: UserStoreUser) => {
+      console.log(user);
+      set({ user });
+    },
+    logout: () => set({ ...initialState }),
+    setIsAuthLoading: (isLoading: boolean) => set({ isAuthLoading: isLoading })
+  }))
 );

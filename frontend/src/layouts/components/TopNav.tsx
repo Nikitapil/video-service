@@ -13,9 +13,8 @@ import Logo from '../../components/Logo.tsx';
 const TopNav = () => {
   const user = useUserStore((state) => state.user);
   const logout = useUserStore((state) => state.logout);
-  const [logoutUser] = useMutation(LOGOUT_USER);
 
-  console.log(user)
+  const [logoutUser] = useMutation(LOGOUT_USER);
 
   const [showMenu, setShowMenu] = useState<boolean>(false);
 

@@ -12,6 +12,7 @@ import { User } from '@prisma/client';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './dto/register.dto';
+import { safeUserSelect } from '../common/db-selects/safe-user-select';
 
 @Injectable()
 export class AuthService {
@@ -38,7 +39,8 @@ export class AuthService {
     }
 
     const userExists = await this.prismaService.user.findUnique({
-      where: { id: payload.sub }
+      where: { id: payload.sub },
+      select: safeUserSelect
     });
 
     if (!userExists) {
@@ -57,7 +59,7 @@ export class AuthService {
 
     res.cookie('access_token', accessToken, { httpOnly: true });
 
-    return accessToken;
+    return { accessToken, user: userExists };
   }
 
   private async issueTokens(user: User, response: Response) {

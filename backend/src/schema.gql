@@ -45,7 +45,7 @@ type Mutation {
   likePost(postId: Int!): LikeType!
   login(loginInput: LoginDto!): LoginResponse!
   logout: String!
-  refreshToken: String!
+  refreshToken: RefreshType!
   register(registerInput: RegisterDto!): RegisterResponse!
   unlikePost(postId: Int!): LikeType!
   updateUser(bio: String, fullname: String, image: Upload): User!
@@ -76,6 +76,11 @@ type Query {
   getPosts(skip: Int! = 0, take: Int! = 1): [PostType!]!
   getPostsByUserId(userId: Int!): [PostType!]!
   getUsers: [User!]!
+}
+
+type RefreshType {
+  accessToken: String!
+  user: User!
 }
 
 input RegisterDto {

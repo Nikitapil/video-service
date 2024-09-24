@@ -7,12 +7,14 @@ const refreshToken = async (client: ApolloClient<NormalizedCacheObject>) => {
     const { data } = await client.mutate({
       mutation: gql`
         mutation RefreshToken {
-          refreshToken
+          refreshToken {
+            accessToken
+          }
         }
       `
     });
 
-    const newAccessToken = data?.refreshToken;
+    const newAccessToken = data?.refreshToken.accessToken;
     if (!newAccessToken) {
       throw new Error('New access token not received');
     }

@@ -11,6 +11,7 @@ import { GraphQlErrorFilter } from '../filters/custom-exception.filter';
 import { User } from './models/user.model';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
+import { RefreshType } from '../auth/types/RefreshType';
 
 @UseFilters(GraphQlErrorFilter)
 @Resolver()
@@ -41,10 +42,10 @@ export class UserResolver {
     return this.authService.logout(context.res);
   }
 
-  @Mutation(() => String)
+  @Mutation(() => RefreshType)
   refreshToken(
     @Context() context: { res: Response; req: Request }
-  ): Promise<string> {
+  ): Promise<RefreshType> {
     return this.authService.refreshToken(context.req, context.res);
   }
 

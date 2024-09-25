@@ -1,19 +1,15 @@
-import {ReactNode} from "react";
-import TopNav from "../components/TopNav.tsx";
-import SideNav from "./components/SideNav/SideNav.tsx";
+import { ReactNode } from 'react';
+import AppHeader from '../components/AppHeader.tsx';
+import SideNav from './components/SideNav/SideNav.tsx';
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div>
-      <header>
-        <TopNav />
-      </header>
+      <AppHeader />
 
-      <div className="container flex justify-between mx-auto lg:px-2.5 px-0">
+      <div className="container mx-auto flex justify-between px-0 lg:px-2.5">
         <SideNav />
-        <div className="mt-[70px] ml-[55px] lg:ml-[310px] flex-1 px-6">
-          {children}
-        </div>
+        <div className="ml-[55px] mt-[70px] flex-1 px-6 lg:ml-[310px]">{children}</div>
       </div>
     </div>
   );

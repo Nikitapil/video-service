@@ -9,10 +9,11 @@ import { BiMessageDetail } from 'react-icons/bi';
 import { GrLogout } from 'react-icons/gr';
 import UserAvatar from '../../modules/shared/components/UserAvatar.tsx';
 import Logo from '../../components/Logo.tsx';
-// TODO hide non user button
-const TopNav = () => {
+
+const AppHeader = () => {
   const user = useUserStore((state) => state.user);
   const logout = useUserStore((state) => state.logout);
+  const setIsLoading = useUserStore((state) => state.setIsAuthLoading);
 
   const [logoutUser] = useMutation(LOGOUT_USER);
 
@@ -20,7 +21,9 @@ const TopNav = () => {
 
   const handleLogout = async () => {
     try {
+      setIsLoading(true);
       await logoutUser();
+      setIsLoading(false);
       logout();
     } catch (e) {
       console.log(e);
@@ -118,4 +121,4 @@ const TopNav = () => {
   );
 };
 
-export default TopNav;
+export default AppHeader;

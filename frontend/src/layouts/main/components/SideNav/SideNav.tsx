@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
-import { GET_USERS } from './queries/GetUsers.ts';
+import { GET_SUGGESTED_USERS } from './queries/GetSuggestedUsers.ts';
 import { useMemo, useState } from 'react';
-import { GetUsersQuery } from '../../../../gql/graphql.ts';
+import { GetSuggestedUsersQuery } from '../../../../gql/graphql.ts';
 import { Link } from 'react-router-dom';
 import MenuItem from './MenuItem.tsx';
 import { AiFillHome } from 'react-icons/ai';
@@ -11,7 +11,7 @@ import MenuItemSuggested from './MenuItemSuggested.tsx';
 
 const SideNav = () => {
   //TODO use loading and error state
-  const { data, loading, fetchMore } = useQuery<GetUsersQuery>(GET_USERS, {});
+  const { data, loading, fetchMore } = useQuery<GetSuggestedUsersQuery>(GET_SUGGESTED_USERS, {});
   const [showAllUsers, setShowAllUsers] = useState(false);
 
   const displayedUsers = useMemo(() => {

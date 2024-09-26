@@ -13,7 +13,7 @@ const UserAvatar = ({ image, className = '' }: UserAvatarProps) => {
     <img
       src={userImageSrc}
       alt="avatar"
-      className={`rounded-full w-8 ${className}`}
+      className={`w-8 rounded-full ${className}`}
     />
   );
 };

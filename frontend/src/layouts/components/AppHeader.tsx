@@ -1,8 +1,8 @@
 import { useUserStore } from '../../modules/shared/auth/stores/userStore.ts';
 import { useMutation } from '@apollo/client';
 import { LOGOUT_USER } from '../../modules/shared/auth/mutations/Logout.ts';
-import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { AiOutlineSearch, AiOutlineUpload } from 'react-icons/ai';
 import { BsFillPersonFill, BsFillSendFill } from 'react-icons/bs';
 import { BiMessageDetail } from 'react-icons/bi';
@@ -11,6 +11,7 @@ import UserAvatar from '../../modules/shared/components/UserAvatar.tsx';
 import Logo from '../../components/Logo.tsx';
 
 const AppHeader = () => {
+  const [searchParams] = useSearchParams();
   const [search, setSearch] = useState('');
 
   const user = useUserStore((state) => state.user);
@@ -35,8 +36,16 @@ const AppHeader = () => {
   };
 
   const onSearch = () => {
-    navigate(`/users/?${search}`);
+    navigate(`/users/?search=${search}`);
   };
+
+  useEffect(() => {
+    const searchFromParams = searchParams.get('search');
+
+    if (searchFromParams) {
+      setSearch(searchFromParams);
+    }
+  }, [searchParams]);
 
   if (!user) {
     return null;
@@ -54,6 +63,7 @@ const AppHeader = () => {
             type="text"
             className="my-2 w-full bg-transparent pl-3 text-[15px] placeholder-gray-500 outline-none"
             placeholder="Search accounts"
+            value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
 

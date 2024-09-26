@@ -53,9 +53,9 @@ export class UserResolver {
   @Query(() => [User])
   getUsers(
     @Args('getUsersInput', { type: () => GetUsersDto, nullable: true })
-    getUsersDto: GetUsersDto
+    getUsersDto?: GetUsersDto
   ) {
-    return this.userService.getUsers();
+    return this.userService.getUsers(getUsersDto);
   }
 
   @UseGuards(GraphQLAuthGuard)

@@ -18,29 +18,29 @@ const PostFeed = ({ post }: { post: PostType }) => {
           className="lg:w-14"
         />
       </div>
-      <div className="pl-3 w-full px-4">
+      <div className="w-full px-4 pl-3">
         <div className="flex items-center justify-between pb-0.5">
           <Link to={`/profile/${post.user.id}`}>
-            <span className="font-bold hover:underline cursor-pointer">User name</span>
-            <span className="text-[13px] text-gray-500 pl-1 cursor-pointer">{post.user.fullname}</span>
+            <span className="cursor-pointer font-bold hover:underline">User name</span>
+            <span className="cursor-pointer pl-1 text-[13px] text-gray-500">{post.user.fullname}</span>
           </Link>
-          <button className="border text-[15px] px-[21px] py-0.5 border-[#f02c56] text-[#f02c56] hover:bg-[#ffeef2] font-semibold rounded-md transition-all duration-300">
+          <button className="rounded-md border border-[#f02c56] px-[21px] py-0.5 text-[15px] font-semibold text-[#f02c56] transition-all duration-300 hover:bg-[#ffeef2]">
             Follow
           </button>
         </div>
 
-        <div className="text-[15px] pb-0.5 break-words md:max-w-[480px] max-v-[300px]">{post.text}</div>
+        <div className="max-v-[300px] break-words pb-0.5 text-[15px] md:max-w-[480px]">{post.text}</div>
 
-        <div className="text-[14px] text-gray-500 pb-0.5">#fun #cool #superAwesome</div>
+        <div className="pb-0.5 text-[14px] text-gray-500">#fun #cool #superAwesome</div>
 
-        <div className="text-[14px] pb-0.5 flex items-center font-semibold">
+        <div className="flex items-center pb-0.5 text-[14px] font-semibold">
           <BsMusicNoteBeamed size="17" />
           <div className="px-1">original - Awesome</div>
           <AiFillHeart size="20" />
         </div>
 
-        <div className="mt-2.5 flex gap-4 flex-wrap">
-          <div className="relative min-h-[480px] max-h-[580px] max-w-[260px] flex items-center bg-black rounded-xl">
+        <div className="mt-2.5 flex flex-wrap gap-4">
+          <div className="relative flex max-h-[580px] min-h-[480px] max-w-[260px] items-center rounded-xl bg-black">
             <video
               ref={video}
               src={`http://localhost:3000${post.video}`}
@@ -48,38 +48,38 @@ const PostFeed = ({ post }: { post: PostType }) => {
               muted
               controls
               autoPlay
-              className="rounded-xl object-cover mx-auto h-full"
+              className="mx-auto h-full rounded-xl object-cover"
             ></video>
           </div>
 
-          <div className="self-end flex items-center gap-2">
+          <div className="flex items-center gap-2 self-end">
             <div className="flex items-center gap-1">
-              <button className="rounded-full bg-gray-200 p-2 cursor-pointer">
+              <button className="cursor-pointer rounded-full bg-gray-200 p-2">
                 <AiFillHeart
                   size="25"
                   color="black"
                 />
               </button>
-              <span className="text-xs text-gray-800 font-semibold">{post.likes?.length}</span>
+              <span className="text-xs font-semibold text-gray-800">{post.likes?.length}</span>
             </div>
 
             <div className="flex items-center gap-1">
-              <button className="rounded-full bg-gray-200 p-2 cursor-pointer">
+              <button className="cursor-pointer rounded-full bg-gray-200 p-2">
                 <IoIosShareAlt
                   size="25"
                   color="black"
                 />
               </button>
-              <span className="text-xs text-gray-800 font-semibold">34</span>
+              <span className="text-xs font-semibold text-gray-800">34</span>
             </div>
             <div className="flex items-center gap-1">
-              <button className="rounded-full bg-gray-200 p-2 cursor-pointer">
+              <button className="cursor-pointer rounded-full bg-gray-200 p-2">
                 <IoChatbubbleEllipses
                   size="25"
                   color="black"
                 />
               </button>
-              <span className="text-xs text-gray-800 font-semibold">0</span>
+              <span className="text-xs font-semibold text-gray-800">0</span>
             </div>
           </div>
         </div>

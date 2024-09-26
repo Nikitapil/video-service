@@ -6,13 +6,24 @@ import { v4 as uuidv4 } from 'uuid';
 import { join } from 'path';
 import * as process from 'node:process';
 import { createWriteStream } from 'fs';
+import { GetUsersDto } from './dto/get-users.dto';
+import { safeUserSelect } from '../common/db-selects/safe-user-select';
 @Injectable()
 export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
 
   // TODO filter private user fields and not return posts
-  getUsers() {
-    return this.prismaService.user.findMany();
+  getUsers(dto?: GetUsersDto) {
+    const { search = '' } = dto || {};
+    return this.prismaService.user.findMany({
+      where: {
+        fullname: {
+          contains: search,
+          mode: 'insensitive'
+        }
+      },
+      select: safeUserSelect
+    });
   }
 
   async updateProfile(userId: number, data: UpdateProfileDto) {

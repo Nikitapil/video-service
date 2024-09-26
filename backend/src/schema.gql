@@ -21,6 +21,10 @@ type ErrorType {
   message: String!
 }
 
+input GetUsersDto {
+  search: String
+}
+
 type LikeType {
   id: Int!
   postId: Int!
@@ -75,7 +79,7 @@ type Query {
   getPostById(id: Int!): PostDetails!
   getPosts(skip: Int! = 0, take: Int! = 1): [PostType!]!
   getPostsByUserId(userId: Int!): [PostType!]!
-  getUsers: [User!]!
+  getUsers(getUsersInput: GetUsersDto): [User!]!
 }
 
 type RefreshType {

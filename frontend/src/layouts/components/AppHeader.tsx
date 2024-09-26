@@ -1,7 +1,7 @@
 import { useUserStore } from '../../modules/shared/auth/stores/userStore.ts';
 import { useMutation } from '@apollo/client';
 import { LOGOUT_USER } from '../../modules/shared/auth/mutations/Logout.ts';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { AiOutlineSearch, AiOutlineUpload } from 'react-icons/ai';
 import { BsFillPersonFill, BsFillSendFill } from 'react-icons/bs';
@@ -11,9 +11,13 @@ import UserAvatar from '../../modules/shared/components/UserAvatar.tsx';
 import Logo from '../../components/Logo.tsx';
 
 const AppHeader = () => {
+  const [search, setSearch] = useState('');
+
   const user = useUserStore((state) => state.user);
   const logout = useUserStore((state) => state.logout);
   const setIsLoading = useUserStore((state) => state.setIsAuthLoading);
+
+  const navigate = useNavigate();
 
   const [logoutUser] = useMutation(LOGOUT_USER);
 
@@ -23,11 +27,15 @@ const AppHeader = () => {
     try {
       setIsLoading(true);
       await logoutUser();
-      setIsLoading(false);
       logout();
+      setIsLoading(false);
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const onSearch = () => {
+    navigate(`/users/?${search}`);
   };
 
   if (!user) {
@@ -35,24 +43,30 @@ const AppHeader = () => {
   }
 
   return (
-    <div className="fixed z-30 flex h-[61px] w-full items-center border-b bg-white">
+    <header className="fixed z-30 flex h-16 w-full items-center border-b bg-white">
       <div className="container mx-auto flex w-full items-center justify-between px-6">
         <Link to="/">
           <Logo />
         </Link>
 
-        <div className="hidden max-w-[380px] items-center rounded-full bg-[#f1f1f1] p-1 md:flex">
+        <div className="hidden items-center rounded-full bg-gray-100 p-1 md:flex">
           <input
             type="text"
-            className="my-2 w-full bg-transparent pl-3 text-[15px] placeholder-[#838383] outline-none"
+            className="my-2 w-full bg-transparent pl-3 text-[15px] placeholder-gray-500 outline-none"
             placeholder="Search accounts"
+            onChange={(e) => setSearch(e.target.value)}
           />
-          <div className="items-center border-l border-l-gray-300 px-3 py-1">
+
+          <button
+            className="border-l border-l-gray-300 px-3 py-1 disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={!search}
+            onClick={onSearch}
+          >
             <AiOutlineSearch
+              className="text-gray-500"
               size="20"
-              color="#838383"
             />
-          </div>
+          </button>
         </div>
 
         <div className="flex w-full min-w-[275px] max-w-[320px] items-center justify-end gap-3">
@@ -117,7 +131,7 @@ const AppHeader = () => {
           </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 

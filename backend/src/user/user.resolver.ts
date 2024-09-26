@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args, Context, Query } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Context, Query, Int } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { AuthService } from '../auth/auth.service';
 import { RegisterResponse } from '../auth/types/RegisterResponse';
@@ -12,6 +12,7 @@ import { User } from './models/user.model';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
 import { RefreshType } from '../auth/types/RefreshType';
+import { GetUsersDto } from './dto/get-users.dto';
 
 @UseFilters(GraphQlErrorFilter)
 @Resolver()
@@ -50,7 +51,10 @@ export class UserResolver {
   }
 
   @Query(() => [User])
-  getUsers() {
+  getUsers(
+    @Args('getUsersInput', { type: () => GetUsersDto, nullable: true })
+    getUsersDto: GetUsersDto
+  ) {
     return this.userService.getUsers();
   }
 

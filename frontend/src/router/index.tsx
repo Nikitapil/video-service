@@ -4,6 +4,7 @@ import Upload from '../modules/upload/pages/Upload.tsx';
 import Profile from '../modules/profile/pages/Profile.tsx';
 import Post from '../modules/post/pages/Post.tsx';
 import ProtectedRoutes from '../modules/shared/auth/components/ProtectedRoutes.tsx';
+import Users from '../modules/users/pages/Users.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,14 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoutes>
         <Post />
+      </ProtectedRoutes>
+    )
+  },
+  {
+    path: '/users/',
+    element: (
+      <ProtectedRoutes>
+        <Users />
       </ProtectedRoutes>
     )
   }

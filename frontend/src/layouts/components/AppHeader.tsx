@@ -61,7 +61,7 @@ const AppHeader = () => {
         <div className="hidden items-center rounded-full bg-gray-100 p-1 md:flex">
           <input
             type="text"
-            className="my-2 w-full bg-transparent pl-3 text-[15px] placeholder-gray-500 outline-none"
+            className="my-2 w-full bg-transparent pl-3 placeholder-gray-500 outline-none"
             placeholder="Search accounts"
             value={search}
             onChange={(e) => setSearch(e.target.value)}

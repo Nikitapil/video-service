@@ -54,11 +54,8 @@ const AppHeader = () => {
   return (
     <header className="fixed z-30 flex h-16 w-full items-center border-b bg-white">
       <div className="container mx-auto flex w-full items-center justify-between gap-4 px-6">
-        <Link
-          to="/"
-          className="max-w-8 overflow-hidden whitespace-nowrap md:max-w-full"
-        >
-          <Logo />
+        <Link to="/">
+          <Logo textClassName="hidden md:block" />
         </Link>
 
         <div className="mx-auto flex items-center rounded-full bg-gray-100 p-1">

@@ -1,6 +1,10 @@
 import logo from '../assets/images/logo.png';
 
-const Logo = () => {
+interface LogoProps {
+  textClassName?: string;
+}
+
+const Logo = ({ textClassName = '' }: LogoProps) => {
   return (
     <div className="flex items-center gap-2">
       <img
@@ -9,7 +13,7 @@ const Logo = () => {
         className="w-7"
       />
 
-      <span className="text-lg text-black">Video Service</span>
+      <span className={`text-lg text-black ${textClassName}`}>Video Service</span>
     </div>
   );
 };

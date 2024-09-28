@@ -53,12 +53,15 @@ const AppHeader = () => {
 
   return (
     <header className="fixed z-30 flex h-16 w-full items-center border-b bg-white">
-      <div className="container mx-auto flex w-full items-center justify-between px-6">
-        <Link to="/">
+      <div className="container mx-auto flex w-full items-center justify-between gap-4 px-6">
+        <Link
+          to="/"
+          className="max-w-8 overflow-hidden whitespace-nowrap md:max-w-full"
+        >
           <Logo />
         </Link>
 
-        <div className="hidden items-center rounded-full bg-gray-100 p-1 md:flex">
+        <div className="mx-auto flex items-center rounded-full bg-gray-100 p-1">
           <input
             type="text"
             className="my-2 w-full bg-transparent pl-3 placeholder-gray-500 outline-none"
@@ -79,7 +82,7 @@ const AppHeader = () => {
           </button>
         </div>
 
-        <div className="flex w-full min-w-[275px] max-w-[320px] items-center justify-end gap-3">
+        <div className="flex items-center justify-end gap-3">
           <Link
             to="/upload"
             className="flex items-center rounded-sm border px-3 py-[6px] hover:bg-gray-100"

@@ -1,0 +1,7 @@
+.menu-item {
+  @apply common-transition flex items-center gap-1.5 px-3 py-2 hover:bg-gray-100 w-full text-sm font-semibold
+}
+
+.menu-icon {
+ @apply text-xl text-gray-900
+}

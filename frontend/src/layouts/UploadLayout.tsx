@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import AppHeader from './components/AppHeader.tsx';
+import AppHeader from './components/AppHeader/AppHeader.tsx';
 
 const UploadLayout = ({ children }: { children: ReactNode }) => {
   return (

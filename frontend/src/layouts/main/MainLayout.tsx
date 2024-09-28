@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import AppHeader from '../components/AppHeader.tsx';
+import AppHeader from '../components/AppHeader/AppHeader.tsx';
 import SideNav from './components/SideNav/SideNav.tsx';
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
@@ -9,7 +9,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
 
       <div className="container mx-auto flex justify-between px-0 lg:px-2.5">
         <SideNav />
-        <div className="ml-[55px] mt-[70px] flex-1 px-6 lg:ml-[310px]">{children}</div>
+        <div className="ml-[55px] mt-[70px] flex-1 px-3 sm:px-6 lg:ml-[310px]">{children}</div>
       </div>
     </div>
   );

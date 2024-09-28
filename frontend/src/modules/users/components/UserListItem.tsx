@@ -14,7 +14,7 @@ const UserListItem = ({ user }: UserListItemProps) => {
     >
       <UserAvatar
         image={user.image}
-        className="h-12 w-12"
+        className="!h-12 !w-12"
       />
       <div>
         <h3 className="text-lg font-semibold">{user.fullname}</h3>

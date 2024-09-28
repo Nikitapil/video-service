@@ -5,6 +5,8 @@ import Profile from '../modules/profile/pages/Profile.tsx';
 import Post from '../modules/post/pages/Post.tsx';
 import ProtectedRoutes from '../modules/shared/auth/components/ProtectedRoutes.tsx';
 import UsersPage from '../modules/users/pages/Users/UsersPage.tsx';
+import { RoutesEnum } from './routes.ts';
+import Messages from '../modules/messages/pages/Messages.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -40,10 +42,18 @@ export const router = createBrowserRouter([
     )
   },
   {
-    path: '/users/',
+    path: '/users',
     element: (
       <ProtectedRoutes>
         <UsersPage />
+      </ProtectedRoutes>
+    )
+  },
+  {
+    path: RoutesEnum.MESSAGES,
+    element: (
+      <ProtectedRoutes>
+        <Messages />
       </ProtectedRoutes>
     )
   }

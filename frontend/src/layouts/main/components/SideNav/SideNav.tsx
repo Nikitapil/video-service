@@ -5,7 +5,7 @@ import { GetSuggestedUsersQuery } from '../../../../gql/graphql.ts';
 import { Link } from 'react-router-dom';
 import MenuItem from './MenuItem.tsx';
 import { AiFillHome } from 'react-icons/ai';
-import { BiGroup } from 'react-icons/bi';
+import { BiGroup, BiMessageDetail } from 'react-icons/bi';
 import { RiLiveLine } from 'react-icons/ri';
 import MenuItemSuggested from './MenuItemSuggested.tsx';
 
@@ -23,8 +23,8 @@ const SideNav = () => {
   }, [data]);
 
   return (
-    <div className="lg:w-[310px] fixed z-20 bg-white pt-[70px] h-full lg:border-r-0 border-r overflow-auto">
-      <div className="lg:w-full w-[55px] mx-auto">
+    <div className="fixed z-20 h-full overflow-auto border-r bg-white pt-[70px] lg:w-[310px] lg:border-r-0">
+      <div className="mx-auto w-[55px] lg:w-full">
         <Link to="/">
           <MenuItem
             Icon={AiFillHome}
@@ -48,11 +48,18 @@ const SideNav = () => {
           text="LIVE"
         />
 
-        <div className="border-b lg:ml-2 mt-2" />
+        <MenuItem
+          Icon={BiMessageDetail}
+          color="#000"
+          size="27"
+          text="MESSEGES"
+        />
 
-        <div className="lg:block hidden text-xs text-gray-600 font-semibold pt-4 pb-2 px-2">Suggested accounts</div>
+        <div className="mt-2 border-b lg:ml-2" />
 
-        <div className="border-b lg:hidden pt-3" />
+        <div className="hidden px-2 pb-2 pt-4 text-xs font-semibold text-gray-600 lg:block">Suggested accounts</div>
+
+        <div className="border-b pt-3 lg:hidden" />
 
         <ul>
           {displayedUsers?.map((user) => (
@@ -69,7 +76,7 @@ const SideNav = () => {
 
         {isShowMoreBtn && (
           <button
-            className="lg:block hidden text-[#f02C56] pt-1.5 pl-2 text-[13px]"
+            className="hidden pl-2 pt-1.5 text-[13px] text-[#f02C56] lg:block"
             onClick={() => setShowAllUsers(!showAllUsers)}
           >
             {showAllUsers ? 'Show less' : 'Show more'}

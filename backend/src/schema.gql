@@ -23,6 +23,8 @@ type ErrorType {
 
 input GetUsersDto {
   search: String
+  skip: Float
+  take: Float
 }
 
 type LikeType {

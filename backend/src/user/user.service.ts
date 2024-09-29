@@ -22,6 +22,11 @@ export class UserService {
           mode: 'insensitive'
         }
       },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      take: dto.take,
+      skip: dto.skip,
       select: safeUserSelect
     });
   }

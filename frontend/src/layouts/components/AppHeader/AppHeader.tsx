@@ -2,7 +2,6 @@ import { useUserStore } from '../../../modules/shared/auth/stores/userStore.ts';
 import { useMutation } from '@apollo/client';
 import { LOGOUT_USER } from '../../../modules/shared/auth/mutations/Logout.ts';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import { AiOutlineUpload } from 'react-icons/ai';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { GrLogout } from 'react-icons/gr';
@@ -13,15 +12,18 @@ import { getProfileLink, RoutesEnum } from '../../../router/routes.ts';
 import { useClickOutside } from '../../../hooks/useClickOutside.ts';
 import styles from './styles.module.scss';
 import SearchUsersForm from './SearchUsersForm.tsx';
+import { useShowElement } from '../../../hooks/useShowElement.tsx';
+import ConfirmModal from '../../../components/ux/ConfirmModal.tsx';
 
 const AppHeader = () => {
-  const [showMenu, setShowMenu] = useState<boolean>(false);
+  const menu = useShowElement();
+  const logoutModal = useShowElement();
 
   const user = useUserStore((state) => state.user);
   const logout = useUserStore((state) => state.logout);
   const setIsAuthLoading = useUserStore((state) => state.setIsAuthLoading);
 
-  const { ref: menuRef } = useClickOutside<HTMLDivElement>(() => setShowMenu(false));
+  const { ref: menuRef } = useClickOutside<HTMLDivElement>(() => menu.close());
 
   const [logoutUser] = useMutation(LOGOUT_USER);
 
@@ -61,12 +63,12 @@ const AppHeader = () => {
           >
             <button
               className="mt-1"
-              onClick={() => setShowMenu((prev) => !prev)}
+              onClick={() => menu.open()}
             >
               <UserAvatar image={user.image} />
             </button>
 
-            {showMenu && (
+            {menu.isShowed && (
               <div className="absolute right-0 top-11 w-52 rounded-lg border bg-white shadow-xl">
                 <Link
                   to={getProfileLink(user.id)}
@@ -78,13 +80,19 @@ const AppHeader = () => {
 
                 <button
                   className={styles['menu-item']}
-                  onClick={handleLogout}
+                  onClick={logoutModal.open}
                 >
                   <GrLogout className={styles['menu-icon']} />
                   <span>Log out</span>
                 </button>
               </div>
             )}
+
+            <ConfirmModal
+              showElement={logoutModal}
+              title="Confirm leave your account"
+              onConfirm={handleLogout}
+            />
           </div>
         </div>
       </div>

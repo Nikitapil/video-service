@@ -24,7 +24,6 @@ export const useUserStore = create<UserStoreState & UserActions>()(
   devtools((set) => ({
     ...initialState,
     setUser: (user: UserStoreUser) => {
-      console.log(user);
       set({ user });
     },
     logout: () => set({ ...initialState }),

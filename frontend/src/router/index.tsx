@@ -7,6 +7,7 @@ import ProtectedRoutes from '../modules/shared/auth/components/ProtectedRoutes.t
 import UsersPage from '../modules/users/pages/Users/UsersPage.tsx';
 import { RoutesEnum } from './routes.ts';
 import Messages from '../modules/messages/pages/Messages.tsx';
+import FollowUsersPage from '../modules/users/pages/Users/FollowUsersPage.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -54,6 +55,14 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoutes>
         <Messages />
+      </ProtectedRoutes>
+    )
+  },
+  {
+    path: RoutesEnum.USERS_FOLLOW,
+    element: (
+      <ProtectedRoutes>
+        <FollowUsersPage />
       </ProtectedRoutes>
     )
   }

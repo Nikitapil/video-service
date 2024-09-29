@@ -5,9 +5,9 @@ import { GetSuggestedUsersQuery } from '../../../../gql/graphql.ts';
 import { Link } from 'react-router-dom';
 import MenuItem from './MenuItem.tsx';
 import { AiFillHome } from 'react-icons/ai';
-import { BiGroup, BiMessageDetail } from 'react-icons/bi';
-import { RiLiveLine } from 'react-icons/ri';
+import { BiGroup, BiMessageDetail, BiSolidGroup } from 'react-icons/bi';
 import MenuItemSuggested from './MenuItemSuggested.tsx';
+import { getUserFollowLink, RoutesEnum, UserFollowPagesTypesEnum } from '../../../../router/routes.ts';
 
 const SideNav = () => {
   //TODO use loading and error state
@@ -27,32 +27,29 @@ const SideNav = () => {
       <div className="mx-auto w-[55px] lg:w-full">
         <Link to="/">
           <MenuItem
+            to={RoutesEnum.HOME}
             Icon={AiFillHome}
-            color="#F02C56"
-            size="30"
-            text="For you"
+            text="Home"
+            iconColor="#f02c56"
           />
         </Link>
 
         <MenuItem
+          to={getUserFollowLink(UserFollowPagesTypesEnum.FOLLOWING)}
           Icon={BiGroup}
-          color="#000"
-          size="27"
           text="Following"
         />
 
         <MenuItem
-          Icon={RiLiveLine}
-          color="#000"
-          size="27"
-          text="LIVE"
+          to={getUserFollowLink(UserFollowPagesTypesEnum.FOLLOWERS)}
+          Icon={BiSolidGroup}
+          text="Followers"
         />
 
         <MenuItem
+          to={RoutesEnum.MESSAGES}
           Icon={BiMessageDetail}
-          color="#000"
-          size="27"
-          text="MESSEGES"
+          text="MESSAGES"
         />
 
         <div className="mt-2 border-b lg:ml-2" />

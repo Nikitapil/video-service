@@ -1,5 +1,7 @@
 import UserAvatar from '../../../../modules/shared/components/UserAvatar.tsx';
 import { User } from '../../../../gql/graphql.tsx';
+import { Link } from 'react-router-dom';
+import { getProfileLink } from '../../../../router/routes.ts';
 
 interface SuggestedUserProps {
   user: User;
@@ -7,7 +9,10 @@ interface SuggestedUserProps {
 
 const SuggestedUser = ({ user }: SuggestedUserProps) => {
   return (
-    <div className="flex w-full items-center rounded-md px-2 py-1.5 hover:bg-gray-100">
+    <Link
+      to={getProfileLink(user.id)}
+      className="flex w-full items-center rounded-md px-2 py-1.5 hover:bg-gray-100"
+    >
       <UserAvatar image={user.image} />
 
       <div className="hidden max-w-full lg:block lg:pl-2.5">
@@ -17,7 +22,7 @@ const SuggestedUser = ({ user }: SuggestedUserProps) => {
           {user.bio}
         </p>
       </div>
-    </div>
+    </Link>
   );
 };
 

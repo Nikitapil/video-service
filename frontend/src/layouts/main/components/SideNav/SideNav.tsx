@@ -2,37 +2,38 @@ import { useQuery } from '@apollo/client';
 import { GET_SUGGESTED_USERS } from './queries/GetSuggestedUsers.ts';
 import { useMemo, useState } from 'react';
 import { GetSuggestedUsersQuery } from '../../../../gql/graphql.ts';
-import { Link } from 'react-router-dom';
 import MenuItem from './MenuItem.tsx';
 import { AiFillHome } from 'react-icons/ai';
-import { BiGroup, BiMessageDetail, BiSolidGroup } from 'react-icons/bi';
+import { BiGroup, BiSolidGroup } from 'react-icons/bi';
 import SuggestedUser from './SuggestedUser.tsx';
 import { getUserFollowLink, RoutesEnum, UserFollowPagesTypesEnum } from '../../../../router/routes.ts';
+import { ImSpinner2 } from 'react-icons/im';
+import { BsEnvelope } from 'react-icons/bs';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
 const SideNav = () => {
-  //TODO use loading and error state
-  const { data, loading, fetchMore } = useQuery<GetSuggestedUsersQuery>(GET_SUGGESTED_USERS, {});
+  const SHOWED_USERS_LIMIT = 3;
   const [showAllUsers, setShowAllUsers] = useState(false);
 
+  const { data, loading } = useQuery<GetSuggestedUsersQuery>(GET_SUGGESTED_USERS, {});
+
   const displayedUsers = useMemo(() => {
-    return showAllUsers ? data?.getUsers : data?.getUsers.slice(0, 3);
+    return showAllUsers ? data?.getUsers : data?.getUsers.slice(0, SHOWED_USERS_LIMIT);
   }, [showAllUsers, data]);
 
   const isShowMoreBtn = useMemo(() => {
-    return (data?.getUsers?.length || 0) > 3;
+    return (data?.getUsers?.length || 0) > SHOWED_USERS_LIMIT;
   }, [data]);
 
   return (
-    <div className="fixed z-20 h-full overflow-auto border-r bg-white pt-[70px] lg:w-[310px] lg:border-r-0">
-      <div className="mx-auto w-[55px] lg:w-full">
-        <Link to="/">
-          <MenuItem
-            to={RoutesEnum.HOME}
-            Icon={AiFillHome}
-            text="Home"
-            iconColor="#f02c56"
-          />
-        </Link>
+    <nav className="fixed z-20 h-full overflow-auto border-r bg-white pt-16 lg:w-72">
+      <div>
+        <MenuItem
+          to={RoutesEnum.HOME}
+          Icon={AiFillHome}
+          text="Home"
+          iconColor="#f02c56"
+        />
 
         <MenuItem
           to={getUserFollowLink(UserFollowPagesTypesEnum.FOLLOWING)}
@@ -48,39 +49,39 @@ const SideNav = () => {
 
         <MenuItem
           to={RoutesEnum.MESSAGES}
-          Icon={BiMessageDetail}
+          Icon={BsEnvelope}
           text="MESSAGES"
         />
 
-        <div className="mt-2 border-b lg:ml-2" />
+        <hr className="mt-2" />
 
-        <div className="hidden px-2 pb-2 pt-4 text-xs font-semibold text-gray-600 lg:block">Suggested accounts</div>
+        <h6 className="hidden px-2 pb-2 pt-4 text-xs font-semibold text-gray-600 lg:block">Suggested accounts</h6>
 
-        <div className="border-b pt-3 lg:hidden" />
+        {loading && (
+          <div className="mt-2 px-2">
+            <ImSpinner2 className="h-8 w-8 animate-spin" />
+          </div>
+        )}
 
         <ul>
           {displayedUsers?.map((user) => (
-            <li
-              key={user.id}
-              className="cursor-pointer"
-            >
-              <Link to={`/profile/${user.id}`}>
-                <SuggestedUser user={user} />
-              </Link>
+            <li key={user.id}>
+              <SuggestedUser user={user} />
             </li>
           ))}
         </ul>
 
         {isShowMoreBtn && (
           <button
-            className="hidden pl-2 pt-1.5 text-[13px] text-[#f02C56] lg:block"
+            className="ml-2 flex items-center justify-center gap-1 pl-2 pt-1.5 text-sm text-red-600 common-transition hover:text-red-800 lg:ml-0"
             onClick={() => setShowAllUsers(!showAllUsers)}
           >
-            {showAllUsers ? 'Show less' : 'Show more'}
+            {showAllUsers ? <IoIosArrowUp /> : <IoIosArrowDown />}
+            <span className="hidden lg:block">{showAllUsers ? 'Show less' : 'Show more'}</span>
           </button>
         )}
       </div>
-    </div>
+    </nav>
   );
 };
 

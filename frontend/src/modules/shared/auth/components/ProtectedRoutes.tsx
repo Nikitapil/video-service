@@ -11,7 +11,7 @@ const ProtectedRoutes = ({ children }: { children: ReactNode }) => {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <ImSpinner2
-          className="ml-1 animate-spin"
+          className="animate-spin"
           size="120"
           color=""
         />

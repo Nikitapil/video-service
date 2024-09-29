@@ -9,7 +9,7 @@ interface UserListItemProps {
 const UserListItem = ({ user }: UserListItemProps) => {
   return (
     <Link
-      className="common-transition flex gap-2 p-2 hover:bg-gray-50"
+      className="flex gap-2 p-2 common-transition hover:bg-gray-50"
       to={`/profile/${user.id}`}
     >
       <UserAvatar

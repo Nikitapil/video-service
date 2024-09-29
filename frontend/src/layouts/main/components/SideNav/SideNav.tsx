@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import MenuItem from './MenuItem.tsx';
 import { AiFillHome } from 'react-icons/ai';
 import { BiGroup, BiMessageDetail, BiSolidGroup } from 'react-icons/bi';
-import MenuItemSuggested from './MenuItemSuggested.tsx';
+import SuggestedUser from './SuggestedUser.tsx';
 import { getUserFollowLink, RoutesEnum, UserFollowPagesTypesEnum } from '../../../../router/routes.ts';
 
 const SideNav = () => {
@@ -65,7 +65,7 @@ const SideNav = () => {
               className="cursor-pointer"
             >
               <Link to={`/profile/${user.id}`}>
-                <MenuItemSuggested user={user} />
+                <SuggestedUser user={user} />
               </Link>
             </li>
           ))}

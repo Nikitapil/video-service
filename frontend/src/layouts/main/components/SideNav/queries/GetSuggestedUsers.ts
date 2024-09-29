@@ -7,6 +7,7 @@ export const GET_SUGGESTED_USERS = gql`
       fullname
       email
       image
+      bio
     }
   }
 `;

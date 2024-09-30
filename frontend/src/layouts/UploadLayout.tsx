@@ -1,12 +1,12 @@
-import { ReactNode } from 'react';
 import AppHeader from './components/AppHeader/AppHeader.tsx';
+import { ReactChildrenProps } from '../utils/types.ts';
 
-const UploadLayout = ({ children }: { children: ReactNode }) => {
+const UploadLayout = ({ children }: ReactChildrenProps) => {
   return (
-    <div className="h-screen bg-[#f8f8f8]">
+    <div className="h-screen bg-gray-100">
       <AppHeader />
 
-      <div className="container mx-auto flex w-full justify-between px-2">{children}</div>
+      <main className="container mx-auto flex w-full justify-between px-2">{children}</main>
     </div>
   );
 };

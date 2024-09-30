@@ -1,12 +1,8 @@
-import { ReactNode } from 'react';
 import AppHeader from '../components/AppHeader/AppHeader.tsx';
 import SideNav from './components/SideNav/SideNav.tsx';
+import { ReactChildrenProps } from '../../utils/types.ts';
 
-interface MainLayoutProps {
-  children: ReactNode;
-}
-
-const MainLayout = ({ children }: MainLayoutProps) => {
+const MainLayout = ({ children }: ReactChildrenProps) => {
   return (
     <div>
       <AppHeader />

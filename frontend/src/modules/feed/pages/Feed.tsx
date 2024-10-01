@@ -2,7 +2,7 @@ import MainLayout from '../../../layouts/main/MainLayout.tsx';
 import { useQuery } from '@apollo/client';
 import { GetPostsQuery } from '../../../gql/graphql.ts';
 import { GET_ALL_POSTS } from '../queries/GetPosts.ts';
-import PostFeed from '../components/PostFeed.tsx';
+import FeedPost from '../components/FeedPost.tsx';
 import { useEffect, useRef } from 'react';
 
 const Feed = () => {
@@ -55,7 +55,7 @@ const Feed = () => {
     <MainLayout>
       <div className="max-w-[690px] mx-auto">
         {data?.getPosts.map((post) => (
-          <PostFeed
+          <FeedPost
             key={post.id}
             post={post}
           />

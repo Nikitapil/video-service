@@ -1,32 +1,41 @@
 import { PostType } from '../../../gql/graphql.ts';
-import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { BsMusicNoteBeamed } from 'react-icons/bs';
 import { AiFillHeart } from 'react-icons/ai';
 import { IoIosShareAlt } from 'react-icons/io';
 import { IoChatbubbleEllipses } from 'react-icons/io5';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
+import { getProfileLink } from '../../../router/routes.ts';
+import AppButton from '../../../components/ui/AppButton.tsx';
 
-const PostFeed = ({ post }: { post: PostType }) => {
-  const video = useRef<HTMLVideoElement | null>(null);
+interface FeedPostProps {
+  post: PostType;
+}
 
+const FeedPost = ({ post }: FeedPostProps) => {
   return (
-    <div className="flex border-b py-6">
-      <div className="cursor-pointer">
+    <article className="flex border-b py-6">
+      <Link
+        to={getProfileLink(post.user.id)}
+        className="self-start"
+      >
         <UserAvatar
           image={post.user.image}
           className="lg:w-14"
         />
-      </div>
-      <div className="w-full px-4 pl-3">
+      </Link>
+
+      <div className="w-full px-4">
         <div className="flex items-center justify-between pb-0.5">
-          <Link to={`/profile/${post.user.id}`}>
-            <span className="cursor-pointer font-bold hover:underline">User name</span>
-            <span className="cursor-pointer pl-1 text-[13px] text-gray-500">{post.user.fullname}</span>
+          <Link to={getProfileLink(post.user.id)}>
+            <span className="cursor-pointer font-bold hover:underline">{post.user.fullname}</span>
           </Link>
-          <button className="rounded-md border border-[#f02c56] px-[21px] py-0.5 text-[15px] font-semibold text-[#f02c56] transition-all duration-300 hover:bg-[#ffeef2]">
-            Follow
-          </button>
+
+          <AppButton
+            appearance="danger"
+            text="Follow"
+            size="sm"
+          />
         </div>
 
         <div className="max-v-[300px] break-words pb-0.5 text-[15px] md:max-w-[480px]">{post.text}</div>
@@ -42,7 +51,6 @@ const PostFeed = ({ post }: { post: PostType }) => {
         <div className="mt-2.5 flex flex-wrap gap-4">
           <div className="relative flex max-h-[580px] min-h-[480px] max-w-[260px] items-center rounded-xl bg-black">
             <video
-              ref={video}
               src={`http://localhost:3000${post.video}`}
               loop
               muted
@@ -84,8 +92,8 @@ const PostFeed = ({ post }: { post: PostType }) => {
           </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 
-export default PostFeed;
+export default FeedPost;

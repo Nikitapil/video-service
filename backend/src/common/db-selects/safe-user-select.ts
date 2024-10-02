@@ -7,3 +7,16 @@ export const safeUserSelect: Prisma.UserSelect = {
   bio: true,
   image: true
 };
+
+export const getSafeUserSelectFull = (
+  currentUserId?: number
+): Prisma.UserSelect => {
+  return {
+    ...safeUserSelect,
+    followedBy: {
+      where: {
+        followedById: currentUserId
+      }
+    }
+  };
+};

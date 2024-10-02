@@ -8,11 +8,12 @@ import { LoginDto } from '../auth/dto/login.dto';
 import { LoginResponse } from '../auth/types/LoginResponse';
 import { UseFilters, UseGuards } from '@nestjs/common';
 import { GraphQlErrorFilter } from '../filters/custom-exception.filter';
-import { User } from './models/user.model';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
 import { RefreshType } from '../auth/types/RefreshType';
 import { GetUsersDto } from './dto/get-users.dto';
+import { ToggleFollowType } from './types/toggle-follow.type';
+import { User } from './types/user.type';
 
 @UseFilters(GraphQlErrorFilter)
 @Resolver()
@@ -76,6 +77,19 @@ export class UserResolver {
       fullname,
       bio,
       image: imageUrl
+    });
+  }
+
+  @UseGuards(GraphQLAuthGuard)
+  @Mutation(() => ToggleFollowType)
+  async toggleUserFollow(
+    @Context() context: { req: Request },
+    @Args('userToFollowId', { type: () => Int })
+    userToFollowId?: number
+  ): Promise<ToggleFollowType> {
+    return this.userService.toggleFollowUser({
+      userToFollowId,
+      currentUserId: context.req.user.sub
     });
   }
 }

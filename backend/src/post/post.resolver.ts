@@ -2,7 +2,6 @@ import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { PostService } from './post.service';
 import { PostType } from './types/post.type';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
-// import GraphQLUpload from 'graphql-upload/graphqlUpload.mjs';
 import { Request } from 'express';
 import { UseGuards } from '@nestjs/common';
 import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
@@ -39,12 +38,14 @@ export class PostResolver {
     return this.postService.getPostById(id);
   }
 
+  @UseGuards(GraphQLAuthGuard)
   @Query(() => [PostType])
   async getPosts(
     @Args('skip', { type: () => Int, defaultValue: 0 }) skip: number,
-    @Args('take', { type: () => Int, defaultValue: 1 }) take: number
+    @Args('take', { type: () => Int, defaultValue: 1 }) take: number,
+    @Context() context: { req: Request }
   ): Promise<PostType[]> {
-    return this.postService.getPosts(skip, take);
+    return this.postService.getPosts(skip, take, context.req.user.sub);
   }
 
   @UseGuards(GraphQLAuthGuard)

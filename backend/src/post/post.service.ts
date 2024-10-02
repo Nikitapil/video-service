@@ -12,6 +12,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { PostDetails } from './types/post-details.type';
 import { PostType } from './types/post.type';
 import { unlinkSync, mkdirSync, existsSync } from 'fs';
+import { getSafeUserSelectFull } from '../common/db-selects/safe-user-select';
 
 @Injectable()
 export class PostService {
@@ -70,13 +71,24 @@ export class PostService {
     return { ...post, otherPostIds: postIds.map(({ id }) => id) };
   }
 
-  async getPosts(skip: number, take: number): Promise<PostType[]> {
-    return this.prismaService.post.findMany({
+  async getPosts(
+    skip: number,
+    take: number,
+    currentUserId: number
+  ): Promise<PostType[]> {
+    const posts = await this.prismaService.post.findMany({
       skip,
       take,
-      include: { user: true, likes: true, comments: true },
+      include: {
+        user: {
+          select: getSafeUserSelectFull(currentUserId)
+        },
+        likes: true,
+        comments: true
+      },
       orderBy: { createdAt: 'desc' }
     });
+    return posts.map((post) => new PostType(post));
   }
 
   async getPostsByUserId(userId: number): Promise<PostType[]> {

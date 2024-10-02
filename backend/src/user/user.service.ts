@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { FileUpload } from 'graphql-upload-ts';
@@ -8,6 +8,7 @@ import * as process from 'node:process';
 import { createWriteStream } from 'fs';
 import { GetUsersDto } from './dto/get-users.dto';
 import { safeUserSelect } from '../common/db-selects/safe-user-select';
+import { ToggleUserFollowParams } from './types';
 @Injectable()
 export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
@@ -56,5 +57,46 @@ export class UserService {
     });
 
     return imageUrl;
+  }
+
+  async toggleFollowUser({
+    currentUserId,
+    userToFollowId
+  }: ToggleUserFollowParams) {
+    const userToFollow = await this.prismaService.user.findUnique({
+      where: { id: userToFollowId },
+      include: {
+        followedBy: {
+          where: {
+            followedById: currentUserId
+          }
+        }
+      }
+    });
+
+    if (!userToFollow) {
+      throw new NotFoundException('User does not exist');
+    }
+
+    if (userToFollow.followedBy.length) {
+      await this.prismaService.follows.delete({
+        where: {
+          followingId_followedById: {
+            followedById: currentUserId,
+            followingId: userToFollowId
+          }
+        }
+      });
+      return { isFollowed: false };
+    }
+
+    await this.prismaService.follows.create({
+      data: {
+        followedById: currentUserId,
+        followingId: userToFollowId
+      }
+    });
+
+    return { isFollowed: true };
   }
 }

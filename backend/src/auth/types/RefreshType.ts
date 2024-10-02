@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { User } from '../../user/models/user.model';
+import { User } from '../../user/types/user.type';
 
 @ObjectType()
 export class RefreshType {

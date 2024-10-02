@@ -1,6 +1,7 @@
 import { Field, Int, ObjectType, GraphQLISODateTime } from '@nestjs/graphql';
-import { User } from '../../user/models/user.model';
 import { LikeType } from '../../like/types/like.type';
+import { User } from '../../user/types/user.type';
+import { PostFromDb } from '../types';
 
 @ObjectType()
 export class PostType {
@@ -21,4 +22,13 @@ export class PostType {
 
   @Field(() => [LikeType], { nullable: true })
   likes?: LikeType[];
+
+  constructor(postFromDb: PostFromDb) {
+    this.id = postFromDb.id;
+    this.text = postFromDb.text;
+    this.createdAt = postFromDb.createdAt;
+    this.video = postFromDb.video;
+    this.likes = postFromDb.likes;
+    this.user = new User(postFromDb.user);
+  }
 }

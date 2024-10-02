@@ -53,6 +53,7 @@ type Mutation {
   logout: String!
   refreshToken: RefreshType!
   register(registerInput: RegisterDto!): RegisterResponse!
+  toggleUserFollow(userToFollowId: Int!): ToggleFollowType!
   unlikePost(postId: Int!): LikeType!
   updateUser(bio: String, fullname: String, image: Upload): User!
 }
@@ -101,6 +102,10 @@ type RegisterResponse {
   user: User
 }
 
+type ToggleFollowType {
+  isFollowed: Boolean!
+}
+
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
 
@@ -110,4 +115,5 @@ type User {
   fullname: String!
   id: Int!
   image: String
+  isFollowed: Boolean
 }

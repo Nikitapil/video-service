@@ -212,6 +212,7 @@ export type ToggleFollowType = {
 export type User = {
   __typename?: 'User';
   bio?: Maybe<Scalars['String']['output']>;
+  canFollow?: Maybe<Scalars['Boolean']['output']>;
   email: Scalars['String']['output'];
   fullname: Scalars['String']['output'];
   id: Scalars['Int']['output'];
@@ -230,7 +231,7 @@ export type GetPostsQueryVariables = Exact<{
 }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'PostType', id: number, text: string, video: string, createdAt: any, user: { __typename?: 'User', id: number, fullname: string, email: string, image?: string | null, isFollowed?: boolean | null }, likes?: Array<{ __typename?: 'LikeType', id: number, userId: number, postId: number }> | null }> };
+export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'PostType', id: number, text: string, video: string, createdAt: any, user: { __typename?: 'User', id: number, fullname: string, email: string, image?: string | null, isFollowed?: boolean | null, canFollow?: boolean | null }, likes?: Array<{ __typename?: 'LikeType', id: number, userId: number, postId: number }> | null }> };
 
 export type CreateCommentMutationVariables = Exact<{
   text: Scalars['String']['input'];
@@ -403,6 +404,7 @@ export const GetPostsDocument = gql`
       email
       image
       isFollowed
+      canFollow
     }
     likes {
       id

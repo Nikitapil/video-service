@@ -88,7 +88,7 @@ export class PostService {
       },
       orderBy: { createdAt: 'desc' }
     });
-    return posts.map((post) => new PostType(post));
+    return posts.map((post) => new PostType(post, currentUserId));
   }
 
   async getPostsByUserId(userId: number): Promise<PostType[]> {

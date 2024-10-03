@@ -49,6 +49,8 @@ model Post {
   text  String
   video String
 
+  tags String[] @default([])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

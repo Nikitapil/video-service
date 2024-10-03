@@ -21,12 +21,16 @@ export class User {
   @Field(() => Boolean, { nullable: true })
   isFollowed?: boolean;
 
-  constructor(userFromDb: UserFromDb) {
+  @Field(() => Boolean, { nullable: true })
+  canFollow?: boolean;
+
+  constructor(userFromDb: UserFromDb, currentUserId: number) {
     this.id = userFromDb.id;
     this.fullname = userFromDb.fullname;
     this.bio = userFromDb.bio;
     this.image = userFromDb.image;
     this.email = userFromDb.email;
     this.isFollowed = !!userFromDb?.followedBy.length;
+    this.canFollow = currentUserId !== userFromDb.id;
   }
 }

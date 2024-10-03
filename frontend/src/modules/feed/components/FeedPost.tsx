@@ -34,16 +34,18 @@ const FeedPost = ({ post }: FeedPostProps) => {
             <span className="cursor-pointer font-bold hover:underline">{post.user.fullname}</span>
           </Link>
 
-          <AppButton
-            appearance="danger"
-            isLoading={isLoading}
-            text={followButtonText}
-            size="sm"
-            onClick={onToggleFollow}
-          />
+          {post.user.canFollow && (
+            <AppButton
+              appearance="danger"
+              isLoading={isLoading}
+              text={followButtonText}
+              size="sm"
+              onClick={onToggleFollow}
+            />
+          )}
         </div>
 
-        <div className="max-v-[300px] break-words pb-0.5 text-[15px] md:max-w-[480px]">{post.text}</div>
+        <div className="max-w-md break-words pb-0.5 text-sm">{post.text}</div>
 
         <div className="pb-0.5 text-[14px] text-gray-500">#fun #cool #superAwesome</div>
 

@@ -111,6 +111,7 @@ scalar Upload
 
 type User {
   bio: String
+  canFollow: Boolean
   email: String!
   fullname: String!
   id: Int!

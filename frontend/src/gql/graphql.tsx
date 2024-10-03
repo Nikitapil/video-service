@@ -37,6 +37,8 @@ export type ErrorType = {
 
 export type GetUsersDto = {
   search?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Float']['input']>;
+  take?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type LikeType = {
@@ -68,6 +70,7 @@ export type Mutation = {
   logout: Scalars['String']['output'];
   refreshToken: RefreshType;
   register: RegisterResponse;
+  toggleUserFollow: ToggleFollowType;
   unlikePost: LikeType;
   updateUser: User;
 };
@@ -107,6 +110,11 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterArgs = {
   registerInput: RegisterDto;
+};
+
+
+export type MutationToggleUserFollowArgs = {
+  userToFollowId: Scalars['Int']['input'];
 };
 
 
@@ -196,6 +204,11 @@ export type RegisterResponse = {
   user?: Maybe<User>;
 };
 
+export type ToggleFollowType = {
+  __typename?: 'ToggleFollowType';
+  isFollowed: Scalars['Boolean']['output'];
+};
+
 export type User = {
   __typename?: 'User';
   bio?: Maybe<Scalars['String']['output']>;
@@ -203,12 +216,13 @@ export type User = {
   fullname: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   image?: Maybe<Scalars['String']['output']>;
+  isFollowed?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export type GetSuggestedUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSuggestedUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: number, fullname: string, email: string, image?: string | null }> };
+export type GetSuggestedUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: number, fullname: string, email: string, image?: string | null, bio?: string | null }> };
 
 export type GetPostsQueryVariables = Exact<{
   skip: Scalars['Int']['input'];
@@ -216,7 +230,7 @@ export type GetPostsQueryVariables = Exact<{
 }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'PostType', id: number, text: string, video: string, createdAt: any, user: { __typename?: 'User', id: number, fullname: string, email: string }, likes?: Array<{ __typename?: 'LikeType', id: number, userId: number, postId: number }> | null }> };
+export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'PostType', id: number, text: string, video: string, createdAt: any, user: { __typename?: 'User', id: number, fullname: string, email: string, image?: string | null, isFollowed?: boolean | null }, likes?: Array<{ __typename?: 'LikeType', id: number, userId: number, postId: number }> | null }> };
 
 export type CreateCommentMutationVariables = Exact<{
   text: Scalars['String']['input'];
@@ -291,6 +305,13 @@ export type RegisterUserMutationVariables = Exact<{
 
 export type RegisterUserMutation = { __typename?: 'Mutation', register: { __typename?: 'RegisterResponse', user?: { __typename?: 'User', id: number, fullname: string, email: string, image?: string | null } | null } };
 
+export type ToggleUserFollowMutationVariables = Exact<{
+  userToFollowId: Scalars['Int']['input'];
+}>;
+
+
+export type ToggleUserFollowMutation = { __typename?: 'Mutation', toggleUserFollow: { __typename?: 'ToggleFollowType', isFollowed: boolean } };
+
 export type LikePostMutationVariables = Exact<{
   postId: Scalars['Int']['input'];
 }>;
@@ -318,7 +339,7 @@ export type GetUsersQueryVariables = Exact<{
 }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: number, fullname: string, email: string, image?: string | null }> };
+export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: number, fullname: string, email: string, image?: string | null, bio?: string | null }> };
 
 export type RefreshTokenMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -328,11 +349,12 @@ export type RefreshTokenMutation = { __typename?: 'Mutation', refreshToken: { __
 
 export const GetSuggestedUsersDocument = gql`
     query GetSuggestedUsers {
-  getUsers {
+  getUsers(getUsersInput: {take: 5}) {
     id
     fullname
     email
     image
+    bio
   }
 }
     `;
@@ -379,6 +401,8 @@ export const GetPostsDocument = gql`
       id
       fullname
       email
+      image
+      isFollowed
     }
     likes {
       id
@@ -845,6 +869,39 @@ export function useRegisterUserMutation(baseOptions?: Apollo.MutationHookOptions
 export type RegisterUserMutationHookResult = ReturnType<typeof useRegisterUserMutation>;
 export type RegisterUserMutationResult = Apollo.MutationResult<RegisterUserMutation>;
 export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutation, RegisterUserMutationVariables>;
+export const ToggleUserFollowDocument = gql`
+    mutation ToggleUserFollow($userToFollowId: Int!) {
+  toggleUserFollow(userToFollowId: $userToFollowId) {
+    isFollowed
+  }
+}
+    `;
+export type ToggleUserFollowMutationFn = Apollo.MutationFunction<ToggleUserFollowMutation, ToggleUserFollowMutationVariables>;
+
+/**
+ * __useToggleUserFollowMutation__
+ *
+ * To run a mutation, you first call `useToggleUserFollowMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useToggleUserFollowMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [toggleUserFollowMutation, { data, loading, error }] = useToggleUserFollowMutation({
+ *   variables: {
+ *      userToFollowId: // value for 'userToFollowId'
+ *   },
+ * });
+ */
+export function useToggleUserFollowMutation(baseOptions?: Apollo.MutationHookOptions<ToggleUserFollowMutation, ToggleUserFollowMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ToggleUserFollowMutation, ToggleUserFollowMutationVariables>(ToggleUserFollowDocument, options);
+      }
+export type ToggleUserFollowMutationHookResult = ReturnType<typeof useToggleUserFollowMutation>;
+export type ToggleUserFollowMutationResult = Apollo.MutationResult<ToggleUserFollowMutation>;
+export type ToggleUserFollowMutationOptions = Apollo.BaseMutationOptions<ToggleUserFollowMutation, ToggleUserFollowMutationVariables>;
 export const LikePostDocument = gql`
     mutation LikePost($postId: Int!) {
   likePost(postId: $postId) {
@@ -956,6 +1013,7 @@ export const GetUsersDocument = gql`
     fullname
     email
     image
+    bio
   }
 }
     `;

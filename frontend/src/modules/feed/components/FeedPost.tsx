@@ -7,12 +7,15 @@ import { IoChatbubbleEllipses } from 'react-icons/io5';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
 import { getProfileLink } from '../../../router/routes.ts';
 import AppButton from '../../../components/ui/AppButton.tsx';
+import { useFollows } from '../../shared/follows/useFollows.ts';
 
 interface FeedPostProps {
   post: PostType;
 }
 
 const FeedPost = ({ post }: FeedPostProps) => {
+  const { onToggleFollow, isLoading, followButtonText } = useFollows(post.user);
+
   return (
     <article className="flex border-b py-6">
       <Link
@@ -33,8 +36,10 @@ const FeedPost = ({ post }: FeedPostProps) => {
 
           <AppButton
             appearance="danger"
-            text="Follow"
+            isLoading={isLoading}
+            text={followButtonText}
             size="sm"
+            onClick={onToggleFollow}
           />
         </div>
 

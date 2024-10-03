@@ -12,6 +12,7 @@ export const GET_ALL_POSTS = gql`
         fullname
         email
         image
+        isFollowed
       }
       likes {
         id

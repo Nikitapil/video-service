@@ -1,5 +1,6 @@
 import { ButtonHTMLAttributes, ReactNode, useMemo } from 'react';
 import { Link, To } from 'react-router-dom';
+import { FaSpinner } from 'react-icons/fa';
 
 interface AppButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   text?: string;
@@ -7,6 +8,7 @@ interface AppButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   to?: To;
   appearance?: 'default' | 'danger';
   size?: 'md' | 'sm';
+  isLoading?: boolean;
 }
 
 const AppButton = ({
@@ -15,6 +17,7 @@ const AppButton = ({
   type,
   appearance = 'default',
   size = 'md',
+  isLoading = false,
   to,
   ...restProps
 }: AppButtonProps) => {
@@ -31,6 +34,17 @@ const AppButton = ({
 
     return `rounded-md border px-3 common-transition shadow-md active:shadow-sm ${appearanceClasses[appearance]} ${sizeClasses[size]}`;
   }, [appearance, size]);
+
+  if (isLoading) {
+    return (
+      <div className={className}>
+        <FaSpinner
+          size="18"
+          className="animate-spin"
+        />
+      </div>
+    );
+  }
 
   if (to) {
     return (

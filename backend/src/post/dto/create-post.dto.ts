@@ -17,4 +17,8 @@ export class CreatePostDto {
   @Field(() => String, { nullable: true })
   @IsString()
   video: string;
+
+  @Field(() => String, { nullable: true })
+  @IsString()
+  tags?: string;
 }

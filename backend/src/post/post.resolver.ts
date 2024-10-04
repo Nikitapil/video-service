@@ -17,7 +17,8 @@ export class PostResolver {
   async createPost(
     @Context() context: { req: Request },
     @Args({ name: 'video', type: () => GraphQLUpload }) video: FileUpload,
-    @Args('text') text: string
+    @Args('text') text: string,
+    @Args('tags', { type: () => String }) tags: string
   ) {
     const userId = context.req.user.sub;
     const videoPath = await this.postService.saveVideo(video);
@@ -25,7 +26,8 @@ export class PostResolver {
     const postData: CreatePostDto = {
       text,
       video: videoPath,
-      userId
+      userId,
+      tags
     };
 
     return this.postService.createPost(postData);

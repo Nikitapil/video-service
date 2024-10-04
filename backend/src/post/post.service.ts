@@ -49,8 +49,16 @@ export class PostService {
   }
 
   async createPost(data: CreatePostDto): Promise<Post> {
+    const postData = {
+      ...data,
+      tags:
+        data.tags
+          ?.split(' ')
+          .map((tag) => tag.replace(/[^a-zA-Z0-9]/g, ''))
+          .filter(Boolean) || []
+    };
     return this.prismaService.post.create({
-      data: data
+      data: postData
     });
   }
 

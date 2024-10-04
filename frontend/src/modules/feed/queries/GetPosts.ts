@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_ALL_POSTS = gql`
-  query GetPosts($skip: Int!, $take: Int!) {
-    getPosts(skip: $skip, take: $take) {
+  query GetPosts($skip: Int!, $take: Int!, $search: String) {
+    getPosts(skip: $skip, take: $take, search: $search) {
       id
       text
       video

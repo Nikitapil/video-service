@@ -45,9 +45,10 @@ export class PostResolver {
   async getPosts(
     @Args('skip', { type: () => Int, defaultValue: 0 }) skip: number,
     @Args('take', { type: () => Int, defaultValue: 1 }) take: number,
+    @Args('search', { type: () => String, nullable: true }) search: string,
     @Context() context: { req: Request }
   ): Promise<PostType[]> {
-    return this.postService.getPosts(skip, take, context.req.user.sub);
+    return this.postService.getPosts(skip, take, context.req.user.sub, search);
   }
 
   @UseGuards(GraphQLAuthGuard)

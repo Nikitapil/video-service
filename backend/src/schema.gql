@@ -82,7 +82,7 @@ type PostType {
 type Query {
   getCommentsByPostId(postId: Int!): [CommentType!]!
   getPostById(id: Int!): PostDetails!
-  getPosts(skip: Int! = 0, take: Int! = 1): [PostType!]!
+  getPosts(search: String, skip: Int! = 0, take: Int! = 1): [PostType!]!
   getPostsByUserId(userId: Int!): [PostType!]!
   getUsers(getUsersInput: GetUsersDto): [User!]!
 }

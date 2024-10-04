@@ -3,10 +3,11 @@ import { useQuery } from '@apollo/client';
 import { GetPostsQuery } from '../../../gql/graphql.ts';
 import { GET_ALL_POSTS } from '../queries/GetPosts.ts';
 import FeedPost from '../components/FeedPost.tsx';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const Feed = () => {
   const loadMoreRef = useRef(null);
+  const [search, setSearch] = useState('');
 
   const { data, loading, fetchMore, refetch } = useQuery<GetPostsQuery>(GET_ALL_POSTS, {
     variables: {
@@ -16,13 +17,18 @@ const Feed = () => {
   });
 
   const onSearchByTag = (tag: string) => {
-    console.log('implement this method with refetch and pass tag as a parameter');
+    setSearch(tag);
+    refetch({
+      skip: 0,
+      take: 2,
+      search: tag
+    });
   };
 
   const loadMorePosts = async () => {
     try {
       await fetchMore({
-        variables: { skip: data?.getPosts.length || 0, take: 2 },
+        variables: { skip: data?.getPosts.length || 0, take: 2, search },
         updateQuery: (prev, { fetchMoreResult }) => {
           if (!fetchMoreResult) return prev;
           // Todo фильтр ниже скорее всего не нужен, перепроверить

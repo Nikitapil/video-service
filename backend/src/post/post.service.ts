@@ -7,7 +7,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { extname } from 'path';
 import { createWriteStream } from 'fs';
-import { Post } from '@prisma/client';
+import { Post, Prisma } from '@prisma/client';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostDetails } from './types/post-details.type';
 import { PostType } from './types/post.type';
@@ -79,13 +79,22 @@ export class PostService {
     });
     return { ...post, otherPostIds: postIds.map(({ id }) => id) };
   }
-
+  // TODO take parameters as object
   async getPosts(
     skip: number,
     take: number,
-    currentUserId: number
+    currentUserId: number,
+    search?: string
   ): Promise<PostType[]> {
+    const where: Prisma.PostWhereInput = {};
+
+    if (search) {
+      where.tags = {
+        has: search
+      };
+    }
     const posts = await this.prismaService.post.findMany({
+      where,
       skip,
       take,
       include: {

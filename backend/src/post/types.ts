@@ -13,4 +13,6 @@ export interface PostFromDb {
   user?: UserFromDb;
 
   likes?: LikeType[];
+
+  tags: string[];
 }

@@ -45,7 +45,7 @@ type LoginResponse {
 
 type Mutation {
   createComment(postId: Int!, text: String!): CommentType!
-  createPost(tags: String!, text: String!, video: Upload!): PostType!
+  createPost(tags: String, text: String!, video: Upload!): PostType!
   deleteComment(id: Int!): String
   deletePost(id: Int!): String!
   likePost(postId: Int!): LikeType!
@@ -63,6 +63,7 @@ type PostDetails {
   id: Int!
   likes: [LikeType!]
   otherPostIds: [Int!]
+  tags: [String!]!
   text: String!
   user: User!
   video: String!
@@ -72,6 +73,7 @@ type PostType {
   createdAt: DateTime!
   id: Int!
   likes: [LikeType!]
+  tags: [String!]!
   text: String!
   user: User!
   video: String!

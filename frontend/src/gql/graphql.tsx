@@ -83,6 +83,7 @@ export type MutationCreateCommentArgs = {
 
 
 export type MutationCreatePostArgs = {
+  tags?: InputMaybe<Scalars['String']['input']>;
   text: Scalars['String']['input'];
   video: Scalars['Upload']['input'];
 };
@@ -135,6 +136,7 @@ export type PostDetails = {
   id: Scalars['Int']['output'];
   likes?: Maybe<Array<LikeType>>;
   otherPostIds?: Maybe<Array<Scalars['Int']['output']>>;
+  tags: Array<Scalars['String']['output']>;
   text: Scalars['String']['output'];
   user: User;
   video: Scalars['String']['output'];
@@ -145,6 +147,7 @@ export type PostType = {
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
   likes?: Maybe<Array<LikeType>>;
+  tags: Array<Scalars['String']['output']>;
   text: Scalars['String']['output'];
   user: User;
   video: Scalars['String']['output'];
@@ -231,7 +234,7 @@ export type GetPostsQueryVariables = Exact<{
 }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'PostType', id: number, text: string, video: string, createdAt: any, user: { __typename?: 'User', id: number, fullname: string, email: string, image?: string | null, isFollowed?: boolean | null, canFollow?: boolean | null }, likes?: Array<{ __typename?: 'LikeType', id: number, userId: number, postId: number }> | null }> };
+export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'PostType', id: number, text: string, video: string, createdAt: any, tags: Array<string>, user: { __typename?: 'User', id: number, fullname: string, email: string, image?: string | null, isFollowed?: boolean | null, canFollow?: boolean | null }, likes?: Array<{ __typename?: 'LikeType', id: number, userId: number, postId: number }> | null }> };
 
 export type CreateCommentMutationVariables = Exact<{
   text: Scalars['String']['input'];
@@ -398,6 +401,7 @@ export const GetPostsDocument = gql`
     text
     video
     createdAt
+    tags
     user {
       id
       fullname

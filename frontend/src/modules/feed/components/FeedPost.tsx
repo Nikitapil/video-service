@@ -8,12 +8,14 @@ import UserAvatar from '../../shared/components/UserAvatar.tsx';
 import { getProfileLink } from '../../../router/routes.ts';
 import AppButton from '../../../components/ui/AppButton.tsx';
 import { useFollows } from '../../shared/follows/useFollows.ts';
+import PostHashTags from '../../shared/components/PostHashTags.tsx';
 
 interface FeedPostProps {
   post: PostType;
+  onTagClick: (tagValue: string) => void;
 }
 
-const FeedPost = ({ post }: FeedPostProps) => {
+const FeedPost = ({ post, onTagClick }: FeedPostProps) => {
   const { onToggleFollow, isLoading, followButtonText } = useFollows(post.user);
 
   return (
@@ -47,7 +49,12 @@ const FeedPost = ({ post }: FeedPostProps) => {
 
         <div className="max-w-md break-words pb-0.5 text-sm">{post.text}</div>
 
-        <div className="pb-0.5 text-[14px] text-gray-500">#fun #cool #superAwesome</div>
+        <div className="mb-0.5">
+          <PostHashTags
+            tags={post.tags || []}
+            onTagClick={onTagClick}
+          />
+        </div>
 
         <div className="flex items-center pb-0.5 text-[14px] font-semibold">
           <BsMusicNoteBeamed size="17" />

@@ -23,6 +23,9 @@ export class PostType {
   @Field(() => [LikeType], { nullable: true })
   likes?: LikeType[];
 
+  @Field(() => [String])
+  tags: string[];
+
   constructor(postFromDb: PostFromDb, currentUserId: number) {
     this.id = postFromDb.id;
     this.text = postFromDb.text;
@@ -30,5 +33,6 @@ export class PostType {
     this.video = postFromDb.video;
     this.likes = postFromDb.likes;
     this.user = new User(postFromDb.user, currentUserId);
+    this.tags = postFromDb.tags;
   }
 }

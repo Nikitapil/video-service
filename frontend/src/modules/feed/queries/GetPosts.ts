@@ -7,6 +7,7 @@ export const GET_ALL_POSTS = gql`
       text
       video
       createdAt
+      tags
       user {
         id
         fullname

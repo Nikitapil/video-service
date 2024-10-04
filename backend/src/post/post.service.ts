@@ -55,7 +55,8 @@ export class PostService {
         data.tags
           ?.split(' ')
           .map((tag) => tag.replace(/[^a-zA-Z0-9]/g, ''))
-          .filter(Boolean) || []
+          .filter((tag, index, arr) => !!tag && index === arr.indexOf(tag)) ||
+        []
     };
     return this.prismaService.post.create({
       data: postData

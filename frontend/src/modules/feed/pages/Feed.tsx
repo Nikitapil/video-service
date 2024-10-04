@@ -8,12 +8,16 @@ import { useEffect, useRef } from 'react';
 const Feed = () => {
   const loadMoreRef = useRef(null);
 
-  const { data, loading, fetchMore } = useQuery<GetPostsQuery>(GET_ALL_POSTS, {
+  const { data, loading, fetchMore, refetch } = useQuery<GetPostsQuery>(GET_ALL_POSTS, {
     variables: {
       skip: 0,
       take: 2
     }
   });
+
+  const onSearchByTag = (tag: string) => {
+    console.log('implement this method with refetch and pass tag as a parameter');
+  };
 
   const loadMorePosts = async () => {
     try {
@@ -53,11 +57,12 @@ const Feed = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-[690px] mx-auto">
+      <div className="mx-auto max-w-[690px]">
         {data?.getPosts.map((post) => (
           <FeedPost
             key={post.id}
             post={post}
+            onTagClick={onSearchByTag}
           />
         ))}
         <div

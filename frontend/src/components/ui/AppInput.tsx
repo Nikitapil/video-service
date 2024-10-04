@@ -26,7 +26,7 @@ const AppInput = ({
         onChange={onChange}
         name={name}
         {...otherProps}
-        className="common-transition block w-full rounded-md border border-gray-300 bg-indigo-50 px-3 py-2.5 text-gray-900 outline-none focus:bg-white"
+        className="block w-full rounded-md border border-gray-300 bg-indigo-50 px-3 py-2.5 text-gray-900 outline-none common-transition focus:bg-white"
       />
       {error && <span className="text-sm font-semibold text-red-500">{error}</span>}
     </div>

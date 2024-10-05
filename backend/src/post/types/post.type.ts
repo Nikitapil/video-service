@@ -25,6 +25,9 @@ export class PostType {
   @Field(() => Number, { nullable: true })
   likesCount?: number;
 
+  @Field(() => Number, { nullable: true })
+  commentsCount?: number;
+
   @Field(() => [String])
   tags: string[];
 
@@ -37,5 +40,6 @@ export class PostType {
     this.user = new User(postFromDb.user, currentUserId);
     this.tags = postFromDb.tags;
     this.likesCount = postFromDb._count?.likes || 0;
+    this.commentsCount = postFromDb._count?.comments || 0;
   }
 }

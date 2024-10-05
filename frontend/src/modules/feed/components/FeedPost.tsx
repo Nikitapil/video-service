@@ -1,10 +1,10 @@
 import { PostType } from '../../../gql/graphql.ts';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AiFillHeart } from 'react-icons/ai';
 import { IoIosShareAlt } from 'react-icons/io';
 import { IoChatbubbleEllipses } from 'react-icons/io5';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
-import { getProfileLink } from '../../../router/routes.ts';
+import { getPostLink, getProfileLink } from '../../../router/routes.ts';
 import AppButton from '../../../components/ui/AppButton.tsx';
 import { useFollows } from '../../shared/follows/useFollows.ts';
 import PostHashTags from '../../shared/components/PostHashTags.tsx';
@@ -18,6 +18,8 @@ interface FeedPostProps {
 }
 
 const FeedPost = ({ post, onTagClick }: FeedPostProps) => {
+  const navigate = useNavigate();
+
   const { onToggleFollow, isLoading, followButtonText } = useFollows(post.user);
 
   const { likesCount, isLiked, onLikeToggle } = usePostLikes(post);
@@ -33,6 +35,10 @@ const FeedPost = ({ post, onTagClick }: FeedPostProps) => {
       navigator.share(shareData).catch(() => {});
     }
   }, [post.text]);
+
+  const goToPost = useCallback(() => {
+    navigate(getPostLink(post.id));
+  }, [navigate, post.id]);
 
   return (
     <article className="flex border-b py-6">
@@ -96,15 +102,10 @@ const FeedPost = ({ post, onTagClick }: FeedPostProps) => {
               hideCount
             />
 
-            <div className="flex items-center gap-1">
-              <button className="cursor-pointer rounded-full bg-gray-200 p-2">
-                <IoChatbubbleEllipses
-                  size="25"
-                  color="black"
-                />
-              </button>
-              <span className="text-xs font-semibold text-gray-800">0</span>
-            </div>
+            <PostAction
+              buttonProps={{ Icon: IoChatbubbleEllipses, onClick: goToPost }}
+              count={post.commentsCount || 0}
+            />
           </div>
         </div>
       </div>

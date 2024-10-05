@@ -52,6 +52,7 @@ type Mutation {
 }
 
 type PostDetails {
+  commentsCount: Float
   createdAt: DateTime!
   id: Int!
   isLiked: Boolean
@@ -64,6 +65,7 @@ type PostDetails {
 }
 
 type PostType {
+  commentsCount: Float
   createdAt: DateTime!
   id: Int!
   isLiked: Boolean

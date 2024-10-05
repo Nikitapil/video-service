@@ -18,5 +18,6 @@ export interface PostFromDb {
 
   _count: {
     likes: number;
+    comments: number;
   };
 }

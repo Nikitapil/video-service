@@ -119,6 +119,7 @@ export type MutationUpdateUserArgs = {
 
 export type PostDetails = {
   __typename?: 'PostDetails';
+  commentsCount?: Maybe<Scalars['Float']['output']>;
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
   isLiked?: Maybe<Scalars['Boolean']['output']>;
@@ -132,6 +133,7 @@ export type PostDetails = {
 
 export type PostType = {
   __typename?: 'PostType';
+  commentsCount?: Maybe<Scalars['Float']['output']>;
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
   isLiked?: Maybe<Scalars['Boolean']['output']>;
@@ -230,7 +232,7 @@ export type GetPostsQueryVariables = Exact<{
 }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'PostType', id: number, text: string, video: string, createdAt: any, tags: Array<string>, isLiked?: boolean | null, user: { __typename?: 'User', id: number, fullname: string, email: string, image?: string | null, isFollowed?: boolean | null, canFollow?: boolean | null } }> };
+export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'PostType', id: number, text: string, video: string, createdAt: any, tags: Array<string>, isLiked?: boolean | null, likesCount?: number | null, commentsCount?: number | null, user: { __typename?: 'User', id: number, fullname: string, email: string, image?: string | null, isFollowed?: boolean | null, canFollow?: boolean | null } }> };
 
 export type CreateCommentMutationVariables = Exact<{
   text: Scalars['String']['input'];
@@ -393,6 +395,8 @@ export const GetPostsDocument = gql`
     createdAt
     tags
     isLiked
+    likesCount
+    commentsCount
     user {
       id
       fullname

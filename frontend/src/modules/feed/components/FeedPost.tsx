@@ -10,6 +10,7 @@ import { useFollows } from '../../shared/follows/useFollows.ts';
 import PostHashTags from '../../shared/components/PostHashTags.tsx';
 import PostAction from '../../shared/components/PostAction.tsx';
 import { usePostLikes } from '../../shared/likes/usePostLikes.ts';
+import { useCallback } from 'react';
 
 interface FeedPostProps {
   post: PostType;
@@ -20,6 +21,18 @@ const FeedPost = ({ post, onTagClick }: FeedPostProps) => {
   const { onToggleFollow, isLoading, followButtonText } = useFollows(post.user);
 
   const { likesCount, isLiked, onLikeToggle } = usePostLikes(post);
+
+  const share = useCallback(() => {
+    const shareData = {
+      title: 'Video service',
+      text: post.text,
+      url: window.location.href
+    };
+
+    if (navigator.canShare(shareData)) {
+      navigator.share(shareData).catch(() => {});
+    }
+  }, [post.text]);
 
   return (
     <article className="flex border-b py-6">
@@ -77,15 +90,12 @@ const FeedPost = ({ post, onTagClick }: FeedPostProps) => {
               count={likesCount}
             />
 
-            <div className="flex items-center gap-1">
-              <button className="cursor-pointer rounded-full bg-gray-200 p-2">
-                <IoIosShareAlt
-                  size="25"
-                  color="black"
-                />
-              </button>
-              <span className="text-xs font-semibold text-gray-800">34</span>
-            </div>
+            <PostAction
+              buttonProps={{ Icon: IoIosShareAlt, onClick: share }}
+              count={0}
+              hideCount
+            />
+
             <div className="flex items-center gap-1">
               <button className="cursor-pointer rounded-full bg-gray-200 p-2">
                 <IoChatbubbleEllipses

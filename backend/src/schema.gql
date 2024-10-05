@@ -27,12 +27,6 @@ input GetUsersDto {
   take: Float
 }
 
-type LikeType {
-  id: Int!
-  postId: Int!
-  userId: Int!
-}
-
 input LoginDto {
   email: String!
   password: String!
@@ -48,20 +42,20 @@ type Mutation {
   createPost(tags: String, text: String!, video: Upload!): PostType!
   deleteComment(id: Int!): String
   deletePost(id: Int!): String!
-  likePost(postId: Int!): LikeType!
   login(loginInput: LoginDto!): LoginResponse!
   logout: String!
   refreshToken: RefreshType!
   register(registerInput: RegisterDto!): RegisterResponse!
+  toggleLikePost(postId: Int!): ToggleLike!
   toggleUserFollow(userToFollowId: Int!): ToggleFollowType!
-  unlikePost(postId: Int!): LikeType!
   updateUser(bio: String, fullname: String, image: Upload): User!
 }
 
 type PostDetails {
   createdAt: DateTime!
   id: Int!
-  likes: [LikeType!]
+  isLiked: Boolean
+  likesCount: Float
   otherPostIds: [Int!]
   tags: [String!]!
   text: String!
@@ -72,7 +66,8 @@ type PostDetails {
 type PostType {
   createdAt: DateTime!
   id: Int!
-  likes: [LikeType!]
+  isLiked: Boolean
+  likesCount: Float
   tags: [String!]!
   text: String!
   user: User!
@@ -106,6 +101,10 @@ type RegisterResponse {
 
 type ToggleFollowType {
   isFollowed: Boolean!
+}
+
+type ToggleLike {
+  isLiked: Boolean!
 }
 
 """The `Upload` scalar type represents a file upload."""

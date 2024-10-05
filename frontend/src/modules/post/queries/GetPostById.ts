@@ -13,11 +13,7 @@ export const GET_POST_BY_ID = gql`
         fullname
         image
       }
-      likes {
-        id
-        userId
-        postId
-      }
+      isLiked
       otherPostIds
     }
   }

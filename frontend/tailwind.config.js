@@ -4,7 +4,12 @@ import plugin from 'tailwindcss/plugin';
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {}
+    extend: {
+      spacing: {
+        120: '30rem',
+        140: '36rem'
+      }
+    }
   },
   plugins: [
     plugin(function ({ addUtilities }) {

@@ -11,24 +11,18 @@ import {
   GetCommentsByPostIdQuery,
   GetCommentsByPostIdQueryVariables,
   GetPostByIdQuery,
-  GetPostByIdQueryVariables,
-  LikePostMutation,
-  LikePostMutationVariables,
-  UnlikePostMutation,
-  UnlikePostMutationVariables
+  GetPostByIdQueryVariables
 } from '../../../gql/graphql.ts';
 import { DELETE_COMMENT } from '../mutations/DeleteComment.ts';
 import { GET_POST_BY_ID } from '../queries/GetPostById.ts';
-import { usePostStore } from '../stores/postStore.ts';
 import { useUserStore } from '../../shared/auth/stores/userStore.ts';
-import { LIKE_POST } from '../../shared/likes/mutations/LikePost.ts';
-import { UNLIKE_POST } from '../../shared/likes/mutations/UnlikePost.ts';
 import { ImCross, ImSpinner2 } from 'react-icons/im';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
 import { MdOutlineDeleteForever } from 'react-icons/md';
 import { BsFillChatDotsFill, BsMusicNoteBeamed } from 'react-icons/bs';
 import { AiFillHeart } from 'react-icons/ai';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
+import { usePostLikes } from '../../shared/likes/usePostLikes.ts';
 
 const Post = () => {
   const { id } = useParams<{ id: string }>();
@@ -38,10 +32,6 @@ const Post = () => {
   const [currentPostIdIndex, setCurrentPostIdIndex] = useState<number>(0);
 
   const navigate = useNavigate();
-
-  const likedPosts = usePostStore((state) => state.likedPosts);
-  const likePost = usePostStore((state) => state.likePost);
-  const removeLike = usePostStore((state) => state.removeLike);
 
   const loggedInUserId = useUserStore((state) => state.user?.id);
 
@@ -77,34 +67,6 @@ const Post = () => {
         query: GET_COMMENTS_BY_POST_ID,
         variables: {
           postId: postIdInt
-        }
-      }
-    ]
-  });
-
-  const [likePostFn] = useMutation<LikePostMutation, LikePostMutationVariables>(LIKE_POST, {
-    variables: {
-      postId: postIdInt
-    },
-    refetchQueries: [
-      {
-        query: GET_POST_BY_ID,
-        variables: {
-          id: postIdInt
-        }
-      }
-    ]
-  });
-
-  const [unlikePostFn] = useMutation<UnlikePostMutation, UnlikePostMutationVariables>(UNLIKE_POST, {
-    variables: {
-      postId: postIdInt
-    },
-    refetchQueries: [
-      {
-        query: GET_POST_BY_ID,
-        variables: {
-          id: postIdInt
         }
       }
     ]
@@ -149,20 +111,8 @@ const Post = () => {
     setComment('');
   };
 
-  const handleRemoveLike = async () => {
-    await unlikePostFn();
-    removeLike(postIdInt);
-  };
-
-  const handleLikePost = async () => {
-    const { data } = await likePostFn();
-    removeLike(postIdInt);
-    if (data?.likePost) {
-      likePost(data?.likePost);
-    }
-  };
-  // TODO get this from backend in post model
-  const isLiked = likedPosts.some((likedPost) => likedPost.userId === loggedInUserId);
+  // TODO implement likes here
+  // const {} = usePostLikes(dataPost.getPostById)
 
   return (
     <div className="fixed left-0 top-0 z-50 h-full w-full justify-between overflow-auto bg-black lg:flex lg:overflow-hidden">
@@ -256,20 +206,20 @@ const Post = () => {
             </div>
 
             <div className="mt-8 flex items-center px-8">
-              <div className="flex items-center pb-4 text-center">
-                <button
-                  className="rounded-full bg-gray-200 p-2 transition-all duration-300 hover:bg-gray-300"
-                  onClick={() => (isLiked ? handleRemoveLike() : handleLikePost())}
-                >
-                  <AiFillHeart
-                    size="25"
-                    color={isLiked ? 'red' : 'black'}
-                  />
-                </button>
-                <span className="pl-2 pr-4 text-xs font-semibold text-gray-800">
-                  {dataPost?.getPostById.likes?.length}
-                </span>
-              </div>
+              {/*<div className="flex items-center pb-4 text-center">*/}
+              {/*  <button*/}
+              {/*    className="rounded-full bg-gray-200 p-2 transition-all duration-300 hover:bg-gray-300"*/}
+              {/*    onClick={() => (isLiked ? handleRemoveLike() : handleLikePost())}*/}
+              {/*  >*/}
+              {/*    <AiFillHeart*/}
+              {/*      size="25"*/}
+              {/*      color={isLiked ? 'red' : 'black'}*/}
+              {/*    />*/}
+              {/*  </button>*/}
+              {/*  <span className="pl-2 pr-4 text-xs font-semibold text-gray-800">*/}
+              {/*    {dataPost?.getPostById.likes?.length}*/}
+              {/*  </span>*/}
+              {/*</div>*/}
 
               <div className="flex items-center pb-4 text-center">
                 <button className="rounded-full bg-gray-200 p-2 transition-all duration-300 hover:bg-gray-300">

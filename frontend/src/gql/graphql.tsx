@@ -41,13 +41,6 @@ export type GetUsersDto = {
   take?: InputMaybe<Scalars['Float']['input']>;
 };
 
-export type LikeType = {
-  __typename?: 'LikeType';
-  id: Scalars['Int']['output'];
-  postId: Scalars['Int']['output'];
-  userId: Scalars['Int']['output'];
-};
-
 export type LoginDto = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -65,13 +58,12 @@ export type Mutation = {
   createPost: PostType;
   deleteComment?: Maybe<Scalars['String']['output']>;
   deletePost: Scalars['String']['output'];
-  likePost: LikeType;
   login: LoginResponse;
   logout: Scalars['String']['output'];
   refreshToken: RefreshType;
   register: RegisterResponse;
+  toggleLikePost: ToggleLike;
   toggleUserFollow: ToggleFollowType;
-  unlikePost: LikeType;
   updateUser: User;
 };
 
@@ -99,11 +91,6 @@ export type MutationDeletePostArgs = {
 };
 
 
-export type MutationLikePostArgs = {
-  postId: Scalars['Int']['input'];
-};
-
-
 export type MutationLoginArgs = {
   loginInput: LoginDto;
 };
@@ -114,13 +101,13 @@ export type MutationRegisterArgs = {
 };
 
 
-export type MutationToggleUserFollowArgs = {
-  userToFollowId: Scalars['Int']['input'];
+export type MutationToggleLikePostArgs = {
+  postId: Scalars['Int']['input'];
 };
 
 
-export type MutationUnlikePostArgs = {
-  postId: Scalars['Int']['input'];
+export type MutationToggleUserFollowArgs = {
+  userToFollowId: Scalars['Int']['input'];
 };
 
 
@@ -134,7 +121,8 @@ export type PostDetails = {
   __typename?: 'PostDetails';
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
-  likes?: Maybe<Array<LikeType>>;
+  isLiked?: Maybe<Scalars['Boolean']['output']>;
+  likesCount?: Maybe<Scalars['Float']['output']>;
   otherPostIds?: Maybe<Array<Scalars['Int']['output']>>;
   tags: Array<Scalars['String']['output']>;
   text: Scalars['String']['output'];
@@ -146,7 +134,8 @@ export type PostType = {
   __typename?: 'PostType';
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
-  likes?: Maybe<Array<LikeType>>;
+  isLiked?: Maybe<Scalars['Boolean']['output']>;
+  likesCount?: Maybe<Scalars['Float']['output']>;
   tags: Array<Scalars['String']['output']>;
   text: Scalars['String']['output'];
   user: User;
@@ -174,6 +163,7 @@ export type QueryGetPostByIdArgs = {
 
 
 export type QueryGetPostsArgs = {
+  search?: InputMaybe<Scalars['String']['input']>;
   skip?: Scalars['Int']['input'];
   take?: Scalars['Int']['input'];
 };
@@ -212,6 +202,11 @@ export type ToggleFollowType = {
   isFollowed: Scalars['Boolean']['output'];
 };
 
+export type ToggleLike = {
+  __typename?: 'ToggleLike';
+  isLiked: Scalars['Boolean']['output'];
+};
+
 export type User = {
   __typename?: 'User';
   bio?: Maybe<Scalars['String']['output']>;
@@ -231,10 +226,11 @@ export type GetSuggestedUsersQuery = { __typename?: 'Query', getUsers: Array<{ _
 export type GetPostsQueryVariables = Exact<{
   skip: Scalars['Int']['input'];
   take: Scalars['Int']['input'];
+  search?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'PostType', id: number, text: string, video: string, createdAt: any, tags: Array<string>, user: { __typename?: 'User', id: number, fullname: string, email: string, image?: string | null, isFollowed?: boolean | null, canFollow?: boolean | null }, likes?: Array<{ __typename?: 'LikeType', id: number, userId: number, postId: number }> | null }> };
+export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'PostType', id: number, text: string, video: string, createdAt: any, tags: Array<string>, isLiked?: boolean | null, user: { __typename?: 'User', id: number, fullname: string, email: string, image?: string | null, isFollowed?: boolean | null, canFollow?: boolean | null } }> };
 
 export type CreateCommentMutationVariables = Exact<{
   text: Scalars['String']['input'];
@@ -263,7 +259,7 @@ export type GetPostByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetPostByIdQuery = { __typename?: 'Query', getPostById: { __typename?: 'PostDetails', id: number, text: string, video: string, createdAt: any, otherPostIds?: Array<number> | null, user: { __typename?: 'User', id: number, email: string, fullname: string, image?: string | null }, likes?: Array<{ __typename?: 'LikeType', id: number, userId: number, postId: number }> | null } };
+export type GetPostByIdQuery = { __typename?: 'Query', getPostById: { __typename?: 'PostDetails', id: number, text: string, video: string, createdAt: any, isLiked?: boolean | null, otherPostIds?: Array<number> | null, user: { __typename?: 'User', id: number, email: string, fullname: string, image?: string | null } } };
 
 export type UpdateUserProfileMutationVariables = Exact<{
   fullname?: InputMaybe<Scalars['String']['input']>;
@@ -321,18 +317,12 @@ export type LikePostMutationVariables = Exact<{
 }>;
 
 
-export type LikePostMutation = { __typename?: 'Mutation', likePost: { __typename?: 'LikeType', id: number, postId: number, userId: number } };
-
-export type UnlikePostMutationVariables = Exact<{
-  postId: Scalars['Int']['input'];
-}>;
-
-
-export type UnlikePostMutation = { __typename?: 'Mutation', unlikePost: { __typename?: 'LikeType', id: number } };
+export type LikePostMutation = { __typename?: 'Mutation', toggleLikePost: { __typename?: 'ToggleLike', isLiked: boolean } };
 
 export type CreatePostMutationVariables = Exact<{
   text: Scalars['String']['input'];
   video: Scalars['Upload']['input'];
+  tags?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -395,13 +385,14 @@ export type GetSuggestedUsersLazyQueryHookResult = ReturnType<typeof useGetSugge
 export type GetSuggestedUsersSuspenseQueryHookResult = ReturnType<typeof useGetSuggestedUsersSuspenseQuery>;
 export type GetSuggestedUsersQueryResult = Apollo.QueryResult<GetSuggestedUsersQuery, GetSuggestedUsersQueryVariables>;
 export const GetPostsDocument = gql`
-    query GetPosts($skip: Int!, $take: Int!) {
-  getPosts(skip: $skip, take: $take) {
+    query GetPosts($skip: Int!, $take: Int!, $search: String) {
+  getPosts(skip: $skip, take: $take, search: $search) {
     id
     text
     video
     createdAt
     tags
+    isLiked
     user {
       id
       fullname
@@ -409,11 +400,6 @@ export const GetPostsDocument = gql`
       image
       isFollowed
       canFollow
-    }
-    likes {
-      id
-      userId
-      postId
     }
   }
 }
@@ -433,6 +419,7 @@ export const GetPostsDocument = gql`
  *   variables: {
  *      skip: // value for 'skip'
  *      take: // value for 'take'
+ *      search: // value for 'search'
  *   },
  * });
  */
@@ -595,11 +582,7 @@ export const GetPostByIdDocument = gql`
       fullname
       image
     }
-    likes {
-      id
-      userId
-      postId
-    }
+    isLiked
     otherPostIds
   }
 }
@@ -910,10 +893,8 @@ export type ToggleUserFollowMutationResult = Apollo.MutationResult<ToggleUserFol
 export type ToggleUserFollowMutationOptions = Apollo.BaseMutationOptions<ToggleUserFollowMutation, ToggleUserFollowMutationVariables>;
 export const LikePostDocument = gql`
     mutation LikePost($postId: Int!) {
-  likePost(postId: $postId) {
-    id
-    postId
-    userId
+  toggleLikePost(postId: $postId) {
+    isLiked
   }
 }
     `;
@@ -943,42 +924,9 @@ export function useLikePostMutation(baseOptions?: Apollo.MutationHookOptions<Lik
 export type LikePostMutationHookResult = ReturnType<typeof useLikePostMutation>;
 export type LikePostMutationResult = Apollo.MutationResult<LikePostMutation>;
 export type LikePostMutationOptions = Apollo.BaseMutationOptions<LikePostMutation, LikePostMutationVariables>;
-export const UnlikePostDocument = gql`
-    mutation UnlikePost($postId: Int!) {
-  unlikePost(postId: $postId) {
-    id
-  }
-}
-    `;
-export type UnlikePostMutationFn = Apollo.MutationFunction<UnlikePostMutation, UnlikePostMutationVariables>;
-
-/**
- * __useUnlikePostMutation__
- *
- * To run a mutation, you first call `useUnlikePostMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUnlikePostMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [unlikePostMutation, { data, loading, error }] = useUnlikePostMutation({
- *   variables: {
- *      postId: // value for 'postId'
- *   },
- * });
- */
-export function useUnlikePostMutation(baseOptions?: Apollo.MutationHookOptions<UnlikePostMutation, UnlikePostMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UnlikePostMutation, UnlikePostMutationVariables>(UnlikePostDocument, options);
-      }
-export type UnlikePostMutationHookResult = ReturnType<typeof useUnlikePostMutation>;
-export type UnlikePostMutationResult = Apollo.MutationResult<UnlikePostMutation>;
-export type UnlikePostMutationOptions = Apollo.BaseMutationOptions<UnlikePostMutation, UnlikePostMutationVariables>;
 export const CreatePostDocument = gql`
-    mutation CreatePost($text: String!, $video: Upload!) {
-  createPost(text: $text, video: $video) {
+    mutation CreatePost($text: String!, $video: Upload!, $tags: String) {
+  createPost(text: $text, video: $video, tags: $tags) {
     id
     text
     video
@@ -1002,6 +950,7 @@ export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, C
  *   variables: {
  *      text: // value for 'text'
  *      video: // value for 'video'
+ *      tags: // value for 'tags'
  *   },
  * });
  */

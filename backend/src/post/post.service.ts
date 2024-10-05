@@ -101,7 +101,14 @@ export class PostService {
         user: {
           select: getSafeUserSelectFull(currentUserId)
         },
-        likes: true,
+        likes: {
+          where: { userId: currentUserId }
+        },
+        _count: {
+          select: {
+            likes: true
+          }
+        },
         comments: true
       },
       orderBy: { createdAt: 'desc' }

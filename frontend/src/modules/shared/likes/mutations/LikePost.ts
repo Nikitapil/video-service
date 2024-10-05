@@ -1,11 +1,9 @@
 import { gql } from '@apollo/client';
 
-export const LIKE_POST = gql`
+export const TOGGLE_LIKE_POST = gql`
   mutation LikePost($postId: Int!) {
-    likePost(postId: $postId) {
-      id
-      postId
-      userId
+    toggleLikePost(postId: $postId) {
+      isLiked
     }
   }
 `;

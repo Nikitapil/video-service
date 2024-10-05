@@ -5,14 +5,22 @@ import { ToggleLikeDto } from './dto/toggle-like.dto';
 @Injectable()
 export class LikeService {
   constructor(private readonly prismaService: PrismaService) {}
-  // TODO переделать чтобы был единый метод который либо добавляет либо удаляет лайк
-  async likePost(data: ToggleLikeDto) {
-    return this.prismaService.like.create({ data });
-  }
 
-  async unlikePost(data: ToggleLikeDto) {
-    return this.prismaService.like.delete({
+  async toggleLike(data: ToggleLikeDto) {
+    const like = await this.prismaService.like.findUnique({
       where: { userId_postId: data }
     });
+
+    if (like) {
+      await this.prismaService.like.delete({
+        where: { userId_postId: data }
+      });
+
+      return { isLiked: false };
+    }
+
+    await this.prismaService.like.create({ data });
+
+    return { isLiked: true };
   }
 }

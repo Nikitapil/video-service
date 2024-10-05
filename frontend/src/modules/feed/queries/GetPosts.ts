@@ -8,6 +8,8 @@ export const GET_ALL_POSTS = gql`
       video
       createdAt
       tags
+      isLiked
+      likesCount
       user {
         id
         fullname
@@ -15,11 +17,6 @@ export const GET_ALL_POSTS = gql`
         image
         isFollowed
         canFollow
-      }
-      likes {
-        id
-        userId
-        postId
       }
     }
   }

@@ -1,6 +1,5 @@
 import { PostType } from '../../../gql/graphql.ts';
 import { Link } from 'react-router-dom';
-import { BsMusicNoteBeamed } from 'react-icons/bs';
 import { AiFillHeart } from 'react-icons/ai';
 import { IoIosShareAlt } from 'react-icons/io';
 import { IoChatbubbleEllipses } from 'react-icons/io5';
@@ -9,6 +8,8 @@ import { getProfileLink } from '../../../router/routes.ts';
 import AppButton from '../../../components/ui/AppButton.tsx';
 import { useFollows } from '../../shared/follows/useFollows.ts';
 import PostHashTags from '../../shared/components/PostHashTags.tsx';
+import PostAction from '../../shared/components/PostAction.tsx';
+import { usePostLikes } from '../../shared/likes/usePostLikes.ts';
 
 interface FeedPostProps {
   post: PostType;
@@ -17,6 +18,8 @@ interface FeedPostProps {
 
 const FeedPost = ({ post, onTagClick }: FeedPostProps) => {
   const { onToggleFollow, isLoading, followButtonText } = useFollows(post.user);
+
+  const { likesCount, isLiked, onLikeToggle } = usePostLikes(post);
 
   return (
     <article className="flex border-b py-6">
@@ -56,16 +59,10 @@ const FeedPost = ({ post, onTagClick }: FeedPostProps) => {
           />
         </div>
 
-        <div className="flex items-center pb-0.5 text-[14px] font-semibold">
-          <BsMusicNoteBeamed size="17" />
-          <div className="px-1">original - Awesome</div>
-          <AiFillHeart size="20" />
-        </div>
-
         <div className="mt-2.5 flex flex-wrap gap-4">
-          <div className="relative flex max-h-[580px] min-h-[480px] max-w-[260px] items-center rounded-xl bg-black">
+          <div className="max-h-140 min-h-120 max-w-72 rounded-xl bg-black">
             <video
-              src={`http://localhost:3000${post.video}`}
+              src={`${import.meta.env.VITE_APP_BACKEND_BASE_URL}${post.video}`}
               loop
               muted
               controls
@@ -75,15 +72,10 @@ const FeedPost = ({ post, onTagClick }: FeedPostProps) => {
           </div>
 
           <div className="flex items-center gap-2 self-end">
-            <div className="flex items-center gap-1">
-              <button className="cursor-pointer rounded-full bg-gray-200 p-2">
-                <AiFillHeart
-                  size="25"
-                  color="black"
-                />
-              </button>
-              <span className="text-xs font-semibold text-gray-800">{post.likes?.length}</span>
-            </div>
+            <PostAction
+              buttonProps={{ Icon: AiFillHeart, iconColor: isLiked ? 'red' : 'black', onClick: onLikeToggle }}
+              count={likesCount}
+            />
 
             <div className="flex items-center gap-1">
               <button className="cursor-pointer rounded-full bg-gray-200 p-2">

@@ -9,7 +9,7 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
 const IconButton = ({ Icon, iconColor = 'black', ...restProps }: IconButtonProps) => {
   return (
     <button
-      className="cursor-pointer rounded-full bg-gray-200 p-2 common-transition hover:bg-gray-300"
+      className="cursor-pointer rounded-full bg-gray-200 p-2 shadow-md common-transition hover:bg-gray-300 active:shadow-sm"
       {...restProps}
     >
       <Icon

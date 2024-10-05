@@ -3,13 +3,16 @@ import { useQuery } from '@apollo/client';
 import { GetPostsQuery } from '../../../gql/graphql.ts';
 import { GET_ALL_POSTS } from '../queries/GetPosts.ts';
 import FeedPost from '../components/FeedPost.tsx';
-import { useEffect, useRef, useState } from 'react';
+import { FormEvent, useCallback, useState } from 'react';
+import Observer from '../../../components/Observer.tsx';
+import AppInput from '../../../components/ui/AppInput.tsx';
+import AppButton from '../../../components/ui/AppButton.tsx';
+import { RiSendPlane2Fill } from 'react-icons/ri';
 
 const Feed = () => {
-  const loadMoreRef = useRef(null);
   const [search, setSearch] = useState('');
 
-  const { data, loading, fetchMore, refetch } = useQuery<GetPostsQuery>(GET_ALL_POSTS, {
+  const { data, fetchMore, refetch } = useQuery<GetPostsQuery>(GET_ALL_POSTS, {
     variables: {
       skip: 0,
       take: 2
@@ -25,45 +28,54 @@ const Feed = () => {
     });
   };
 
-  const loadMorePosts = async () => {
-    try {
-      await fetchMore({
-        variables: { skip: data?.getPosts.length || 0, take: 2, search },
-        updateQuery: (prev, { fetchMoreResult }) => {
-          if (!fetchMoreResult) return prev;
-          // Todo фильтр ниже скорее всего не нужен, перепроверить
-          return {
-            getPosts: [...prev.getPosts, ...fetchMoreResult.getPosts]
-          };
-        }
+  const onSubmitSearchForm = useCallback(
+    (e: FormEvent) => {
+      e.preventDefault();
+      refetch({
+        skip: 0,
+        take: 2,
+        search
       });
-    } catch (e) {
-      console.log(e);
-    }
-  };
+    },
+    [refetch, search]
+  );
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadMorePosts();
+  const loadMorePosts = useCallback(async () => {
+    await fetchMore({
+      variables: { skip: data?.getPosts.length || 0, take: 2, search },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) {
+          return prev;
         }
-      },
-      { threshold: 1 }
-    );
-
-    if (data?.getPosts && observer && loadMoreRef.current) {
-      observer.observe(loadMoreRef.current);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [data?.getPosts]);
+        return {
+          getPosts: [...prev.getPosts, ...fetchMoreResult.getPosts]
+        };
+      }
+    });
+  }, [data?.getPosts.length, fetchMore, search]);
 
   return (
     <MainLayout>
-      <div className="mx-auto max-w-[690px]">
+      <div className="mx-auto max-w-[690px] py-4">
+        <form
+          className="flex gap-2"
+          onSubmit={onSubmitSearchForm}
+        >
+          <div className="flex-1">
+            <AppInput
+              placeholder="Search posts..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+
+          <AppButton type="submit">
+            <RiSendPlane2Fill size="20" />
+          </AppButton>
+        </form>
+
+        {!data?.getPosts.length && <p className="text-center text-xl font-semibold">Posts Not Found</p>}
+
         {data?.getPosts.map((post) => (
           <FeedPost
             key={post.id}
@@ -71,10 +83,7 @@ const Feed = () => {
             onTagClick={onSearchByTag}
           />
         ))}
-        <div
-          ref={loadMoreRef}
-          className="h-1"
-        ></div>
+        {(data?.getPosts.length || 0) > 1 && <Observer callback={loadMorePosts} />}
       </div>
     </MainLayout>
   );

@@ -26,3 +26,13 @@ export interface ChatListItemFromDb {
     messages: number;
   };
 }
+
+export interface GetChatParams {
+  currentUserId: number;
+  chatId: string;
+}
+
+export interface ChatFromDb {
+  id: string;
+  messages: MessageFromDb[];
+}

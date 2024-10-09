@@ -16,7 +16,7 @@ export class ChatListItemType {
   @Field(() => MessageType)
   lastMessage: MessageType;
 
-  @Field(() => MessageType)
+  @Field(() => User)
   chatWithUser: User;
 
   @Field(() => Int)

@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { ICreateMessageParams } from './types';
+import { GetChatParams, ICreateMessageParams } from './types';
 import { PrismaService } from '../prisma/prisma.service';
 import { getSafeUserSelectFull } from '../common/db-selects/safe-user-select';
 import { MessageType } from './types/Message.type';
 import { ChatListItemType } from './types/ChatListItem.type';
+import { getMessageInclude } from './db-selects';
+import { ChatType } from './types/Chat.type';
 
 @Injectable()
 export class MessagesService {
@@ -43,11 +45,7 @@ export class MessagesService {
         text: dto.text,
         chatId: chat.id
       },
-      include: {
-        author: {
-          select: getSafeUserSelectFull(authorId)
-        }
-      }
+      include: getMessageInclude(authorId)
     });
 
     return new MessageType({ message, currentUserId: authorId });
@@ -64,11 +62,7 @@ export class MessagesService {
       },
       include: {
         messages: {
-          include: {
-            author: {
-              select: getSafeUserSelectFull(userId)
-            }
-          },
+          include: getMessageInclude(userId),
           orderBy: {
             createdAt: 'desc'
           },
@@ -95,5 +89,18 @@ export class MessagesService {
       (chat) =>
         new ChatListItemType({ chatFromDb: chat, currentUserId: userId })
     );
+  }
+
+  async getChat({ currentUserId, chatId }: GetChatParams) {
+    const chat = await this.prismaService.chat.findUnique({
+      where: { id: chatId },
+      include: {
+        messages: {
+          include: getMessageInclude(currentUserId)
+        }
+      }
+    });
+
+    return new ChatType({ chat, currentUserId: currentUserId });
   }
 }

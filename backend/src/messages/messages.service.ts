@@ -103,4 +103,8 @@ export class MessagesService {
 
     return new ChatType({ chat, currentUserId: currentUserId });
   }
+
+  async openChatMessages() {
+      
+  }
 }

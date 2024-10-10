@@ -12,6 +12,7 @@ export interface MessageFromDb {
   author: UserFromDb;
   isOpened: boolean;
   createdAt: Date;
+  chatId: string;
 }
 
 export interface ChatUserFromDb {
@@ -35,4 +36,9 @@ export interface GetChatParams {
 export interface ChatFromDb {
   id: string;
   messages: MessageFromDb[];
+}
+
+export interface OpenChatMessagesParams {
+  currentUserId: number;
+  chatId: string;
 }

@@ -12,6 +12,9 @@ export class MessageType {
   @Field(() => String)
   id: string;
 
+  @Field(() => String)
+  chatId: string;
+
   @Field(() => User)
   author: User;
 
@@ -30,5 +33,6 @@ export class MessageType {
     this.text = message.text;
     this.isOpened = message.isOpened;
     this.createdAt = message.createdAt;
+    this.chatId = message.chatId;
   }
 }

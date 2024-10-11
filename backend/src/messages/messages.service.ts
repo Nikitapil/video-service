@@ -1,11 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { GetChatParams, ICreateMessageParams } from './types';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  GetChatParams,
+  ICreateMessageParams,
+  OpenChatMessagesParams
+} from './types';
 import { PrismaService } from '../prisma/prisma.service';
 import { getSafeUserSelectFull } from '../common/db-selects/safe-user-select';
 import { MessageType } from './types/Message.type';
 import { ChatListItemType } from './types/ChatListItem.type';
 import { getMessageInclude } from './db-selects';
 import { ChatType } from './types/Chat.type';
+import { SuccessMessageType } from '../common/types/SuccessMessage.type';
 
 @Injectable()
 export class MessagesService {
@@ -78,7 +83,7 @@ export class MessagesService {
         _count: {
           select: {
             messages: {
-              where: { isOpened: false }
+              where: { isOpened: false, authorId: { not: userId } }
             }
           }
         }
@@ -104,7 +109,26 @@ export class MessagesService {
     return new ChatType({ chat, currentUserId: currentUserId });
   }
 
-  async openChatMessages() {
-      
+  async openChatMessages({ currentUserId, chatId }: OpenChatMessagesParams) {
+    const chat = await this.prismaService.chat.findUnique({
+      where: { id: chatId }
+    });
+
+    if (!chat) {
+      throw new NotFoundException('Chat not found.');
+    }
+
+    this.prismaService.message.updateMany({
+      where: {
+        chatId: chatId,
+        isOpened: false,
+        authorId: { not: currentUserId }
+      },
+      data: {
+        isOpened: true
+      }
+    });
+
+    return new SuccessMessageType();
   }
 }

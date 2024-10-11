@@ -8,7 +8,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { getSafeUserSelectFull } from '../common/db-selects/safe-user-select';
 import { MessageType } from './types/Message.type';
 import { ChatListItemType } from './types/ChatListItem.type';
-import { getMessageInclude } from './db-selects';
+import { getMessageInclude } from './helpers/db-selects';
 import { ChatType } from './types/Chat.type';
 import { SuccessMessageType } from '../common/types/SuccessMessage.type';
 

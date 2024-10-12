@@ -1,4 +1,4 @@
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MessageType } from './types/Message.type';
 import { UseGuards } from '@nestjs/common';
 import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
@@ -7,6 +7,9 @@ import { Request } from 'express';
 import { MessagesService } from './messages.service';
 import { SocketService } from '../socket/socket.service';
 import { getChatRoomId } from './helpers/common';
+import { ChatListItemType } from './types/ChatListItem.type';
+import { ChatType } from './types/Chat.type';
+import { SuccessMessageType } from '../common/types/SuccessMessage.type';
 
 @UseGuards(GraphQLAuthGuard)
 @Resolver()
@@ -33,5 +36,34 @@ export class MessagesResolver {
     });
 
     return message;
+  }
+
+  @Query(() => [ChatListItemType])
+  getChatList(
+    @Context() context: { req: Request }
+  ): Promise<ChatListItemType[]> {
+    return this.messageService.getChatList(context.req.user.sub);
+  }
+
+  @Query(() => ChatType)
+  getChat(
+    @Context() context: { req: Request },
+    @Args('chatId', { type: () => String }) chatId: string
+  ): Promise<ChatType> {
+    return this.messageService.getChat({
+      currentUserId: context.req.user.sub,
+      chatId
+    });
+  }
+
+  @Mutation(() => SuccessMessageType)
+  openChatMessages(
+    @Context() context: { req: Request },
+    @Args('chatId', { type: () => String }) chatId: string
+  ): Promise<SuccessMessageType> {
+    return this.messageService.openChatMessages({
+      currentUserId: context.req.user.sub,
+      chatId
+    });
   }
 }

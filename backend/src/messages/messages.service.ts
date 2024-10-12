@@ -98,7 +98,7 @@ export class MessagesService {
 
   async getChat({ currentUserId, chatId }: GetChatParams) {
     const chat = await this.prismaService.chat.findUnique({
-      where: { id: chatId },
+      where: { id: chatId, chatUser: { some: { userId: currentUserId } } },
       include: {
         messages: {
           include: getMessageInclude(currentUserId)
@@ -106,12 +106,16 @@ export class MessagesService {
       }
     });
 
+    if (!chat) {
+      throw new NotFoundException('Chat not found');
+    }
+
     return new ChatType({ chat, currentUserId: currentUserId });
   }
 
   async openChatMessages({ currentUserId, chatId }: OpenChatMessagesParams) {
     const chat = await this.prismaService.chat.findUnique({
-      where: { id: chatId }
+      where: { id: chatId, chatUser: { some: { userId: currentUserId } } }
     });
 
     if (!chat) {

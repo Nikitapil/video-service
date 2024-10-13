@@ -4,7 +4,7 @@ import { useUserStore } from '../stores/userStore.ts';
 import { useGeneralStore } from '../../stores/generalStore.ts';
 import { ChangeEvent, useMemo, useState } from 'react';
 import { GraphQLErrorExtensions } from 'graphql/error';
-import AppInput from '../../../../components/ui/AppInput.tsx';
+import AppInput from '../../../../components/ui/inputs/AppInput.tsx';
 import { LOGIN_USER } from '../mutations/Login.ts';
 
 const Login = () => {

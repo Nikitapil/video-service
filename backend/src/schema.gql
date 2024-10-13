@@ -2,6 +2,18 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type ChatListItemType {
+  chatWithUser: User!
+  id: String!
+  lastMessage: MessageType!
+  unreadMessagesCount: Int!
+}
+
+type ChatType {
+  id: String!
+  messages: [MessageType!]!
+}
+
 type CommentType {
   createdAt: String!
   id: Int!
@@ -9,6 +21,11 @@ type CommentType {
   text: String!
   updatedAt: String!
   user: User!
+}
+
+input CreateMessageDto {
+  text: String!
+  userToId: Int!
 }
 
 """
@@ -37,13 +54,24 @@ type LoginResponse {
   user: User
 }
 
+type MessageType {
+  author: User!
+  chatId: String!
+  createdAt: DateTime!
+  id: String!
+  isOpened: Boolean!
+  text: String!
+}
+
 type Mutation {
   createComment(postId: Int!, text: String!): CommentType!
+  createMessage(createMesageInput: CreateMessageDto!): MessageType!
   createPost(tags: String, text: String!, video: Upload!): PostType!
   deleteComment(id: Int!): String
   deletePost(id: Int!): String!
   login(loginInput: LoginDto!): LoginResponse!
   logout: String!
+  openChatMessages(chatId: String!): SuccessMessageType!
   refreshToken: RefreshType!
   register(registerInput: RegisterDto!): RegisterResponse!
   toggleLikePost(postId: Int!): ToggleLike!
@@ -77,6 +105,8 @@ type PostType {
 }
 
 type Query {
+  getChat(chatId: String!): ChatType!
+  getChatList: [ChatListItemType!]!
   getCommentsByPostId(postId: Int!): [CommentType!]!
   getPostById(id: Int!): PostDetails!
   getPosts(search: String, skip: Int! = 0, take: Int! = 1): [PostType!]!
@@ -99,6 +129,10 @@ input RegisterDto {
 type RegisterResponse {
   error: ErrorType
   user: User
+}
+
+type SuccessMessageType {
+  message: String!
 }
 
 type ToggleFollowType {

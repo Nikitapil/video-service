@@ -27,7 +27,7 @@ const Modal = ({ showElement, preventClose, children }: ModalProps) => {
         onClick={close}
       ></div>
 
-      <div className="fixed left-1/2 top-1/2 z-40 min-h-24 min-w-80 max-w-[90vw] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-white p-6">
+      <div className="fixed left-1/2 top-1/2 z-40 min-h-24 min-w-[max(50vw,320px)] max-w-[90vw] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-white p-6">
         {!preventClose && (
           <button
             className="absolute right-2 top-2 text-gray-700 common-transition hover:text-black"

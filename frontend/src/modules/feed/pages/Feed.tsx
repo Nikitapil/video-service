@@ -2,7 +2,7 @@ import MainLayout from '../../../layouts/main/MainLayout.tsx';
 import FeedPost from '../components/FeedPost.tsx';
 import { useCallback, useState } from 'react';
 import Observer from '../../../components/Observer.tsx';
-import AppInput from '../../../components/ui/AppInput.tsx';
+import AppInput from '../../../components/ui/inputs/AppInput.tsx';
 import AppButton from '../../../components/ui/AppButton.tsx';
 import { RiSendPlane2Fill } from 'react-icons/ri';
 import { useGetPostsQuery } from '../../../gql/graphql.tsx';

@@ -8,7 +8,7 @@ import mobileCase from '../../../assets/images/mobile-case.png';
 import { IoCheckmarkDoneCircleOutline } from 'react-icons/io5';
 import { GiBoxCutter } from 'react-icons/gi';
 import { GET_ALL_POSTS } from '../../feed/queries/GetPosts.ts';
-import AppInput from '../../../components/ui/AppInput.tsx';
+import AppInput from '../../../components/ui/inputs/AppInput.tsx';
 
 const Upload = () => {
   const [fileData, setFileData] = useState<File | null>(null);

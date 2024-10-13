@@ -87,6 +87,9 @@ export class MessagesService {
             }
           }
         }
+      },
+      orderBy: {
+        updatedAt: 'desc'
       }
     });
 

@@ -1,4 +1,5 @@
 import { InputHTMLAttributes } from 'react';
+import styles from './inputs.module.scss';
 
 interface AppInputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
@@ -26,9 +27,9 @@ const AppInput = ({
         onChange={onChange}
         name={name}
         {...otherProps}
-        className="block w-full rounded-md border border-gray-300 bg-indigo-50 px-3 py-2.5 text-gray-900 outline-none common-transition focus:bg-white"
+        className={styles.input}
       />
-      {error && <span className="text-sm font-semibold text-red-500">{error}</span>}
+      {error && <span className={styles.error}>{error}</span>}
     </div>
   );
 };

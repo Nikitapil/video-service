@@ -8,7 +8,7 @@ import { UPDATE_PROFILE } from '../mutations/UpdateUserProfile.ts';
 import { UpdateUserProfileMutation, UpdateUserProfileMutationVariables } from '../../../gql/graphql.ts';
 import { AiOutlineClose } from 'react-icons/ai';
 import { BsFillPencilFill } from 'react-icons/bs';
-import AppInput from '../../../components/ui/AppInput.tsx';
+import AppInput from '../../../components/ui/inputs/AppInput.tsx';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
 
 const EditProfileModal = () => {

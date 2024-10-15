@@ -5,7 +5,7 @@ interface AppTextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   error?: string;
 }
 
-const AppTextarea = ({ placeholder, error, autoFocus, onChange, value, name, ...otherProps }: AppTextareaProps) => {
+const AppTextarea = ({ placeholder, error, value, name, ...otherProps }: AppTextareaProps) => {
   return (
     <div className="w-full">
       <textarea

@@ -65,7 +65,7 @@ type MessageType {
 
 type Mutation {
   createComment(postId: Int!, text: String!): CommentType!
-  createMessage(createMesageInput: CreateMessageDto!): MessageType!
+  createMessage(CreateMesageInput: CreateMessageDto!): MessageType!
   createPost(tags: String, text: String!, video: Upload!): PostType!
   deleteComment(id: Int!): String
   deletePost(id: Int!): String!

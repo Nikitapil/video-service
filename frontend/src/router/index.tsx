@@ -8,6 +8,7 @@ import UsersPage from '../modules/users/pages/Users/UsersPage.tsx';
 import { RoutesEnum } from './routes.ts';
 import Chats from '../modules/messages/pages/Chats.tsx';
 import FollowUsersPage from '../modules/users/pages/Users/FollowUsersPage.tsx';
+import Chat from '../modules/messages/pages/Chat.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -63,6 +64,14 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoutes>
         <FollowUsersPage />
+      </ProtectedRoutes>
+    )
+  },
+  {
+    path: RoutesEnum.CHAT,
+    element: (
+      <ProtectedRoutes>
+        <Chat />
       </ProtectedRoutes>
     )
   }

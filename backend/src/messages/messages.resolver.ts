@@ -21,7 +21,7 @@ export class MessagesResolver {
 
   @Mutation(() => MessageType)
   async createMessage(
-    @Args('createMesageInput', { type: () => CreateMessageDto })
+    @Args('CreateMesageInput', { type: () => CreateMessageDto })
     createMessageDto: CreateMessageDto,
     @Context() context: { req: Request }
   ) {

@@ -32,7 +32,7 @@ const AppButton = ({
       sm: 'py-0.5'
     };
 
-    return `rounded-md border px-3 common-transition shadow-md active:shadow-sm ${appearanceClasses[appearance]} ${sizeClasses[size]}`;
+    return `rounded-md border px-3 common-transition shadow-md active:shadow-sm disabled:cursor-not-allowed disabled:bg-gray-200 ${appearanceClasses[appearance]} ${sizeClasses[size]}`;
   }, [appearance, size]);
 
   if (isLoading) {

@@ -14,4 +14,4 @@ export const useShowElement = () => {
   return { isShowed, open, close };
 };
 
-export type ShowableElement = ReturnType<typeof useShowElement>
+export type ShowableElement = ReturnType<typeof useShowElement>;

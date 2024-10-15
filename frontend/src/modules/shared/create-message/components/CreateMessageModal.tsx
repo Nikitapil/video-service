@@ -4,6 +4,7 @@ import AppTextarea from '../../../../components/ui/inputs/AppTextarea.tsx';
 import AppCombobox from '../../../../components/ui/inputs/AppCombobox.tsx';
 import { useMemo, useState } from 'react';
 import { useSearchUsersLazyQuery } from '../../../../gql/graphql.tsx';
+import { useDebounce } from '../../../../hooks/useDebounce.ts';
 
 interface CreateMessageModalProps {
   showElement: ShowableElement;
@@ -27,12 +28,14 @@ const CreateMessageModal = ({ showElement }: CreateMessageModalProps) => {
     });
   };
 
+  const testdebounce = useDebounce(() => console.log('debounce'));
+
   return (
     <Modal showElement={showElement}>
       <div className="flex w-full flex-col items-center">
         <h3 className="text-lg font-semibold">New Message</h3>
         <AppCombobox
-          onInputChange={() => {}}
+          onInputChange={testdebounce}
           value={user}
           setValue={setUser}
           options={usersOptions}

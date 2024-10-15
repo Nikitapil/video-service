@@ -1,6 +1,6 @@
 import { useState, ChangeEvent, useEffect } from 'react';
 import AppInput from './AppInput.tsx';
-import { useShowElement } from '../../../hooks/useShowElement.tsx';
+import { useShowElement } from '../../../hooks/useShowElement.ts';
 import { useClickOutside } from '../../../hooks/useClickOutside.ts';
 
 interface IAppComboboxOption<T extends string | number> {

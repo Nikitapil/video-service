@@ -3,7 +3,7 @@ import { useGetChatsListQuery } from '../../../gql/graphql.tsx';
 import ChatList from '../components/ChatList.tsx';
 import AppButton from '../../../components/ui/AppButton.tsx';
 import CreateMessageModal from '../../shared/create-message/components/CreateMessageModal.tsx';
-import { useShowElement } from '../../../hooks/useShowElement.tsx';
+import { useShowElement } from '../../../hooks/useShowElement.ts';
 
 const Chats = () => {
   const { data, loading } = useGetChatsListQuery();

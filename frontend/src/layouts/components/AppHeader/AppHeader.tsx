@@ -12,7 +12,7 @@ import { getProfileLink, RoutesEnum } from '../../../router/routes.ts';
 import { useClickOutside } from '../../../hooks/useClickOutside.ts';
 import styles from './styles.module.scss';
 import SearchUsersForm from './SearchUsersForm.tsx';
-import { useShowElement } from '../../../hooks/useShowElement.tsx';
+import { useShowElement } from '../../../hooks/useShowElement.ts';
 import ConfirmModal from '../../../components/ux/ConfirmModal.tsx';
 
 const AppHeader = () => {

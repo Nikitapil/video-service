@@ -13,9 +13,16 @@ interface AppComboboxProps<T extends string | number> {
   value: T | null;
   setValue: (value: T | null) => void;
   options: IAppComboboxOption<T>[];
+  placeholder?: string;
 }
 
-const AppCombobox = <T extends string | number>({ onInputChange, setValue, options, value }: AppComboboxProps<T>) => {
+const AppCombobox = <T extends string | number>({
+  onInputChange,
+  setValue,
+  options,
+  value,
+  placeholder = ''
+}: AppComboboxProps<T>) => {
   const [inputValue, setInputValue] = useState('');
   const { isShowed, open, close } = useShowElement();
 
@@ -49,10 +56,11 @@ const AppCombobox = <T extends string | number>({ onInputChange, setValue, optio
         value={inputValue}
         onChange={changeHandler}
         onFocus={open}
+        placeholder={placeholder}
       />
 
       {isShowed && !!options.length && (
-        <div className="absolute top-full z-40 max-h-96 w-full overflow-scroll rounded-md border bg-white">
+        <div className="absolute top-full z-40 max-h-52 w-full overflow-scroll rounded-md border bg-white">
           {options.map((option) => (
             <div
               className="cursor-pointer p-2 hover:bg-blue-100"

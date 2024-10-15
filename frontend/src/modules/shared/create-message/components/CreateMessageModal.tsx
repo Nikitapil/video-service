@@ -5,6 +5,8 @@ import AppCombobox from '../../../../components/ui/inputs/AppCombobox.tsx';
 import { useMemo, useState } from 'react';
 import { useSearchUsersLazyQuery } from '../../../../gql/graphql.tsx';
 import { useDebounce } from '../../../../hooks/useDebounce.ts';
+import AppForm from '../../../../components/ui/AppForm.tsx';
+import AppButton from '../../../../components/ui/AppButton.tsx';
 
 interface CreateMessageModalProps {
   showElement: ShowableElement;
@@ -20,31 +22,44 @@ const CreateMessageModal = ({ showElement }: CreateMessageModalProps) => {
   }, [data?.getUsers]);
 
   // TODO продолжить с реализации useDebounce
-  const onUsersSearch = (value: string) => {
+  const onUsersSearch = useDebounce((value: string) => {
     getUsers({
       variables: {
         search: value
       }
     });
-  };
-
-  const testdebounce = useDebounce(() => console.log('debounce'));
+  });
 
   return (
     <Modal showElement={showElement}>
-      <div className="flex w-full flex-col items-center">
+      <AppForm className="flex w-full flex-col items-center">
         <h3 className="text-lg font-semibold">New Message</h3>
-        <AppCombobox
-          onInputChange={testdebounce}
-          value={user}
-          setValue={setUser}
-          options={usersOptions}
-        />
+
+        <div className="mb-5 w-full">
+          <AppCombobox
+            onInputChange={onUsersSearch}
+            value={user}
+            setValue={setUser}
+            options={usersOptions}
+            placeholder="Find user"
+          />
+        </div>
+
         <AppTextarea
           placeholder="Write your message here..."
           rows={4}
         />
-      </div>
+
+        <div className="mt-5 flex gap-4 self-end">
+          <AppButton
+            appearance="danger"
+            type="button"
+            text="Cancel"
+            onClick={showElement.close}
+          />
+          <AppButton text="Send" />
+        </div>
+      </AppForm>
     </Modal>
   );
 };

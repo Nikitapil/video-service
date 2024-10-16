@@ -51,12 +51,14 @@ export class UserResolver {
     return this.authService.refreshToken(context.req, context.res);
   }
 
+  @UseGuards(GraphQLAuthGuard)
   @Query(() => [User])
   getUsers(
+    @Context() context: { req: Request },
     @Args('getUsersInput', { type: () => GetUsersDto, nullable: true })
     getUsersDto?: GetUsersDto
   ) {
-    return this.userService.getUsers(getUsersDto);
+    return this.userService.getUsers(context.req.user.sub, getUsersDto);
   }
 
   @UseGuards(GraphQLAuthGuard)

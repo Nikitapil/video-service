@@ -14,13 +14,16 @@ export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
 
   // TODO filter private user fields and not return posts
-  getUsers(dto?: GetUsersDto) {
+  getUsers(currentUserId: number, dto?: GetUsersDto) {
     const { search } = dto || {};
     return this.prismaService.user.findMany({
       where: {
         fullname: {
           contains: search || '',
           mode: 'insensitive'
+        },
+        id: {
+          not: currentUserId
         }
       },
       orderBy: {

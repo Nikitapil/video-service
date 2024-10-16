@@ -26,7 +26,7 @@ const SideNav = () => {
   }, [data]);
 
   return (
-    <nav className="fixed z-20 h-full overflow-auto border-r bg-white pt-16 lg:w-72">
+    <nav className="h-full min-w-fit overflow-auto border-r bg-white pt-16 lg:w-72">
       <div>
         <MenuItem
           to={RoutesEnum.HOME}

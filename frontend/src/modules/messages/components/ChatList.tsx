@@ -1,8 +1,9 @@
-import { GetChatsListQuery } from '../../../gql/graphql.tsx';
 import { ImSpinner2 } from 'react-icons/im';
+import { ChatListType } from '../types.ts';
+import ChatListItem from './ChatListItem.tsx';
 
 interface ChatListProps {
-  chats: GetChatsListQuery['getChatList'];
+  chats: ChatListType;
   isLoading: boolean;
 }
 
@@ -23,7 +24,16 @@ const ChatList = ({ chats, isLoading }: ChatListProps) => {
     return <h3 className="text-center text-xl font-semibold">No chats yet!</h3>;
   }
 
-  return <section>Chats will be here</section>;
+  return (
+    <section>
+      {chats.map((chat) => (
+        <ChatListItem
+          chat={chat}
+          key={chat.id}
+        />
+      ))}
+    </section>
+  );
 };
 
 export default ChatList;

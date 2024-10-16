@@ -7,9 +7,9 @@ const MainLayout = ({ children }: ReactChildrenProps) => {
     <div>
       <AppHeader />
 
-      <div className="container mx-auto flex justify-between px-0 lg:px-2.5">
+      <div className="container mx-auto flex px-0 lg:px-2.5">
         <SideNav />
-        <main className="ml-14 mt-16 flex-1 px-3 sm:px-6 lg:ml-80">{children}</main>
+        <main className="mt-16 max-w-full flex-1 overflow-hidden px-3 sm:px-6">{children}</main>
       </div>
     </div>
   );

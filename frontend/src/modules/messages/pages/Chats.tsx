@@ -14,7 +14,7 @@ const Chats = () => {
     <MainLayout>
       <div>
         <section className="mb-4 flex items-center border-b border-gray-300 p-3">
-          <h2 className="flex-1">Your chat list</h2>
+          <h2 className="flex-1 text-lg font-semibold">Your chat list</h2>
           <div className="border-l border-gray-300 px-2">
             <AppButton
               text="Create message"

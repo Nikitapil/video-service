@@ -6,6 +6,7 @@ import { getChatUrl } from '../../../router/routes.ts';
 interface ChatListItemProps {
   chat: ChatListItemType;
 }
+
 const ChatListItem = ({ chat }: ChatListItemProps) => {
   return (
     <Link

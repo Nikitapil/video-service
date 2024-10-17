@@ -9,6 +9,7 @@ import { RoutesEnum } from './routes.ts';
 import Chats from '../modules/messages/pages/Chats.tsx';
 import FollowUsersPage from '../modules/users/pages/Users/FollowUsersPage.tsx';
 import Chat from '../modules/messages/pages/Chat.tsx';
+import MainLayout from '../layouts/main/MainLayout.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -70,9 +71,9 @@ export const router = createBrowserRouter([
   {
     path: RoutesEnum.CHAT,
     element: (
-      <ProtectedRoutes>
+      <MainLayout>
         <Chat />
-      </ProtectedRoutes>
+      </MainLayout>
     )
   }
 ]);

@@ -105,6 +105,13 @@ export class MessagesService {
       include: {
         messages: {
           include: getMessageInclude(currentUserId)
+        },
+        chatUser: {
+          select: {
+            user: {
+              select: getSafeUserSelectFull(currentUserId)
+            }
+          }
         }
       }
     });

@@ -10,10 +10,16 @@ export const GET_CHAT = gql`
         author {
           id
           fullname
-          image
+          email
         }
         text
         createdAt
+        isMyMessage
+      }
+      chatWithUser {
+        id
+        fullname
+        image
       }
     }
   }

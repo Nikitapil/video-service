@@ -36,6 +36,7 @@ export interface GetChatParams {
 export interface ChatFromDb {
   id: string;
   messages: MessageFromDb[];
+  chatUser: ChatUserFromDb[];
 }
 
 export interface OpenChatMessagesParams {

@@ -27,6 +27,9 @@ export class MessageType {
   @Field(() => GraphQLISODateTime)
   createdAt: Date;
 
+  @Field(() => Boolean)
+  isMyMessage: boolean;
+
   constructor({ message, currentUserId }: MessageTypeConstructorParameters) {
     this.id = message.id;
     this.author = new User(message.author, currentUserId);
@@ -34,5 +37,6 @@ export class MessageType {
     this.isOpened = message.isOpened;
     this.createdAt = message.createdAt;
     this.chatId = message.chatId;
+    this.isMyMessage = message.author.id === currentUserId;
   }
 }

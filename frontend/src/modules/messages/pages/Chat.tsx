@@ -1,15 +1,29 @@
 import { Link, useParams } from 'react-router-dom';
-import { useGetChatQuery } from '../../../gql/graphql.tsx';
+import { useCreateMessageMutation, useGetChatQuery, useOpenMessagesMutation } from '../../../gql/graphql.tsx';
 import { ImSpinner2 } from 'react-icons/im';
 import { getProfileLink } from '../../../router/routes.ts';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import Message from '../components/Message.tsx';
+import Observer from '../../../components/Observer.tsx';
+import AppForm from '../../../components/ui/AppForm.tsx';
+import AppTextarea from '../../../components/ui/inputs/AppTextarea.tsx';
+import AppButton from '../../../components/ui/AppButton.tsx';
+import { RiSendPlane2Fill } from 'react-icons/ri';
 
 const Chat = () => {
   const { id } = useParams();
+  const [newMessage, setNewMessage] = useState('');
+
+  const [createMessage, { loading: isCreateMessageInProgress }] = useCreateMessageMutation();
 
   const { data, loading } = useGetChatQuery({
+    variables: {
+      chatId: id || ''
+    }
+  });
+
+  const [openMessages] = useOpenMessagesMutation({
     variables: {
       chatId: id || ''
     }
@@ -51,7 +65,23 @@ const Chat = () => {
             message={message}
           />
         ))}
+        <Observer callback={openMessages} />
       </div>
+
+      <AppForm className="border-t pt-2">
+        <div className="flex items-center gap-4">
+          <AppTextarea
+            value={newMessage}
+            placeholder="Write your message here..."
+            rows={3}
+            onChange={(e) => setNewMessage(e.target.value)}
+          />
+
+          <AppButton type="submit">
+            <RiSendPlane2Fill size="20" />
+          </AppButton>
+        </div>
+      </AppForm>
     </div>
   );
 };

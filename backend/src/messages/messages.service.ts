@@ -132,7 +132,7 @@ export class MessagesService {
       throw new NotFoundException('Chat not found.');
     }
 
-    this.prismaService.message.updateMany({
+    await this.prismaService.message.updateMany({
       where: {
         chatId: chatId,
         isOpened: false,

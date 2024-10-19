@@ -76,6 +76,7 @@ const CreateMessageModal = ({ showElement }: CreateMessageModalProps) => {
           value={message}
           placeholder="Write your message here..."
           rows={4}
+          disabled={loading}
           onChange={(e) => setMessage(e.target.value)}
         />
 
@@ -84,6 +85,7 @@ const CreateMessageModal = ({ showElement }: CreateMessageModalProps) => {
             appearance="danger"
             type="button"
             text="Cancel"
+            disabled={loading}
             onClick={showElement.close}
           />
           <AppButton

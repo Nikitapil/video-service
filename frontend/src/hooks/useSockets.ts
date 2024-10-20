@@ -7,18 +7,34 @@ export const useSockets = () => {
   const connect = useCallback(() => {
     const url = import.meta.env.VITE_APP_SOCKET_URL;
     if (url && !socket) {
-      const newSocket = io(url);
+      const socketOptions = {
+        transportOptions: {
+          polling: {
+            extraHeaders: {
+              Authorization: localStorage.getItem('accessToken')
+            }
+          }
+        }
+      };
+      const newSocket = io(url, socketOptions);
       setSocket(newSocket);
     }
   }, [socket]);
 
-  const joinRoom = (roomId: string) => {
-    socket?.emit('joinRoom', roomId);
-  };
+  const joinRoom = useCallback(
+    (roomId: string) => {
+      socket?.emit('joinRoom', roomId);
+    },
+    [socket]
+  );
 
   useEffect(() => {
     connect();
-  }, [connect]);
+
+    return () => {
+      socket?.disconnect();
+    };
+  }, [connect, socket]);
 
   return { socket, joinRoom };
 };

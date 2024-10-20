@@ -1,8 +1,8 @@
-import { MessageType } from '../../../gql/graphql.tsx';
 import { useMemo } from 'react';
+import { TMessage } from '../types.ts';
 
 interface MessageProps {
-  message: Omit<MessageType, 'isOpened'>;
+  message: TMessage;
 }
 
 const Message = ({ message }: MessageProps) => {

@@ -18,6 +18,7 @@ function App() {
       setIsAuthLoading(true);
       const { data } = await refresh();
       setUser(data?.refreshToken.user || null);
+      localStorage.setItem('accessToken', data?.refreshToken.accessToken || '');
     } catch (e) {
       console.error(e);
     } finally {

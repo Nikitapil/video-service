@@ -3,23 +3,34 @@ import { useCreateMessageMutation, useGetChatQuery, useOpenMessagesMutation } fr
 import { ImSpinner2 } from 'react-icons/im';
 import { getProfileLink } from '../../../router/routes.ts';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Message from '../components/Message.tsx';
 import Observer from '../../../components/Observer.tsx';
 import AppForm from '../../../components/ui/AppForm.tsx';
 import AppTextarea from '../../../components/ui/inputs/AppTextarea.tsx';
 import AppButton from '../../../components/ui/AppButton.tsx';
 import { RiSendPlane2Fill } from 'react-icons/ri';
+import { useSockets } from '../../../hooks/useSockets.ts';
+import { TMessage } from '../types.ts';
+import { useScrollBottom } from '../../../hooks/useScrollBottom.ts';
 
 const Chat = () => {
   const { id } = useParams();
+  const { socket, joinRoom } = useSockets();
+
+  const [messages, setMessages] = useState<TMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
+
+  const messagesContainerRef = useScrollBottom<HTMLDivElement, TMessage[]>(messages);
 
   const [createMessage, { loading: isCreateMessageInProgress }] = useCreateMessageMutation();
 
   const { data, loading } = useGetChatQuery({
     variables: {
       chatId: id || ''
+    },
+    onCompleted(value) {
+      setMessages(value.getChat.messages);
     }
   });
 
@@ -32,6 +43,36 @@ const Chat = () => {
   const chat = useMemo(() => {
     return data?.getChat;
   }, [data?.getChat]);
+
+  const onSendMessage = useCallback(async () => {
+    if (!newMessage) {
+      return;
+    }
+
+    await createMessage({
+      variables: {
+        text: newMessage,
+        userId: chat?.chatWithUser.id || 0
+      }
+    });
+    setNewMessage('');
+  }, [chat?.chatWithUser.id, createMessage, newMessage]);
+
+  const messageListener = useCallback(
+    (msg: TMessage) => {
+      setMessages((prev) => [...prev, { ...msg, isMyMessage: msg.author.id !== chat?.chatWithUser.id }]);
+    },
+    [chat?.chatWithUser.id]
+  );
+
+  useEffect(() => {
+    joinRoom(`chat_${id}`);
+    socket?.on('message', messageListener);
+
+    return () => {
+      socket?.off('message', messageListener);
+    };
+  }, [id, joinRoom, messageListener, socket]);
 
   if (loading) {
     return (
@@ -58,8 +99,11 @@ const Chat = () => {
         <span className="font-semibold">{chat.chatWithUser.fullname}</span>
       </Link>
 
-      <div className="mt-4 flex flex-col gap-4">
-        {chat.messages.map((message) => (
+      <div
+        ref={messagesContainerRef}
+        className="mt-4 flex max-h-[65vh] flex-col gap-4 overflow-auto"
+      >
+        {messages.map((message) => (
           <Message
             key={message.id}
             message={message}
@@ -68,16 +112,23 @@ const Chat = () => {
         <Observer callback={openMessages} />
       </div>
 
-      <AppForm className="border-t pt-2">
+      <AppForm
+        className="border-t pt-2"
+        onSubmit={onSendMessage}
+      >
         <div className="flex items-center gap-4">
           <AppTextarea
             value={newMessage}
             placeholder="Write your message here..."
             rows={3}
+            disabled={isCreateMessageInProgress}
             onChange={(e) => setNewMessage(e.target.value)}
           />
 
-          <AppButton type="submit">
+          <AppButton
+            type="submit"
+            disabled={isCreateMessageInProgress}
+          >
             <RiSendPlane2Fill size="20" />
           </AppButton>
         </div>

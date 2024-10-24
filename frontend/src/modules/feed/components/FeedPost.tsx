@@ -1,7 +1,5 @@
 import { PostType } from '../../../gql/graphql.ts';
 import { Link, useNavigate } from 'react-router-dom';
-import { AiFillHeart } from 'react-icons/ai';
-import { IoIosShareAlt } from 'react-icons/io';
 import { IoChatbubbleEllipses } from 'react-icons/io5';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
 import { getPostLink, getProfileLink } from '../../../router/routes.ts';
@@ -9,8 +7,9 @@ import AppButton from '../../../components/ui/AppButton.tsx';
 import { useFollows } from '../../shared/follows/useFollows.ts';
 import PostHashTags from '../../shared/components/PostHashTags.tsx';
 import PostAction from '../../shared/components/PostAction.tsx';
-import { usePostLikes } from '../../shared/likes/usePostLikes.ts';
 import { useCallback } from 'react';
+import LikeButton from '../../shared/likes/components/LikeButton.tsx';
+import PostShareButton from '../../shared/components/PostShareButton.tsx';
 
 interface FeedPostProps {
   post: PostType;
@@ -21,20 +20,6 @@ const FeedPost = ({ post, onTagClick }: FeedPostProps) => {
   const navigate = useNavigate();
 
   const { onToggleFollow, isLoading, followButtonText } = useFollows(post.user);
-
-  const { likesCount, isLiked, onLikeToggle } = usePostLikes(post);
-
-  const share = useCallback(() => {
-    const shareData = {
-      title: 'Video service',
-      text: post.text,
-      url: window.location.href
-    };
-
-    if (navigator.canShare(shareData)) {
-      navigator.share(shareData).catch(() => {});
-    }
-  }, [post.text]);
 
   const goToPost = useCallback(() => {
     navigate(getPostLink(post.id));
@@ -91,16 +76,9 @@ const FeedPost = ({ post, onTagClick }: FeedPostProps) => {
           </div>
 
           <div className="flex items-center gap-2 self-end">
-            <PostAction
-              buttonProps={{ Icon: AiFillHeart, iconColor: isLiked ? 'red' : 'black', onClick: onLikeToggle }}
-              count={likesCount}
-            />
+            <LikeButton post={post} />
 
-            <PostAction
-              buttonProps={{ Icon: IoIosShareAlt, onClick: share }}
-              count={0}
-              hideCount
-            />
+            <PostShareButton text={post.text} />
 
             <PostAction
               buttonProps={{ Icon: IoChatbubbleEllipses, onClick: goToPost }}

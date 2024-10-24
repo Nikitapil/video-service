@@ -14,6 +14,7 @@ export const GET_POST_BY_ID = gql`
         image
       }
       isLiked
+      likesCount
       otherPostIds
     }
   }

@@ -19,10 +19,10 @@ import { useUserStore } from '../../shared/auth/stores/userStore.ts';
 import { ImCross, ImSpinner2 } from 'react-icons/im';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
 import { MdOutlineDeleteForever } from 'react-icons/md';
-import { BsFillChatDotsFill, BsMusicNoteBeamed } from 'react-icons/bs';
-import { AiFillHeart } from 'react-icons/ai';
+import { BsMusicNoteBeamed } from 'react-icons/bs';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
-import { usePostLikes } from '../../shared/likes/usePostLikes.ts';
+import LikeButton from '../../shared/likes/components/LikeButton.tsx';
+import PostShareButton from '../../shared/components/PostShareButton.tsx';
 
 const Post = () => {
   const { id } = useParams<{ id: string }>();
@@ -112,7 +112,6 @@ const Post = () => {
   };
 
   // TODO implement likes here
-  // const {} = usePostLikes(dataPost.getPostById)
 
   return (
     <div className="fixed left-0 top-0 z-50 h-full w-full justify-between overflow-auto bg-black lg:flex lg:overflow-hidden">
@@ -205,33 +204,10 @@ const Post = () => {
               Original sound - {dataPost?.getPostById.user.fullname}
             </div>
 
-            <div className="mt-8 flex items-center px-8">
-              {/*<div className="flex items-center pb-4 text-center">*/}
-              {/*  <button*/}
-              {/*    className="rounded-full bg-gray-200 p-2 transition-all duration-300 hover:bg-gray-300"*/}
-              {/*    onClick={() => (isLiked ? handleRemoveLike() : handleLikePost())}*/}
-              {/*  >*/}
-              {/*    <AiFillHeart*/}
-              {/*      size="25"*/}
-              {/*      color={isLiked ? 'red' : 'black'}*/}
-              {/*    />*/}
-              {/*  </button>*/}
-              {/*  <span className="pl-2 pr-4 text-xs font-semibold text-gray-800">*/}
-              {/*    {dataPost?.getPostById.likes?.length}*/}
-              {/*  </span>*/}
-              {/*</div>*/}
+            <div className="mb-4 mt-8 flex items-center gap-4 px-8">
+              <LikeButton post={dataPost.getPostById} />
 
-              <div className="flex items-center pb-4 text-center">
-                <button className="rounded-full bg-gray-200 p-2 transition-all duration-300 hover:bg-gray-300">
-                  <BsFillChatDotsFill
-                    size="25"
-                    color="black"
-                  />
-                </button>
-                <span className="pl-2 pr-4 text-xs font-semibold text-gray-800">
-                  {data?.getCommentsByPostId?.length}
-                </span>
-              </div>
+              <PostShareButton text={dataPost.getPostById.text} />
             </div>
 
             <div className="z-0 w-full flex-1 overflow-auto border-t-2 bg-[#f8f8f8]">

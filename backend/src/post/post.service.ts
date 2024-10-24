@@ -63,10 +63,17 @@ export class PostService {
     });
   }
 
-  async getPostById(id: number): Promise<PostDetails> {
+  async getPostById(id: number, currentUserId: number): Promise<PostDetails> {
     const post = await this.prismaService.post.findUnique({
       where: { id },
-      include: { user: true, likes: true, comments: true }
+      include: {
+        user: {
+          select: getSafeUserSelectFull(currentUserId)
+        },
+        likes: true,
+        comments: true,
+        _count: { select: { likes: true, comments: true } }
+      }
     });
 
     if (!post) {
@@ -77,7 +84,11 @@ export class PostService {
       where: { userId: post.userId },
       select: { id: true }
     });
-    return { ...post, otherPostIds: postIds.map(({ id }) => id) };
+    return new PostDetails({
+      post,
+      postIds: postIds.map(({ id }) => id),
+      currentUserId
+    });
   }
   // TODO take parameters as object
   async getPosts(

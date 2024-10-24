@@ -8,11 +8,11 @@ import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostDetails } from './types/post-details.type';
 
+@UseGuards(GraphQLAuthGuard)
 @Resolver()
 export class PostResolver {
   constructor(private postService: PostService) {}
 
-  @UseGuards(GraphQLAuthGuard)
   @Mutation(() => PostType)
   async createPost(
     @Context() context: { req: Request },
@@ -35,12 +35,12 @@ export class PostResolver {
 
   @Query(() => PostDetails)
   async getPostById(
-    @Args('id', { type: () => Int }) id: number
+    @Args('id', { type: () => Int }) id: number,
+    @Context() context: { req: Request }
   ): Promise<PostDetails> {
-    return this.postService.getPostById(id);
+    return this.postService.getPostById(id, context.req.user.sub);
   }
 
-  @UseGuards(GraphQLAuthGuard)
   @Query(() => [PostType])
   async getPosts(
     @Args('skip', { type: () => Int, defaultValue: 0 }) skip: number,
@@ -51,7 +51,6 @@ export class PostResolver {
     return this.postService.getPosts(skip, take, context.req.user.sub, search);
   }
 
-  @UseGuards(GraphQLAuthGuard)
   @Mutation(() => String)
   async deletePost(
     @Context() context: { req: Request },

@@ -314,7 +314,7 @@ export type CreateCommentMutationVariables = Exact<{
 }>;
 
 
-export type CreateCommentMutation = { __typename?: 'Mutation', createComment: { __typename?: 'CommentType', text: string, id: number, createdAt: string, user: { __typename?: 'User', id: number, fullname: string, email: string }, post: { __typename?: 'PostType', id: number, text: string, video: string } } };
+export type CreateCommentMutation = { __typename?: 'Mutation', createComment: { __typename?: 'CommentType', id: number } };
 
 export type DeleteCommentMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -335,7 +335,7 @@ export type GetPostByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetPostByIdQuery = { __typename?: 'Query', getPostById: { __typename?: 'PostDetails', id: number, text: string, video: string, createdAt: any, isLiked?: boolean | null, otherPostIds?: Array<number> | null, user: { __typename?: 'User', id: number, email: string, fullname: string, image?: string | null } } };
+export type GetPostByIdQuery = { __typename?: 'Query', getPostById: { __typename?: 'PostDetails', id: number, text: string, video: string, createdAt: any, isLiked?: boolean | null, likesCount?: number | null, otherPostIds?: Array<number> | null, user: { __typename?: 'User', id: number, email: string, fullname: string, image?: string | null } } };
 
 export type UpdateUserProfileMutationVariables = Exact<{
   fullname?: InputMaybe<Scalars['String']['input']>;
@@ -677,19 +677,7 @@ export type GetChatsListQueryResult = Apollo.QueryResult<GetChatsListQuery, GetC
 export const CreateCommentDocument = gql`
     mutation CreateComment($text: String!, $postId: Int!) {
   createComment(text: $text, postId: $postId) {
-    text
     id
-    createdAt
-    user {
-      id
-      fullname
-      email
-    }
-    post {
-      id
-      text
-      video
-    }
   }
 }
     `;
@@ -818,6 +806,7 @@ export const GetPostByIdDocument = gql`
       image
     }
     isLiked
+    likesCount
     otherPostIds
   }
 }

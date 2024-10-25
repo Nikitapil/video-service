@@ -83,5 +83,13 @@ export const client = new ApolloClient({
   headers: {
     'Content-Type': 'application/json'
   },
-  link: ApolloLink.from([errorLink, uploadLink])
+  link: ApolloLink.from([errorLink, uploadLink]),
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'no-cache'
+    },
+    query: {
+      fetchPolicy: 'no-cache'
+    }
+  }
 });

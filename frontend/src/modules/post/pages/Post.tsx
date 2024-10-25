@@ -1,20 +1,6 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useMemo, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
-import { CREATE_COMMENT } from '../mutations/CreateComment.ts';
 import { GET_COMMENTS_BY_POST_ID } from '../queries/GetCommentsByPostId.ts';
-import {
-  CreateCommentMutation,
-  CreateCommentMutationVariables,
-  DeleteCommentMutation,
-  DeleteCommentMutationVariables,
-  GetCommentsByPostIdQuery,
-  GetCommentsByPostIdQueryVariables,
-  GetPostByIdQuery,
-  GetPostByIdQueryVariables
-} from '../../../gql/graphql.ts';
-import { DELETE_COMMENT } from '../mutations/DeleteComment.ts';
-import { GET_POST_BY_ID } from '../queries/GetPostById.ts';
 import { useUserStore } from '../../shared/auth/stores/userStore.ts';
 import { ImCross, ImSpinner2 } from 'react-icons/im';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
@@ -23,30 +9,32 @@ import { BsMusicNoteBeamed } from 'react-icons/bs';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
 import LikeButton from '../../shared/likes/components/LikeButton.tsx';
 import PostShareButton from '../../shared/components/PostShareButton.tsx';
+import {
+  useCreateCommentMutation,
+  useDeleteCommentMutation,
+  useGetCommentsByPostIdQuery,
+  useGetPostByIdQuery
+} from '../../../gql/graphql.tsx';
+import { getPostLink } from '../../../router/routes.ts';
 
 const Post = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
+  const postIdInt = useMemo(() => Number(id), [id]);
 
   const [comment, setComment] = useState('');
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [currentPostIdIndex, setCurrentPostIdIndex] = useState<number>(0);
+  const [currentPostIdIndex, setCurrentPostIdIndex] = useState(0);
 
   const navigate = useNavigate();
 
   const loggedInUserId = useUserStore((state) => state.user?.id);
 
-  const postIdInt = useMemo(() => Number(id), [id]);
-
-  const { data: dataPost } = useQuery<GetPostByIdQuery, GetPostByIdQueryVariables>(GET_POST_BY_ID, {
+  const { data: dataPost, loading } = useGetPostByIdQuery({
     variables: {
       id: postIdInt
-    },
-    onCompleted: () => {
-      setIsLoaded(true);
     }
   });
 
-  const [createComment] = useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CREATE_COMMENT, {
+  const [createComment, { loading: isCreateCommentInProgress }] = useCreateCommentMutation({
     variables: {
       postId: postIdInt,
       text: comment
@@ -61,7 +49,7 @@ const Post = () => {
     ]
   });
 
-  const [deleteComment] = useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DELETE_COMMENT, {
+  const [deleteComment] = useDeleteCommentMutation({
     refetchQueries: [
       {
         query: GET_COMMENTS_BY_POST_ID,
@@ -72,7 +60,7 @@ const Post = () => {
     ]
   });
 
-  const { data } = useQuery<GetCommentsByPostIdQuery, GetCommentsByPostIdQueryVariables>(GET_COMMENTS_BY_POST_ID, {
+  const { data } = useGetCommentsByPostIdQuery({
     variables: {
       postId: postIdInt
     }
@@ -87,13 +75,19 @@ const Post = () => {
   };
 
   const loopThroughPostsUp = () => {
-    if (currentPostIdIndex + 1 === dataPost?.getPostById?.otherPostIds?.length) {
+    const nextPostIdIndex = currentPostIdIndex + 1;
+
+    if (nextPostIdIndex === dataPost?.getPostById?.otherPostIds?.length) {
       return;
     }
 
-    setCurrentPostIdIndex((prev) => prev + 1);
-    const nextPostId = dataPost?.getPostById?.otherPostIds?.[currentPostIdIndex + 1];
-    navigate(`/post/${nextPostId}`);
+    setCurrentPostIdIndex(nextPostIdIndex);
+
+    const nextPostId = dataPost?.getPostById?.otherPostIds?.[nextPostIdIndex];
+
+    if (nextPostId) {
+      navigate(getPostLink(nextPostId));
+    }
   };
 
   const loopThroughPostsDown = () => {
@@ -111,11 +105,9 @@ const Post = () => {
     setComment('');
   };
 
-  // TODO implement likes here
-
   return (
     <div className="fixed left-0 top-0 z-50 h-full w-full justify-between overflow-auto bg-black lg:flex lg:overflow-hidden">
-      {!isLoaded && (
+      {loading && (
         <div className="absolute top-0 flex h-screen w-full items-center justify-center bg-black bg-opacity-70">
           <ImSpinner2
             className="ml-1 animate-spin"
@@ -258,12 +250,13 @@ const Post = () => {
                   placeholder="Add a comment..."
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
+                  disabled={isCreateCommentInProgress}
                 />
               </div>
 
               <button
                 className="ml-5 cursor-pointer pr-1 text-sm font-semibold text-[#f02c56] disabled:cursor-not-allowed disabled:text-gray-400"
-                disabled={!comment}
+                disabled={!comment || isCreateCommentInProgress}
                 onClick={addComment}
               >
                 Post

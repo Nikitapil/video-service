@@ -12,6 +12,7 @@ export const GET_COMMENTS_BY_POST_ID = gql`
         email
         image
       }
+      canDelete
     }
   }
 `;

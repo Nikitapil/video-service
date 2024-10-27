@@ -1,10 +1,8 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useMemo, useState } from 'react';
-import { useUserStore } from '../../shared/auth/stores/userStore.ts';
 import { ImCross, ImSpinner2 } from 'react-icons/im';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
 import { MdOutlineDeleteForever } from 'react-icons/md';
-import { BsMusicNoteBeamed } from 'react-icons/bs';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
 import LikeButton from '../../shared/likes/components/LikeButton.tsx';
 import PostShareButton from '../../shared/components/PostShareButton.tsx';
@@ -22,6 +20,7 @@ import { formatDate } from '../../../utils/dates.ts';
 import ConfirmModal from '../../../components/ux/ConfirmModal.tsx';
 import { useShowElement } from '../../../hooks/useShowElement.ts';
 import IconButton from '../../../components/ui/IconButton.tsx';
+import PostCommentsList from '../components/PostCommentsList.tsx';
 
 const Post = () => {
   const { id } = useParams();
@@ -33,8 +32,6 @@ const Post = () => {
   const confirmDeletePostModal = useShowElement();
 
   const navigate = useNavigate();
-
-  const loggedInUserId = useUserStore((state) => state.user?.id);
 
   const { data: dataPost, loading } = useGetPostByIdQuery({
     variables: {
@@ -199,12 +196,7 @@ const Post = () => {
           )}
         </div>
 
-        <div className="mt-4 px-6 text-sm">{dataPost.getPostById.text}</div>
-
-        <div className="mt-4 flex items-center gap-1 px-8 text-sm font-bold">
-          <BsMusicNoteBeamed size="17" />
-          Original sound - {dataPost?.getPostById.user.fullname}
-        </div>
+        <div className="px-8 text-sm">{dataPost.getPostById.text}</div>
 
         <div className="mb-4 mt-8 flex items-center gap-4 px-8">
           <LikeButton post={dataPost.getPostById} />
@@ -212,48 +204,15 @@ const Post = () => {
           <PostShareButton text={dataPost.getPostById.text} />
         </div>
 
-        <div className="z-0 w-full flex-1 overflow-auto border-t-2 bg-[#f8f8f8]">
-          <div className="pt-2" />
-
-          {dataComments?.getCommentsByPostId.length === 0 && (
-            <div className="mt-6 text-center text-xl text-gray-500">No comments...</div>
-          )}
-
-          <div className="mt-4 flex flex-col items-center justify-between px-8">
-            {dataComments?.getCommentsByPostId.map((comment) => (
-              <div
-                className="relative flex w-full items-center"
-                key={comment.id}
-              >
-                <Link to="/">
-                  <UserAvatar
-                    image={comment.user.image}
-                    className="w-10"
-                  />
-                </Link>
-
-                <div className="ml-14 w-full pt-0.5">
-                  <div className="flex items-center justify-between text-[10px] font-semibold">
-                    User name
-                    {comment.user.id === loggedInUserId && (
-                      <MdOutlineDeleteForever
-                        className="cursor-pointer"
-                        size="25"
-                        onClick={() => handleDeleteComment(comment.id)}
-                      />
-                    )}
-                  </div>
-                  <div className="text-[15px] font-light">{comment.text}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mb-28" />
+        <div className="w-full flex-1 overflow-auto border-t-2 bg-gray-100 pb-28">
+          <PostCommentsList
+            comments={dataComments?.getCommentsByPostId || []}
+            handleDeleteComment={handleDeleteComment}
+          />
         </div>
 
-        <div className="absolute bottom-0 flex h-[85px] w-full items-center justify-between border-t-2 bg-white px-8 py-5 lg:max-w-[550px]">
-          <div className="flex w-full items-center rounded-lg bg-[#f1f1f2] has-[input:focus]:border has-[input:focus]:border-gray-400 lg:max-w-[420px]">
+        <div className="absolute bottom-0 flex h-[85px] w-full items-center justify-between border-t-2 bg-white px-8 py-5">
+          <div className="flex w-full items-center rounded-lg bg-[#f1f1f2] has-[input:focus]:border has-[input:focus]:border-gray-400">
             <input
               className="w-full rounded-lg border-none bg-[#f1f1f2] p-2 outline-none lg:max-w-[420px]"
               type="text"

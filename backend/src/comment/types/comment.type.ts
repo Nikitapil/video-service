@@ -1,5 +1,11 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, GraphQLISODateTime, Int, ObjectType } from '@nestjs/graphql';
 import { User } from '../../user/types/user.type';
+import { CommentFromDb } from '../types';
+
+interface CommentTypeConstructorParameters {
+  comment: CommentFromDb;
+  currentUserId: number;
+}
 
 @ObjectType()
 export class CommentType {
@@ -12,9 +18,17 @@ export class CommentType {
   @Field(() => String)
   text: string;
 
-  @Field(() => String)
+  @Field(() => GraphQLISODateTime)
   createdAt: Date;
 
-  @Field(() => String)
-  updatedAt: Date;
+  @Field(() => Boolean)
+  canDelete: boolean;
+
+  constructor({ comment, currentUserId }: CommentTypeConstructorParameters) {
+    this.id = comment.id;
+    this.user = new User(comment.user, currentUserId);
+    this.text = comment.text;
+    this.createdAt = comment.createdAt;
+    this.canDelete = comment.user.id === currentUserId;
+  }
 }

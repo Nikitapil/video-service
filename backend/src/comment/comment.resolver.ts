@@ -5,18 +5,22 @@ import { CommentType } from './types/comment.type';
 import { UseGuards } from '@nestjs/common';
 import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
 
+@UseGuards(GraphQLAuthGuard)
 @Resolver()
 export class CommentResolver {
   constructor(private readonly commentService: CommentService) {}
 
   @Query(() => [CommentType])
   getCommentsByPostId(
-    @Args('postId', { type: () => Int }) postId: number
+    @Args('postId', { type: () => Int }) postId: number,
+    @Context() context: { req: Request }
   ): Promise<CommentType[]> {
-    return this.commentService.getCommentsByPostId(postId);
+    return this.commentService.getCommentsByPostId(
+      postId,
+      context.req.user.sub
+    );
   }
 
-  @UseGuards(GraphQLAuthGuard)
   @Mutation(() => CommentType)
   createComment(
     @Args('postId', { type: () => Int }) postId: number,
@@ -30,7 +34,6 @@ export class CommentResolver {
     });
   }
 
-  @UseGuards(GraphQLAuthGuard)
   @Mutation(() => String, { nullable: true })
   deleteComment(
     @Args('id', { type: () => Int }) id: number,

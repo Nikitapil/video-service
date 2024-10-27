@@ -16,10 +16,10 @@ type ChatType {
 }
 
 type CommentType {
-  createdAt: String!
+  canDelete: Boolean!
+  createdAt: DateTime!
   id: Int!
   text: String!
-  updatedAt: String!
   user: User!
 }
 

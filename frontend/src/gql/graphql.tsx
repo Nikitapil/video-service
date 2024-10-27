@@ -36,10 +36,10 @@ export type ChatType = {
 
 export type CommentType = {
   __typename?: 'CommentType';
-  createdAt: Scalars['String']['output'];
+  canDelete: Scalars['Boolean']['output'];
+  createdAt: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
   text: Scalars['String']['output'];
-  updatedAt: Scalars['String']['output'];
   user: User;
 };
 
@@ -336,7 +336,7 @@ export type GetCommentsByPostIdQueryVariables = Exact<{
 }>;
 
 
-export type GetCommentsByPostIdQuery = { __typename?: 'Query', getCommentsByPostId: Array<{ __typename?: 'CommentType', id: number, text: string, createdAt: string, user: { __typename?: 'User', id: number, fullname: string, email: string, image?: string | null } }> };
+export type GetCommentsByPostIdQuery = { __typename?: 'Query', getCommentsByPostId: Array<{ __typename?: 'CommentType', id: number, text: string, createdAt: any, canDelete: boolean, user: { __typename?: 'User', id: number, fullname: string, email: string, image?: string | null } }> };
 
 export type GetPostByIdQueryVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -792,6 +792,7 @@ export const GetCommentsByPostIdDocument = gql`
       email
       image
     }
+    canDelete
   }
 }
     `;

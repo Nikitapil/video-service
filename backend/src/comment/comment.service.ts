@@ -6,21 +6,25 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CommentType } from './types/comment.type';
+import { getCommentInclude } from '../common/db-selects/comment-selects';
 
 @Injectable()
 export class CommentService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getCommentsByPostId(postId: number): Promise<CommentType[]> {
-    return this.prismaService.comment.findMany({
+  async getCommentsByPostId(
+    postId: number,
+    currentUserId: number
+  ): Promise<CommentType[]> {
+    const comments = await this.prismaService.comment.findMany({
       where: {
         postId
       },
-      include: {
-        user: true,
-        post: true
-      }
+      include: getCommentInclude(currentUserId)
     });
+    return comments.map(
+      (comment) => new CommentType({ comment, currentUserId })
+    );
   }
 
   async createComment(data: CreateCommentDto): Promise<CommentType> {
@@ -32,13 +36,12 @@ export class CommentService {
       throw new NotFoundException('Post not found');
     }
 
-    return this.prismaService.comment.create({
+    const comment = await this.prismaService.comment.create({
       data,
-      include: {
-        user: true,
-        post: true
-      }
+      include: getCommentInclude(data.userId)
     });
+
+    return new CommentType({ comment, currentUserId: data.userId });
   }
 
   async deleteComment(commentId: number, userId: number): Promise<void> {

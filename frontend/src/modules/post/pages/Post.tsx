@@ -21,6 +21,9 @@ import ConfirmModal from '../../../components/ux/ConfirmModal.tsx';
 import { useShowElement } from '../../../hooks/useShowElement.ts';
 import IconButton from '../../../components/ui/IconButton.tsx';
 import PostCommentsList from '../components/PostCommentsList.tsx';
+import AppInput from '../../../components/ui/inputs/AppInput.tsx';
+import AppButton from '../../../components/ui/AppButton.tsx';
+import AppForm from '../../../components/ui/AppForm.tsx';
 
 const Post = () => {
   const { id } = useParams();
@@ -211,11 +214,9 @@ const Post = () => {
           />
         </div>
 
-        <div className="absolute bottom-0 flex h-[85px] w-full items-center justify-between border-t-2 bg-white px-8 py-5">
-          <div className="flex w-full items-center rounded-lg bg-[#f1f1f2] has-[input:focus]:border has-[input:focus]:border-gray-400">
-            <input
-              className="w-full rounded-lg border-none bg-[#f1f1f2] p-2 outline-none lg:max-w-[420px]"
-              type="text"
+        <AppForm className="absolute bottom-0 flex w-full items-center justify-between gap-3 border-t-2 bg-white px-8 py-5">
+          <div className="flex-1">
+            <AppInput
               placeholder="Add a comment..."
               value={comment}
               onChange={(e) => setComment(e.target.value)}
@@ -223,15 +224,16 @@ const Post = () => {
             />
           </div>
 
-          <button
-            className="ml-5 cursor-pointer pr-1 text-sm font-semibold text-[#f02c56] disabled:cursor-not-allowed disabled:text-gray-400"
+          <AppButton
+            appearance="transparentDanger"
             disabled={!comment || isCreateCommentInProgress}
             onClick={addComment}
           >
             Post
-          </button>
-        </div>
+          </AppButton>
+        </AppForm>
       </section>
+
       <ConfirmModal
         showElement={confirmDeletePostModal}
         title="Are you sure you want to delete this post?"

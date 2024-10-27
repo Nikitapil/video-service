@@ -6,7 +6,7 @@ interface AppButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   text?: string;
   children?: ReactNode;
   to?: To;
-  appearance?: 'default' | 'danger';
+  appearance?: 'default' | 'danger' | 'transparentDanger';
   size?: 'md' | 'sm';
   isLoading?: boolean;
 }
@@ -24,7 +24,9 @@ const AppButton = ({
   const className = useMemo(() => {
     const appearanceClasses = {
       default: 'bg-transparent hover:bg-gray-100',
-      danger: 'border-red-600 hover:bg-red-50 text-red-600'
+      danger: 'border-red-600 hover:bg-red-50 text-red-600',
+      transparentDanger:
+        'shadow-none border-none text-red-500 bg-transparent hover:bg-gray-100 font-semibold disabled:text-gray-400'
     };
 
     const sizeClasses = {

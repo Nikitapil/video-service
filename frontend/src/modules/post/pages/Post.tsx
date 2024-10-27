@@ -191,10 +191,12 @@ const Post = () => {
             </div>
           </div>
 
-          <IconButton
-            Icon={MdOutlineDeleteForever}
-            onClick={confirmDeletePostModal.open}
-          />
+          {dataPost.getPostById.canDelete && (
+            <IconButton
+              Icon={MdOutlineDeleteForever}
+              onClick={confirmDeletePostModal.open}
+            />
+          )}
         </div>
 
         <div className="mt-4 px-6 text-sm">{dataPost.getPostById.text}</div>

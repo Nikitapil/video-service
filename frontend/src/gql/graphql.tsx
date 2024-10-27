@@ -343,7 +343,7 @@ export type GetPostByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetPostByIdQuery = { __typename?: 'Query', getPostById: { __typename?: 'PostDetails', id: number, text: string, video: string, createdAt: any, isLiked?: boolean | null, likesCount?: number | null, otherPostIds?: Array<number> | null, user: { __typename?: 'User', id: number, email: string, fullname: string, image?: string | null } } };
+export type GetPostByIdQuery = { __typename?: 'Query', getPostById: { __typename?: 'PostDetails', id: number, text: string, video: string, createdAt: any, isLiked?: boolean | null, likesCount?: number | null, otherPostIds?: Array<number> | null, canDelete: boolean, user: { __typename?: 'User', id: number, email: string, fullname: string, image?: string | null } } };
 
 export type UpdateUserProfileMutationVariables = Exact<{
   fullname?: InputMaybe<Scalars['String']['input']>;
@@ -844,6 +844,7 @@ export const GetPostByIdDocument = gql`
     isLiked
     likesCount
     otherPostIds
+    canDelete
   }
 }
     `;

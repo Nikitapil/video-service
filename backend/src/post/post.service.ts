@@ -13,6 +13,8 @@ import { PostDetails } from './types/post-details.type';
 import { PostType } from './types/post.type';
 import { unlinkSync, mkdirSync, existsSync } from 'fs';
 import { getSafeUserSelectFull } from '../common/db-selects/safe-user-select';
+import { SuccessMessageType } from '../common/types/SuccessMessage.type';
+import { getPostInclude } from '../common/db-selects/post-selects';
 
 @Injectable()
 export class PostService {
@@ -66,14 +68,7 @@ export class PostService {
   async getPostById(id: number, currentUserId: number): Promise<PostDetails> {
     const post = await this.prismaService.post.findUnique({
       where: { id },
-      include: {
-        user: {
-          select: getSafeUserSelectFull(currentUserId)
-        },
-        likes: true,
-        comments: true,
-        _count: { select: { likes: true, comments: true } }
-      }
+      include: getPostInclude(currentUserId)
     });
 
     if (!post) {
@@ -108,34 +103,24 @@ export class PostService {
       where,
       skip,
       take,
-      include: {
-        user: {
-          select: getSafeUserSelectFull(currentUserId)
-        },
-        likes: {
-          where: { userId: currentUserId }
-        },
-        _count: {
-          select: {
-            likes: true,
-            comments: true
-          }
-        },
-        comments: true
-      },
+      include: getPostInclude(currentUserId),
       orderBy: { createdAt: 'desc' }
     });
     return posts.map((post) => new PostType(post, currentUserId));
   }
 
-  async getPostsByUserId(userId: number): Promise<PostType[]> {
-    return this.prismaService.post.findMany({
+  async getPostsByUserId(
+    userId: number,
+    currentUserId: number
+  ): Promise<PostType[]> {
+    const posts = await this.prismaService.post.findMany({
       where: { userId },
-      include: { user: true }
+      include: getPostInclude(currentUserId)
     });
+    return posts.map((post) => new PostType(post, currentUserId));
   }
 
-  async deletePost(id: number, userId: number): Promise<void> {
+  async deletePost(id: number, userId: number): Promise<SuccessMessageType> {
     const post = await this.prismaService.post.findUnique({
       where: { id }
     });
@@ -154,6 +139,8 @@ export class PostService {
       await this.prismaService.post.delete({
         where: { id }
       });
+
+      return new SuccessMessageType();
     } catch (e) {
       throw new NotFoundException(e.message);
     }

@@ -66,7 +66,7 @@ const FeedPost = ({ post, onTagClick }: FeedPostProps) => {
         <div className="mt-2.5 flex flex-wrap gap-4">
           <div className="max-h-140 min-h-120 max-w-72 rounded-xl bg-black">
             <video
-              src={`${import.meta.env.VITE_APP_BACKEND_BASE_URL}${post.video}`}
+              src={post.video}
               loop
               muted
               controls

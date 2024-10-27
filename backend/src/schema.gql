@@ -18,7 +18,6 @@ type ChatType {
 type CommentType {
   createdAt: String!
   id: Int!
-  post: PostType!
   text: String!
   updatedAt: String!
   user: User!
@@ -70,7 +69,7 @@ type Mutation {
   createMessage(CreateMesageInput: CreateMessageDto!): MessageType!
   createPost(tags: String, text: String!, video: Upload!): PostType!
   deleteComment(id: Int!): String
-  deletePost(id: Int!): String!
+  deletePost(id: Int!): SuccessMessageType!
   login(loginInput: LoginDto!): LoginResponse!
   logout: String!
   openChatMessages(chatId: String!): SuccessMessageType!
@@ -82,6 +81,7 @@ type Mutation {
 }
 
 type PostDetails {
+  canDelete: Boolean!
   commentsCount: Float
   createdAt: DateTime!
   id: Int!
@@ -95,6 +95,7 @@ type PostDetails {
 }
 
 type PostType {
+  canDelete: Boolean!
   commentsCount: Float
   createdAt: DateTime!
   id: Int!

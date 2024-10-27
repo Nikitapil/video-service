@@ -1,6 +1,7 @@
 import { Field, Int, ObjectType, GraphQLISODateTime } from '@nestjs/graphql';
 import { User } from '../../user/types/user.type';
 import { PostFromDb } from '../types';
+import * as process from 'node:process';
 
 @ObjectType()
 export class PostType {
@@ -22,6 +23,9 @@ export class PostType {
   @Field(() => Boolean, { nullable: true })
   isLiked?: boolean;
 
+  @Field(() => Boolean)
+  canDelete: boolean;
+
   @Field(() => Number, { nullable: true })
   likesCount?: number;
 
@@ -35,11 +39,12 @@ export class PostType {
     this.id = postFromDb.id;
     this.text = postFromDb.text;
     this.createdAt = postFromDb.createdAt;
-    this.video = postFromDb.video;
+    this.video = process.env.APP_URL + postFromDb.video;
     this.isLiked = !!postFromDb.likes?.length;
     this.user = new User(postFromDb.user, currentUserId);
     this.tags = postFromDb.tags;
     this.likesCount = postFromDb._count?.likes || 0;
     this.commentsCount = postFromDb._count?.comments || 0;
+    this.canDelete = postFromDb.user.id === currentUserId;
   }
 }

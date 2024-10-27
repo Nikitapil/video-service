@@ -7,6 +7,7 @@ import { UseGuards } from '@nestjs/common';
 import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostDetails } from './types/post-details.type';
+import { SuccessMessageType } from '../common/types/SuccessMessage.type';
 
 @UseGuards(GraphQLAuthGuard)
 @Resolver()
@@ -51,18 +52,19 @@ export class PostResolver {
     return this.postService.getPosts(skip, take, context.req.user.sub, search);
   }
 
-  @Mutation(() => String)
+  @Mutation(() => SuccessMessageType)
   async deletePost(
     @Context() context: { req: Request },
     @Args('id', { type: () => Int }) id: number
-  ): Promise<void> {
+  ): Promise<SuccessMessageType> {
     return this.postService.deletePost(id, context.req.user.sub);
   }
 
   @Query(() => [PostType])
   async getPostsByUserId(
-    @Args('userId', { type: () => Int }) userId: number
+    @Args('userId', { type: () => Int }) userId: number,
+    @Context() context: { req: Request }
   ): Promise<PostType[]> {
-    return this.postService.getPostsByUserId(userId);
+    return this.postService.getPostsByUserId(userId, context.req.user.sub);
   }
 }

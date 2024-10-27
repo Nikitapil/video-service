@@ -1,6 +1,5 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useMemo, useState } from 'react';
-import { GET_COMMENTS_BY_POST_ID } from '../queries/GetCommentsByPostId.ts';
 import { useUserStore } from '../../shared/auth/stores/userStore.ts';
 import { ImCross, ImSpinner2 } from 'react-icons/im';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
@@ -12,10 +11,17 @@ import PostShareButton from '../../shared/components/PostShareButton.tsx';
 import {
   useCreateCommentMutation,
   useDeleteCommentMutation,
+  useDeletePostMutation,
   useGetCommentsByPostIdQuery,
   useGetPostByIdQuery
 } from '../../../gql/graphql.tsx';
-import { getPostLink, RoutesEnum } from '../../../router/routes.ts';
+import { getPostLink, getProfileLink, RoutesEnum } from '../../../router/routes.ts';
+
+import styles from './post.module.scss';
+import { formatDate } from '../../../utils/dates.ts';
+import ConfirmModal from '../../../components/ux/ConfirmModal.tsx';
+import { useShowElement } from '../../../hooks/useShowElement.ts';
+import IconButton from '../../../components/ui/IconButton.tsx';
 
 const Post = () => {
   const { id } = useParams();
@@ -23,6 +29,8 @@ const Post = () => {
 
   const [comment, setComment] = useState('');
   const [currentPostIdIndex, setCurrentPostIdIndex] = useState(0);
+
+  const confirmDeletePostModal = useShowElement();
 
   const navigate = useNavigate();
 
@@ -34,9 +42,15 @@ const Post = () => {
     }
   });
 
-  const { data: dataComments } = useGetCommentsByPostIdQuery({
+  const { data: dataComments, refetch: refetchComments } = useGetCommentsByPostIdQuery({
     variables: {
       postId: postIdInt
+    }
+  });
+
+  const [deletePost] = useDeletePostMutation({
+    variables: {
+      id: postIdInt
     }
   });
 
@@ -44,27 +58,17 @@ const Post = () => {
     variables: {
       postId: postIdInt,
       text: comment
-    },
-    refetchQueries: [
-      {
-        query: GET_COMMENTS_BY_POST_ID,
-        variables: {
-          postId: postIdInt
-        }
-      }
-    ]
+    }
   });
 
-  const [deleteComment] = useDeleteCommentMutation({
-    refetchQueries: [
-      {
-        query: GET_COMMENTS_BY_POST_ID,
-        variables: {
-          postId: postIdInt
-        }
-      }
-    ]
-  });
+  const [deleteComment] = useDeleteCommentMutation();
+
+  const postCreatedDate = useMemo(() => {
+    if (!dataPost?.getPostById?.createdAt) {
+      return null;
+    }
+    return formatDate(dataPost?.getPostById?.createdAt);
+  }, [dataPost?.getPostById?.createdAt]);
 
   const handleDeleteComment = async (commentId: number) => {
     await deleteComment({
@@ -72,6 +76,7 @@ const Post = () => {
         id: commentId
       }
     });
+    await refetchComments();
   };
 
   const loopThroughPosts = (up: boolean) => {
@@ -91,6 +96,12 @@ const Post = () => {
   const addComment = async () => {
     await createComment();
     setComment('');
+    await refetchComments();
+  };
+
+  const onDeletePost = async () => {
+    await deletePost();
+    navigate(RoutesEnum.HOME);
   };
 
   if (loading) {
@@ -121,19 +132,19 @@ const Post = () => {
 
   return (
     <div className="fixed left-0 top-0 z-50 h-full w-full overflow-auto bg-black lg:flex lg:overflow-hidden">
-      <div className="relative h-full w-full">
+      <section className="relative h-full w-full">
         <Link
           to={RoutesEnum.HOME}
-          className="absolute z-20 m-5 rounded-full bg-gray-700 p-1.5 transition-all duration-300 hover:bg-gray-800"
+          className={`${styles['video-block-btn']} left-4 top-4`}
         >
           <ImCross
             color="#fff"
-            size="27"
+            size="25"
           />
         </Link>
 
         <button
-          className="absolute right-4 top-4 z-20 flex items-center justify-center rounded-full bg-gray-700 p-1.5 transition-all duration-300 hover:bg-gray-800"
+          className={`${styles['video-block-btn']} right-4 top-4`}
           onClick={() => loopThroughPosts(true)}
         >
           <BiChevronUp
@@ -143,7 +154,7 @@ const Post = () => {
         </button>
 
         <button
-          className="absolute right-4 top-20 z-20 flex items-center justify-center rounded-full bg-gray-700 p-1.5 transition-all duration-300 hover:bg-gray-800"
+          className={`${styles['video-block-btn']} right-4 top-20`}
           onClick={() => loopThroughPosts(false)}
         >
           <BiChevronDown
@@ -152,9 +163,9 @@ const Post = () => {
           />
         </button>
 
-        <div className="bg-black bg-opacity-90 lg:min-w-[480px]">
+        <div className="bg-black lg:min-w-120">
           <video
-            src={`http://localhost:3000${dataPost.getPostById.video}`}
+            src={dataPost.getPostById.video}
             className="mx-auto h-screen"
             controls
             autoPlay
@@ -162,33 +173,27 @@ const Post = () => {
             loop
           ></video>
         </div>
-      </div>
+      </section>
 
-      <div className="relative flex h-full w-full flex-col bg-white lg:max-w-[550px]">
-        <div className="py-7" />
-
-        <div className="flex items-center justify-between px-8">
-          <div className="flex items-center">
-            <Link to="/">
+      <section className="relative flex h-full w-full flex-col bg-white lg:max-w-140">
+        <div className="flex items-center justify-between p-8">
+          <div className="flex items-center gap-3">
+            <Link to={getProfileLink(dataPost.getPostById.user.id)}>
               <UserAvatar
-                image={dataPost?.getPostById.user.image}
-                className="w-10"
+                image={dataPost.getPostById.user.image}
+                className="!w-10"
               />
             </Link>
 
-            <div className="ml-3 pt-0.5">
-              <div className="text-[17px] font-semibold">User name</div>
-              <div className="font-light text-[13]">
-                {dataPost?.getPostById.user.fullname}
-                <span className="relative top-[6px] pr-0.5 text-[30px]">•</span>
-                <span className="font-medium">{new Date(dataPost?.getPostById?.createdAt).toLocaleString()}</span>
-              </div>
+            <div className="pt-0.5">
+              <h3 className="text-lg font-semibold">{dataPost?.getPostById.user.fullname}</h3>
+              <time className="text-sm font-medium">{postCreatedDate}</time>
             </div>
           </div>
 
-          <MdOutlineDeleteForever
-            size="25"
-            className="cursor-pointer"
+          <IconButton
+            Icon={MdOutlineDeleteForever}
+            onClick={confirmDeletePostModal.open}
           />
         </div>
 
@@ -265,7 +270,12 @@ const Post = () => {
             Post
           </button>
         </div>
-      </div>
+      </section>
+      <ConfirmModal
+        showElement={confirmDeletePostModal}
+        title="Are you sure you want to delete this post?"
+        onConfirm={onDeletePost}
+      />
     </div>
   );
 };

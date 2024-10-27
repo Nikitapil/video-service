@@ -38,7 +38,6 @@ export type CommentType = {
   __typename?: 'CommentType';
   createdAt: Scalars['String']['output'];
   id: Scalars['Int']['output'];
-  post: PostType;
   text: Scalars['String']['output'];
   updatedAt: Scalars['String']['output'];
   user: User;
@@ -89,7 +88,7 @@ export type Mutation = {
   createMessage: MessageType;
   createPost: PostType;
   deleteComment?: Maybe<Scalars['String']['output']>;
-  deletePost: Scalars['String']['output'];
+  deletePost: SuccessMessageType;
   login: LoginResponse;
   logout: Scalars['String']['output'];
   openChatMessages: SuccessMessageType;
@@ -162,6 +161,7 @@ export type MutationUpdateUserArgs = {
 
 export type PostDetails = {
   __typename?: 'PostDetails';
+  canDelete: Scalars['Boolean']['output'];
   commentsCount?: Maybe<Scalars['Float']['output']>;
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
@@ -176,6 +176,7 @@ export type PostDetails = {
 
 export type PostType = {
   __typename?: 'PostType';
+  canDelete: Scalars['Boolean']['output'];
   commentsCount?: Maybe<Scalars['Float']['output']>;
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
@@ -323,12 +324,19 @@ export type DeleteCommentMutationVariables = Exact<{
 
 export type DeleteCommentMutation = { __typename?: 'Mutation', deleteComment?: string | null };
 
+export type DeletePostMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type DeletePostMutation = { __typename?: 'Mutation', deletePost: { __typename?: 'SuccessMessageType', message: string } };
+
 export type GetCommentsByPostIdQueryVariables = Exact<{
   postId: Scalars['Int']['input'];
 }>;
 
 
-export type GetCommentsByPostIdQuery = { __typename?: 'Query', getCommentsByPostId: Array<{ __typename?: 'CommentType', id: number, text: string, createdAt: string, user: { __typename?: 'User', id: number, fullname: string, email: string, image?: string | null }, post: { __typename?: 'PostType', id: number, text: string, video: string } }> };
+export type GetCommentsByPostIdQuery = { __typename?: 'Query', getCommentsByPostId: Array<{ __typename?: 'CommentType', id: number, text: string, createdAt: string, user: { __typename?: 'User', id: number, fullname: string, email: string, image?: string | null } }> };
 
 export type GetPostByIdQueryVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -739,6 +747,39 @@ export function useDeleteCommentMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteCommentMutation>;
 export type DeleteCommentMutationResult = Apollo.MutationResult<DeleteCommentMutation>;
 export type DeleteCommentMutationOptions = Apollo.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
+export const DeletePostDocument = gql`
+    mutation DeletePost($id: Int!) {
+  deletePost(id: $id) {
+    message
+  }
+}
+    `;
+export type DeletePostMutationFn = Apollo.MutationFunction<DeletePostMutation, DeletePostMutationVariables>;
+
+/**
+ * __useDeletePostMutation__
+ *
+ * To run a mutation, you first call `useDeletePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePostMutation, { data, loading, error }] = useDeletePostMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeletePostMutation(baseOptions?: Apollo.MutationHookOptions<DeletePostMutation, DeletePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePostMutation, DeletePostMutationVariables>(DeletePostDocument, options);
+      }
+export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutation>;
+export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
+export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
 export const GetCommentsByPostIdDocument = gql`
     query GetCommentsByPostId($postId: Int!) {
   getCommentsByPostId(postId: $postId) {
@@ -750,11 +791,6 @@ export const GetCommentsByPostIdDocument = gql`
       fullname
       email
       image
-    }
-    post {
-      id
-      text
-      video
     }
   }
 }

@@ -1,13 +1,10 @@
 import { RouterProvider } from 'react-router-dom';
 import { router } from './router';
-import { useGeneralStore } from './modules/shared/stores/generalStore.ts';
-import EditProfileModal from './modules/profile/components/EditProfileModal.tsx';
 import { useUserStore } from './modules/shared/auth/stores/userStore.ts';
 import { useRefreshAuthMutation } from './gql/graphql.tsx';
 import { useCallback, useEffect } from 'react';
 
 function App() {
-  const isEditProfileOpen = useGeneralStore((state) => state.isEditProfileOpen);
   const setUser = useUserStore((state) => state.setUser);
   const setIsAuthLoading = useUserStore((state) => state.setIsAuthLoading);
 
@@ -33,7 +30,6 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
-      {isEditProfileOpen && <EditProfileModal />}
     </>
   );
 }

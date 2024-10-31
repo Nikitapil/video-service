@@ -6,16 +6,17 @@ import { GET_POSTS_BY_USER_ID } from '../queries/GetPostsByUserId.ts';
 import { useParams } from 'react-router-dom';
 import { GetPostsByUserIdQuery, GetPostsByUserIdQueryVariables } from '../../../gql/graphql.ts';
 import { BsFillPencilFill } from 'react-icons/bs';
-import { useGeneralStore } from '../../shared/stores/generalStore.ts';
 import PostProfile from '../components/PostProfile.tsx';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
+import { useShowElement } from '../../../hooks/useShowElement.ts';
+import EditProfileModal from '../components/EditProfileModal.tsx';
 
 const Profile = () => {
   const { id } = useParams();
   const pageUserId = useMemo(() => Number(id), [id]);
   const user = useUserStore((state) => state.user);
-  const isEditModalOpen = useGeneralStore((state) => state.isEditProfileOpen);
-  const setIsEditModalOpen = useGeneralStore((state) => state.setIsEditProfileOpen);
+
+  const editProfileModalElement = useShowElement();
 
   const { data, loading, error } = useQuery<GetPostsByUserIdQuery, GetPostsByUserIdQueryVariables>(
     GET_POSTS_BY_USER_ID,
@@ -44,7 +45,7 @@ const Profile = () => {
             <div className="truncate text-[18px]">{user.fullname}</div>
             <button
               className="mt-3 flex items-center rounded-md border px-3.5 py-1.5 text-[15px] font-semibold transition-all duration-300 hover:bg-gray-100"
-              onClick={setIsEditModalOpen}
+              onClick={editProfileModalElement.open}
             >
               <BsFillPencilFill
                 size="18"
@@ -87,6 +88,7 @@ const Profile = () => {
           ))}
         </div>
       </div>
+      <EditProfileModal showElement={editProfileModalElement} />
     </MainLayout>
   );
 };

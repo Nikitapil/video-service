@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { FileUpload } from 'graphql-upload-ts';
@@ -36,6 +40,16 @@ export class UserService {
   }
 
   async updateProfile(userId: number, data: UpdateProfileDto) {
+    if (data.email) {
+      const existingUser = await this.prismaService.user.findUnique({
+        where: { email: data.email }
+      });
+
+      if (existingUser && existingUser.id !== userId) {
+        throw new BadRequestException({ email: 'Email already in use' });
+      }
+    }
+
     return this.prismaService.user.update({
       where: { id: userId },
       data

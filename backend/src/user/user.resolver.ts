@@ -14,6 +14,7 @@ import { RefreshType } from '../auth/types/RefreshType';
 import { GetUsersDto } from './dto/get-users.dto';
 import { ToggleFollowType } from './types/toggle-follow.type';
 import { User } from './types/user.type';
+import { UpdateProfileInputDto } from './dto/update-profile-input.dto';
 
 @UseFilters(GraphQlErrorFilter)
 @Resolver()
@@ -65,8 +66,8 @@ export class UserResolver {
   @Mutation(() => User)
   async updateUser(
     @Context() context: { req: Request },
-    @Args('fullname', { type: () => String, nullable: true }) fullname?: string,
-    @Args('bio', { type: () => String, nullable: true }) bio?: string,
+    @Args('updateProfileInput', { type: () => UpdateProfileInputDto })
+    updateProfileInput?: UpdateProfileInputDto,
     @Args('image', { type: () => GraphQLUpload, nullable: true })
     image?: FileUpload
   ) {
@@ -76,8 +77,7 @@ export class UserResolver {
     }
 
     return this.userService.updateProfile(context.req.user.sub, {
-      fullname,
-      bio,
+      ...updateProfileInput,
       image: imageUrl
     });
   }

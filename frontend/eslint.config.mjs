@@ -44,5 +44,6 @@ export default [...fixupConfigRules(compat.extends(
         "jsx-a11y/no-noninteractive-element-interactions": "off",
         "jsx-a11y/click-events-have-key-events": "off",
         "react/react-in-jsx-scope": "off",
+        "@typescript-eslint/no-explicit-any": "off"
     },
 }];

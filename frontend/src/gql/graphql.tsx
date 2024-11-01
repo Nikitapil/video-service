@@ -154,9 +154,8 @@ export type MutationToggleUserFollowArgs = {
 
 
 export type MutationUpdateUserArgs = {
-  bio?: InputMaybe<Scalars['String']['input']>;
-  fullname?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['Upload']['input']>;
+  updateProfileInput: UpdateProfileInputDto;
 };
 
 export type PostDetails = {
@@ -265,6 +264,12 @@ export type ToggleLike = {
   isLiked: Scalars['Boolean']['output'];
 };
 
+export type UpdateProfileInputDto = {
+  bio?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  fullname?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type User = {
   __typename?: 'User';
   bio?: Maybe<Scalars['String']['output']>;
@@ -348,6 +353,7 @@ export type GetPostByIdQuery = { __typename?: 'Query', getPostById: { __typename
 export type UpdateUserProfileMutationVariables = Exact<{
   fullname?: InputMaybe<Scalars['String']['input']>;
   bio?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['Upload']['input']>;
 }>;
 
@@ -883,8 +889,11 @@ export type GetPostByIdLazyQueryHookResult = ReturnType<typeof useGetPostByIdLaz
 export type GetPostByIdSuspenseQueryHookResult = ReturnType<typeof useGetPostByIdSuspenseQuery>;
 export type GetPostByIdQueryResult = Apollo.QueryResult<GetPostByIdQuery, GetPostByIdQueryVariables>;
 export const UpdateUserProfileDocument = gql`
-    mutation UpdateUserProfile($fullname: String, $bio: String, $image: Upload) {
-  updateUser(fullname: $fullname, bio: $bio, image: $image) {
+    mutation UpdateUserProfile($fullname: String, $bio: String, $email: String, $image: Upload) {
+  updateUser(
+    updateProfileInput: {fullname: $fullname, bio: $bio, email: $email}
+    image: $image
+  ) {
     id
     fullname
     bio
@@ -910,6 +919,7 @@ export type UpdateUserProfileMutationFn = Apollo.MutationFunction<UpdateUserProf
  *   variables: {
  *      fullname: // value for 'fullname'
  *      bio: // value for 'bio'
+ *      email: // value for 'email'
  *      image: // value for 'image'
  *   },
  * });

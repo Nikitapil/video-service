@@ -1,11 +1,16 @@
 import { PostType } from '../../../gql/graphql.ts';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BsFillBarChartFill } from 'react-icons/bs';
-import { FiAlertCircle } from 'react-icons/fi';
+import { getPostLink } from '../../../router/routes.ts';
+import { ImSpinner2 } from 'react-icons/im';
 
-const PostProfile = ({ post }: { post: PostType }) => {
+interface PostProfileProps {
+  post: PostType;
+}
+
+const PostProfile = ({ post }: PostProfileProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [loading, setLoading] = useState(true);
 
   const onMouseEnter = () => {
     videoRef.current?.play();
@@ -16,25 +21,27 @@ const PostProfile = ({ post }: { post: PostType }) => {
   };
 
   return (
-    <Link to={`/post/${post.id}`}>
-      <div className="relative brightness-90 hover:brightness-[1.1] cursor-pointer">
+    <Link to={getPostLink(post.id)}>
+      <div className="relative cursor-pointer brightness-90 hover:brightness-110">
+        {loading && (
+          <div className="absolute left-20 top-20">
+            <ImSpinner2
+              className="animate-spin"
+              size="50"
+            />
+          </div>
+        )}
+
         <video
           ref={videoRef}
-          src={`http://localhost:3000${post.video}`}
-          className="aspect-[3/4] object-cover rounded-md"
+          src={post.video}
+          className="aspect-[3/4] rounded-md object-cover"
           muted
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
+          onCanPlay={() => setLoading(false)}
         ></video>
-        <div className="px-1 text-gray-700 text-[15px] pt-1 break-words">{post.text}</div>
-        <div className="flex gap-2 items-center text-gray-600 font-bold text-xs">
-          <BsFillBarChartFill
-            className="ml-1"
-            size="16"
-          />
-          <div>3%</div>
-          <FiAlertCircle size="20" />
-        </div>
+        <div className="line-clamp-1 break-words px-1 pt-1 text-gray-700">{post.text}</div>
       </div>
     </Link>
   );

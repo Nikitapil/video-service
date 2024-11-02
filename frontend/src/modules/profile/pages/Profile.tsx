@@ -1,33 +1,42 @@
-import { useUserStore } from '../../shared/auth/stores/userStore.ts';
 import { useMemo } from 'react';
 import MainLayout from '../../../layouts/main/MainLayout.tsx';
-import { useQuery } from '@apollo/client';
-import { GET_POSTS_BY_USER_ID } from '../queries/GetPostsByUserId.ts';
 import { useParams } from 'react-router-dom';
-import { GetPostsByUserIdQuery, GetPostsByUserIdQueryVariables } from '../../../gql/graphql.ts';
 import { BsFillPencilFill } from 'react-icons/bs';
 import PostProfile from '../components/PostProfile.tsx';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
 import { useShowElement } from '../../../hooks/useShowElement.ts';
 import EditProfileModal from '../components/EditProfileModal.tsx';
+import { useGetUserProfileQuery } from '../../../gql/graphql.tsx';
+import { ImSpinner2 } from 'react-icons/im';
 
 const Profile = () => {
   const { id } = useParams();
   const pageUserId = useMemo(() => Number(id), [id]);
-  const user = useUserStore((state) => state.user);
 
   const editProfileModalElement = useShowElement();
 
-  const { data, loading, error } = useQuery<GetPostsByUserIdQuery, GetPostsByUserIdQueryVariables>(
-    GET_POSTS_BY_USER_ID,
-    {
-      variables: {
-        userId: pageUserId
-      }
+  const { data, loading } = useGetUserProfileQuery({
+    variables: {
+      userId: pageUserId
     }
-  );
+  });
 
-  if (!user) {
+  const profile = useMemo(() => {
+    return data?.getUserProfile;
+  }, [data?.getUserProfile]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <ImSpinner2
+          className="ml-1 animate-spin"
+          size="100"
+        />
+      </div>
+    );
+  }
+
+  if (!profile) {
     return null;
   }
 
@@ -36,13 +45,13 @@ const Profile = () => {
       <div className="max-w-full pl-[80px] pr-2 pt-[90px] lg:pr-0 2xl:mx-auto">
         <div className="flex">
           <UserAvatar
-            image={user.image}
+            image={profile.image}
             className="!h-24 !w-24 object-cover"
           />
 
           <div className="ml-5 w-full">
             <div className="truncate text-[30px] font-bold">User name</div>
-            <div className="truncate text-[18px]">{user.fullname}</div>
+            <div className="truncate text-[18px]">{profile.fullname}</div>
             <button
               className="mt-3 flex items-center rounded-md border px-3.5 py-1.5 text-[15px] font-semibold transition-all duration-300 hover:bg-gray-100"
               onClick={editProfileModalElement.open}
@@ -80,7 +89,7 @@ const Profile = () => {
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-          {data?.getPostsByUserId.map((post) => (
+          {data?.getUserProfile.posts.map((post) => (
             <PostProfile
               key={post.id}
               post={post}

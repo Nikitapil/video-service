@@ -114,6 +114,7 @@ type Query {
   getPostById(id: Int!): PostDetails!
   getPosts(search: String, skip: Int! = 0, take: Int! = 1): [PostType!]!
   getPostsByUserId(userId: Int!): [PostType!]!
+  getUserProfile(userId: Int!): UserProfileType!
   getUsers(getUsersInput: GetUsersDto): [User!]!
 }
 
@@ -163,4 +164,16 @@ type User {
   id: Int!
   image: String
   isFollowed: Boolean
+}
+
+type UserProfileType {
+  bio: String
+  canFollow: Boolean
+  email: String!
+  fullname: String!
+  id: Int!
+  image: String
+  isFollowed: Boolean
+  isMyProfile: Boolean!
+  posts: [PostType!]!
 }

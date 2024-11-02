@@ -1,3 +1,5 @@
+import { PostFromDb } from '../post/types';
+
 export interface ToggleUserFollowParams {
   currentUserId: number;
   userToFollowId: number;
@@ -20,4 +22,8 @@ export interface UserFromDb {
   email: string;
 
   followedBy?: Follow[];
+}
+
+export interface UserProfileFromDb extends UserFromDb {
+  posts: PostFromDb[];
 }

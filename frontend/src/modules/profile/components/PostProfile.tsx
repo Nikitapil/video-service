@@ -1,11 +1,12 @@
-import { PostType } from '../../../gql/graphql.ts';
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getPostLink } from '../../../router/routes.ts';
 import { ImSpinner2 } from 'react-icons/im';
+import { GetUserProfileQuery } from '../../../gql/graphql.tsx';
+import { ArrayElement } from '../../../utils/types.ts';
 
 interface PostProfileProps {
-  post: PostType;
+  post: ArrayElement<GetUserProfileQuery['getUserProfile']['posts']>;
 }
 
 const PostProfile = ({ post }: PostProfileProps) => {

@@ -15,6 +15,7 @@ import { GetUsersDto } from './dto/get-users.dto';
 import { ToggleFollowType } from './types/toggle-follow.type';
 import { User } from './types/user.type';
 import { UpdateProfileInputDto } from './dto/update-profile-input.dto';
+import { UserProfileType } from './types/user-profile.type';
 
 @UseFilters(GraphQlErrorFilter)
 @Resolver()
@@ -60,6 +61,15 @@ export class UserResolver {
     getUsersDto?: GetUsersDto
   ) {
     return this.userService.getUsers(context.req.user.sub, getUsersDto);
+  }
+
+  @UseGuards(GraphQLAuthGuard)
+  @Query(() => UserProfileType)
+  getUserProfile(
+    @Context() context: { req: Request },
+    @Args('userId', { type: () => Int }) userId?: number
+  ): Promise<UserProfileType> {
+    return this.userService.getUserProfile(userId, context.req.user.sub);
   }
 
   @UseGuards(GraphQLAuthGuard)

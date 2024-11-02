@@ -11,8 +11,13 @@ import { join } from 'path';
 import * as process from 'node:process';
 import { createWriteStream } from 'fs';
 import { GetUsersDto } from './dto/get-users.dto';
-import { safeUserSelect } from '../common/db-selects/safe-user-select';
+import {
+  getSafeUserSelectFull,
+  safeUserSelect
+} from '../common/db-selects/safe-user-select';
 import { ToggleUserFollowParams } from './types';
+import { getPostInclude } from '../common/db-selects/post-selects';
+import { UserProfileType } from './types/user-profile.type';
 @Injectable()
 export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
@@ -88,8 +93,6 @@ export class UserService {
       }
     });
 
-    console.log(userToFollow);
-
     if (!userToFollow) {
       throw new NotFoundException('User does not exist');
     }
@@ -114,5 +117,18 @@ export class UserService {
     });
 
     return { isFollowed: true };
+  }
+
+  async getUserProfile(userId: number, currentUserId: number) {
+    const profile = await this.prismaService.user.findUnique({
+      where: { id: userId },
+      select: {
+        ...getSafeUserSelectFull(currentUserId),
+        posts: {
+          include: getPostInclude(currentUserId)
+        }
+      }
+    });
+    return new UserProfileType({ profile, currentUserId });
   }
 }

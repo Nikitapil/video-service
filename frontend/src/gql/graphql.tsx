@@ -195,6 +195,7 @@ export type Query = {
   getPostById: PostDetails;
   getPosts: Array<PostType>;
   getPostsByUserId: Array<PostType>;
+  getUserProfile: UserProfileType;
   getUsers: Array<User>;
 };
 
@@ -222,6 +223,11 @@ export type QueryGetPostsArgs = {
 
 
 export type QueryGetPostsByUserIdArgs = {
+  userId: Scalars['Int']['input'];
+};
+
+
+export type QueryGetUserProfileArgs = {
   userId: Scalars['Int']['input'];
 };
 
@@ -279,6 +285,19 @@ export type User = {
   id: Scalars['Int']['output'];
   image?: Maybe<Scalars['String']['output']>;
   isFollowed?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type UserProfileType = {
+  __typename?: 'UserProfileType';
+  bio?: Maybe<Scalars['String']['output']>;
+  canFollow?: Maybe<Scalars['Boolean']['output']>;
+  email: Scalars['String']['output'];
+  fullname: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  image?: Maybe<Scalars['String']['output']>;
+  isFollowed?: Maybe<Scalars['Boolean']['output']>;
+  isMyProfile: Scalars['Boolean']['output'];
+  posts: Array<PostType>;
 };
 
 export type GetSuggestedUsersQueryVariables = Exact<{ [key: string]: never; }>;
@@ -360,12 +379,12 @@ export type UpdateUserProfileMutationVariables = Exact<{
 
 export type UpdateUserProfileMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, fullname: string, bio?: string | null, image?: string | null, email: string } };
 
-export type GetPostsByUserIdQueryVariables = Exact<{
+export type GetUserProfileQueryVariables = Exact<{
   userId: Scalars['Int']['input'];
 }>;
 
 
-export type GetPostsByUserIdQuery = { __typename?: 'Query', getPostsByUserId: Array<{ __typename?: 'PostType', id: number, text: string, video: string, createdAt: any, user: { __typename?: 'User', fullname: string, email: string, id: number } }> };
+export type GetUserProfileQuery = { __typename?: 'Query', getUserProfile: { __typename?: 'UserProfileType', id: number, fullname: string, bio?: string | null, image?: string | null, email: string, isFollowed?: boolean | null, canFollow?: boolean | null, isMyProfile: boolean, posts: Array<{ __typename?: 'PostType', id: number, text: string, video: string }> } };
 
 export type LoginUserMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -931,54 +950,58 @@ export function useUpdateUserProfileMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateUserProfileMutationHookResult = ReturnType<typeof useUpdateUserProfileMutation>;
 export type UpdateUserProfileMutationResult = Apollo.MutationResult<UpdateUserProfileMutation>;
 export type UpdateUserProfileMutationOptions = Apollo.BaseMutationOptions<UpdateUserProfileMutation, UpdateUserProfileMutationVariables>;
-export const GetPostsByUserIdDocument = gql`
-    query getPostsByUserId($userId: Int!) {
-  getPostsByUserId(userId: $userId) {
+export const GetUserProfileDocument = gql`
+    query getUserProfile($userId: Int!) {
+  getUserProfile(userId: $userId) {
     id
-    text
-    video
-    createdAt
-    user {
-      fullname
-      email
+    fullname
+    bio
+    image
+    email
+    isFollowed
+    canFollow
+    isMyProfile
+    posts {
       id
+      text
+      video
     }
   }
 }
     `;
 
 /**
- * __useGetPostsByUserIdQuery__
+ * __useGetUserProfileQuery__
  *
- * To run a query within a React component, call `useGetPostsByUserIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPostsByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetUserProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetPostsByUserIdQuery({
+ * const { data, loading, error } = useGetUserProfileQuery({
  *   variables: {
  *      userId: // value for 'userId'
  *   },
  * });
  */
-export function useGetPostsByUserIdQuery(baseOptions: Apollo.QueryHookOptions<GetPostsByUserIdQuery, GetPostsByUserIdQueryVariables> & ({ variables: GetPostsByUserIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useGetUserProfileQuery(baseOptions: Apollo.QueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables> & ({ variables: GetUserProfileQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetPostsByUserIdQuery, GetPostsByUserIdQueryVariables>(GetPostsByUserIdDocument, options);
+        return Apollo.useQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, options);
       }
-export function useGetPostsByUserIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostsByUserIdQuery, GetPostsByUserIdQueryVariables>) {
+export function useGetUserProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetPostsByUserIdQuery, GetPostsByUserIdQueryVariables>(GetPostsByUserIdDocument, options);
+          return Apollo.useLazyQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, options);
         }
-export function useGetPostsByUserIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPostsByUserIdQuery, GetPostsByUserIdQueryVariables>) {
+export function useGetUserProfileSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetPostsByUserIdQuery, GetPostsByUserIdQueryVariables>(GetPostsByUserIdDocument, options);
+          return Apollo.useSuspenseQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, options);
         }
-export type GetPostsByUserIdQueryHookResult = ReturnType<typeof useGetPostsByUserIdQuery>;
-export type GetPostsByUserIdLazyQueryHookResult = ReturnType<typeof useGetPostsByUserIdLazyQuery>;
-export type GetPostsByUserIdSuspenseQueryHookResult = ReturnType<typeof useGetPostsByUserIdSuspenseQuery>;
-export type GetPostsByUserIdQueryResult = Apollo.QueryResult<GetPostsByUserIdQuery, GetPostsByUserIdQueryVariables>;
+export type GetUserProfileQueryHookResult = ReturnType<typeof useGetUserProfileQuery>;
+export type GetUserProfileLazyQueryHookResult = ReturnType<typeof useGetUserProfileLazyQuery>;
+export type GetUserProfileSuspenseQueryHookResult = ReturnType<typeof useGetUserProfileSuspenseQuery>;
+export type GetUserProfileQueryResult = Apollo.QueryResult<GetUserProfileQuery, GetUserProfileQueryVariables>;
 export const LoginUserDocument = gql`
     mutation LoginUser($email: String!, $password: String!) {
   login(loginInput: {email: $email, password: $password}) {

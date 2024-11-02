@@ -1,17 +1,21 @@
-import {gql} from "@apollo/client";
+import { gql } from '@apollo/client';
 
-export const GET_POSTS_BY_USER_ID = gql`
-    query getPostsByUserId($userId: Int!) {
-        getPostsByUserId(userId: $userId) {
-            id
-            text
-            video
-            createdAt
-            user {
-                fullname
-                email
-                id
-            }
-        }
+export const GET_USER_PROFILE = gql`
+  query getUserProfile($userId: Int!) {
+    getUserProfile(userId: $userId) {
+      id
+      fullname
+      bio
+      image
+      email
+      isFollowed
+      canFollow
+      isMyProfile
+      posts {
+        id
+        text
+        video
+      }
     }
-`
+  }
+`;

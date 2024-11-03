@@ -24,6 +24,7 @@ import PostCommentsList from '../components/PostCommentsList.tsx';
 import AppInput from '../../../components/ui/inputs/AppInput.tsx';
 import AppButton from '../../../components/ui/AppButton.tsx';
 import AppForm from '../../../components/ui/AppForm.tsx';
+import NotFoundPage from '../../../components/NotFoundPage.tsx';
 
 const Post = () => {
   const { id } = useParams();
@@ -117,17 +118,7 @@ const Post = () => {
   }
 
   if (!dataPost?.getPostById) {
-    return (
-      <div className="absolute top-0 flex h-screen w-full flex-col items-center justify-center gap-4 bg-black">
-        <h2 className="text-3xl text-white">Post not found</h2>
-        <Link
-          className="block text-white common-transition hover:text-gray-400"
-          to={RoutesEnum.HOME}
-        >
-          Go back to home page
-        </Link>
-      </div>
-    );
+    return <NotFoundPage />;
   }
 
   return (

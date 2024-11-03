@@ -71,9 +71,11 @@ export const router = createBrowserRouter([
   {
     path: RoutesEnum.CHAT,
     element: (
-      <MainLayout>
-        <Chat />
-      </MainLayout>
+      <ProtectedRoutes>
+        <MainLayout>
+          <Chat />
+        </MainLayout>
+      </ProtectedRoutes>
     )
   }
 ]);

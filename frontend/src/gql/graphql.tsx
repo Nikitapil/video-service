@@ -192,9 +192,9 @@ export type Query = {
   getChat: ChatType;
   getChatList: Array<ChatListItemType>;
   getCommentsByPostId: Array<CommentType>;
+  getFavoriteUserPosts: Array<PostType>;
   getPostById: PostDetails;
   getPosts: Array<PostType>;
-  getPostsByUserId: Array<PostType>;
   getUserProfile: UserProfileType;
   getUsers: Array<User>;
 };
@@ -210,6 +210,11 @@ export type QueryGetCommentsByPostIdArgs = {
 };
 
 
+export type QueryGetFavoriteUserPostsArgs = {
+  userId: Scalars['Int']['input'];
+};
+
+
 export type QueryGetPostByIdArgs = {
   id: Scalars['Int']['input'];
 };
@@ -219,11 +224,6 @@ export type QueryGetPostsArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   skip?: Scalars['Int']['input'];
   take?: Scalars['Int']['input'];
-};
-
-
-export type QueryGetPostsByUserIdArgs = {
-  userId: Scalars['Int']['input'];
 };
 
 
@@ -380,6 +380,13 @@ export type UpdateUserProfileMutationVariables = Exact<{
 
 
 export type UpdateUserProfileMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, fullname: string, bio?: string | null, image?: string | null, email: string } };
+
+export type GetFavoriteUserPostsQueryVariables = Exact<{
+  userId: Scalars['Int']['input'];
+}>;
+
+
+export type GetFavoriteUserPostsQuery = { __typename?: 'Query', getFavoriteUserPosts: Array<{ __typename?: 'PostType', id: number, text: string, video: string }> };
 
 export type GetUserProfileQueryVariables = Exact<{
   userId: Scalars['Int']['input'];
@@ -952,6 +959,48 @@ export function useUpdateUserProfileMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateUserProfileMutationHookResult = ReturnType<typeof useUpdateUserProfileMutation>;
 export type UpdateUserProfileMutationResult = Apollo.MutationResult<UpdateUserProfileMutation>;
 export type UpdateUserProfileMutationOptions = Apollo.BaseMutationOptions<UpdateUserProfileMutation, UpdateUserProfileMutationVariables>;
+export const GetFavoriteUserPostsDocument = gql`
+    query getFavoriteUserPosts($userId: Int!) {
+  getFavoriteUserPosts(userId: $userId) {
+    id
+    text
+    video
+  }
+}
+    `;
+
+/**
+ * __useGetFavoriteUserPostsQuery__
+ *
+ * To run a query within a React component, call `useGetFavoriteUserPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFavoriteUserPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFavoriteUserPostsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetFavoriteUserPostsQuery(baseOptions: Apollo.QueryHookOptions<GetFavoriteUserPostsQuery, GetFavoriteUserPostsQueryVariables> & ({ variables: GetFavoriteUserPostsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFavoriteUserPostsQuery, GetFavoriteUserPostsQueryVariables>(GetFavoriteUserPostsDocument, options);
+      }
+export function useGetFavoriteUserPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFavoriteUserPostsQuery, GetFavoriteUserPostsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFavoriteUserPostsQuery, GetFavoriteUserPostsQueryVariables>(GetFavoriteUserPostsDocument, options);
+        }
+export function useGetFavoriteUserPostsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetFavoriteUserPostsQuery, GetFavoriteUserPostsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetFavoriteUserPostsQuery, GetFavoriteUserPostsQueryVariables>(GetFavoriteUserPostsDocument, options);
+        }
+export type GetFavoriteUserPostsQueryHookResult = ReturnType<typeof useGetFavoriteUserPostsQuery>;
+export type GetFavoriteUserPostsLazyQueryHookResult = ReturnType<typeof useGetFavoriteUserPostsLazyQuery>;
+export type GetFavoriteUserPostsSuspenseQueryHookResult = ReturnType<typeof useGetFavoriteUserPostsSuspenseQuery>;
+export type GetFavoriteUserPostsQueryResult = Apollo.QueryResult<GetFavoriteUserPostsQuery, GetFavoriteUserPostsQueryVariables>;
 export const GetUserProfileDocument = gql`
     query getUserProfile($userId: Int!) {
   getUserProfile(userId: $userId) {

@@ -61,10 +61,10 @@ export class PostResolver {
   }
 
   @Query(() => [PostType])
-  async getPostsByUserId(
+  async getFavoriteUserPosts(
     @Args('userId', { type: () => Int }) userId: number,
     @Context() context: { req: Request }
   ): Promise<PostType[]> {
-    return this.postService.getPostsByUserId(userId, context.req.user.sub);
+    return this.postService.getFavoriteUserPosts(userId, context.req.user.sub);
   }
 }

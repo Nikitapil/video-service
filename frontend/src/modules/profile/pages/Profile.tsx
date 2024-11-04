@@ -2,17 +2,17 @@ import { useMemo, useState } from 'react';
 import MainLayout from '../../../layouts/main/MainLayout.tsx';
 import { Link, useParams } from 'react-router-dom';
 import { BsFillPencilFill } from 'react-icons/bs';
-import PostProfile from '../components/PostProfile.tsx';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
 import { useShowElement } from '../../../hooks/useShowElement.ts';
 import EditProfileModal from '../components/EditProfileModal.tsx';
-import { useGetUserProfileQuery } from '../../../gql/graphql.tsx';
+import { useGetFavoriteUserPostsQuery, useGetUserProfileQuery } from '../../../gql/graphql.tsx';
 import { ImSpinner2 } from 'react-icons/im';
 import NotFoundPage from '../../../components/NotFoundPage.tsx';
 import AppButton from '../../../components/ui/AppButton.tsx';
 import FollowButton from '../../shared/follows/components/FollowButton.tsx';
 import { getUserFollowLink, UserFollowPagesTypesEnum } from '../../../router/routes.ts';
 import Tabs from '../../../components/ui/tabs/Tabs.tsx';
+import ProfilePostsList from '../components/ProfilePostsList.tsx';
 
 enum EProfileVideoTabs {
   VIDEOS = 'VIDEOS',
@@ -38,9 +38,23 @@ const Profile = () => {
     }
   });
 
+  const { data: favoritesPostsData, loading: isFavoritesPostsLoading } = useGetFavoriteUserPostsQuery({
+    variables: {
+      userId: pageUserId
+    }
+  });
+
   const profile = useMemo(() => {
     return data?.getUserProfile;
   }, [data?.getUserProfile]);
+
+  const posts = useMemo(() => {
+    return (activeTab === EProfileVideoTabs.VIDEOS ? profile?.posts : favoritesPostsData?.getFavoriteUserPosts) || [];
+  }, [activeTab, favoritesPostsData?.getFavoriteUserPosts, profile?.posts]);
+
+  const isPostsLoading = useMemo(() => {
+    return activeTab === EProfileVideoTabs.VIDEOS ? loading : isFavoritesPostsLoading;
+  }, [activeTab, isFavoritesPostsLoading, loading]);
 
   if (loading) {
     return (
@@ -105,15 +119,14 @@ const Profile = () => {
           setActiveTab={setActiveTab}
         />
 
-        <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-          {data?.getUserProfile.posts.map((post) => (
-            <PostProfile
-              key={post.id}
-              post={post}
-            />
-          ))}
+        <div className="mt-2">
+          <ProfilePostsList
+            posts={posts}
+            loading={isPostsLoading}
+          />
         </div>
       </div>
+
       <EditProfileModal showElement={editProfileModalElement} />
     </MainLayout>
   );

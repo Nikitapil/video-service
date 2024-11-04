@@ -111,9 +111,9 @@ type Query {
   getChat(chatId: String!): ChatType!
   getChatList: [ChatListItemType!]!
   getCommentsByPostId(postId: Int!): [CommentType!]!
+  getFavoriteUserPosts(userId: Int!): [PostType!]!
   getPostById(id: Int!): PostDetails!
   getPosts(search: String, skip: Int! = 0, take: Int! = 1): [PostType!]!
-  getPostsByUserId(userId: Int!): [PostType!]!
   getUserProfile(userId: Int!): UserProfileType!
   getUsers(getUsersInput: GetUsersDto): [User!]!
 }

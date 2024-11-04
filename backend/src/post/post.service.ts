@@ -108,12 +108,18 @@ export class PostService {
     return posts.map((post) => new PostType(post, currentUserId));
   }
 
-  async getPostsByUserId(
+  async getFavoriteUserPosts(
     userId: number,
     currentUserId: number
   ): Promise<PostType[]> {
     const posts = await this.prismaService.post.findMany({
-      where: { userId },
+      where: {
+        likes: {
+          some: {
+            userId
+          }
+        }
+      },
       include: getPostInclude(currentUserId)
     });
     return posts.map((post) => new PostType(post, currentUserId));

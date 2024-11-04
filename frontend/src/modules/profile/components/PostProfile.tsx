@@ -2,11 +2,10 @@ import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getPostLink } from '../../../router/routes.ts';
 import { ImSpinner2 } from 'react-icons/im';
-import { GetUserProfileQuery } from '../../../gql/graphql.tsx';
-import { ArrayElement } from '../../../utils/types.ts';
+import { IProfilePost } from '../types.ts';
 
 interface PostProfileProps {
-  post: ArrayElement<GetUserProfileQuery['getUserProfile']['posts']>;
+  post: IProfilePost;
 }
 
 const PostProfile = ({ post }: PostProfileProps) => {
@@ -23,7 +22,7 @@ const PostProfile = ({ post }: PostProfileProps) => {
 
   return (
     <Link to={getPostLink(post.id)}>
-      <div className="relative cursor-pointer brightness-90 hover:brightness-110">
+      <div className="relative max-w-52 cursor-pointer brightness-90 hover:brightness-110">
         {loading && (
           <div className="absolute left-20 top-20">
             <ImSpinner2

@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import MainLayout from '../../../layouts/main/MainLayout.tsx';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { BsFillPencilFill } from 'react-icons/bs';
 import PostProfile from '../components/PostProfile.tsx';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
@@ -11,8 +11,22 @@ import { ImSpinner2 } from 'react-icons/im';
 import NotFoundPage from '../../../components/NotFoundPage.tsx';
 import AppButton from '../../../components/ui/AppButton.tsx';
 import FollowButton from '../../shared/follows/components/FollowButton.tsx';
+import { getUserFollowLink, UserFollowPagesTypesEnum } from '../../../router/routes.ts';
+import Tabs from '../../../components/ui/tabs/Tabs.tsx';
+
+enum EProfileVideoTabs {
+  VIDEOS = 'VIDEOS',
+  LIKED = 'LIKED'
+}
+
+const tabs = [
+  { value: EProfileVideoTabs.VIDEOS, title: 'Videos' },
+  { value: EProfileVideoTabs.LIKED, title: 'Liked' }
+];
 
 const Profile = () => {
+  const [activeTab, setActiveTab] = useState(EProfileVideoTabs.VIDEOS);
+
   const { id } = useParams();
   const pageUserId = useMemo(() => Number(id), [id]);
 
@@ -46,7 +60,7 @@ const Profile = () => {
   return (
     <MainLayout>
       <div className="max-w-full py-10">
-        <div className="flex">
+        <section className="flex">
           <UserAvatar
             image={profile.image}
             className="!h-24 !w-24 object-cover"
@@ -69,27 +83,27 @@ const Profile = () => {
 
             <FollowButton user={profile} />
           </div>
-        </div>
+        </section>
 
-        <div className="flex items-center gap-3 pt-4">
-          <div>
+        <section className="flex items-center gap-3 pt-4">
+          <Link to={getUserFollowLink(UserFollowPagesTypesEnum.FOLLOWING, profile.id)}>
             <span className="font-bold">{profile.followingCount}</span>
             <span className="pl-1.5 text-sm font-light text-gray-500">Following</span>
-          </div>
+          </Link>
 
-          <div>
+          <Link to={getUserFollowLink(UserFollowPagesTypesEnum.FOLLOWERS, profile.id)}>
             <span className="font-bold">{profile.followersCount}</span>
             <span className="pl-1.5 text-sm font-light text-gray-500">Followers</span>
-          </div>
-        </div>
+          </Link>
+        </section>
 
-        <div className="mr-4 max-w-[500px] pt-5 text-[15px] font-light text-gray-500">This is the bio section</div>
+        <p className="my-4 font-light text-gray-500">{profile.bio}</p>
 
-        <div className="flex w-full items-center border-b pt-4">
-          <div className="flex-1 border-b-2 border-b-black py-5 text-center text-[17px] font-semibold">Videos</div>
-
-          <div className="flex-1 py-5 text-center text-[17px] font-semibold text-gray-500">Liked</div>
-        </div>
+        <Tabs
+          tabs={tabs}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
 
         <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
           {data?.getUserProfile.posts.map((post) => (

@@ -2,7 +2,7 @@ export enum RoutesEnum {
   UPLOAD = '/upload',
   HOME = '/',
   MESSAGES = '/messages',
-  USERS_FOLLOW = '/users/:type',
+  USERS_FOLLOW = '/users/:userId/:type',
   CHAT = '/messages/:id'
 }
 
@@ -19,7 +19,7 @@ export const getUsersSearchLink = (search: string) => {
   return `/users/?search=${search}`;
 };
 
-export const getUserFollowLink = (type: UserFollowPagesTypesEnum) => `/users/${type}`;
+export const getUserFollowLink = (type: UserFollowPagesTypesEnum, userId: number) => `/users/${userId}/${type}`;
 
 export const getPostLink = (id: number) => `/post/${id}`;
 

@@ -10,10 +10,12 @@ import { getUserFollowLink, RoutesEnum, UserFollowPagesTypesEnum } from '../../.
 import { ImSpinner2 } from 'react-icons/im';
 import { BsEnvelope } from 'react-icons/bs';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { useUserStore } from '../../../../modules/shared/auth/stores/userStore.ts';
 
 const SideNav = () => {
   const SHOWED_USERS_LIMIT = 3;
   const [showAllUsers, setShowAllUsers] = useState(false);
+  const user = useUserStore(state => state.user)
 
   const { data, loading } = useQuery<GetSuggestedUsersQuery>(GET_SUGGESTED_USERS, {});
 
@@ -36,13 +38,13 @@ const SideNav = () => {
         />
 
         <MenuItem
-          to={getUserFollowLink(UserFollowPagesTypesEnum.FOLLOWING)}
+          to={getUserFollowLink(UserFollowPagesTypesEnum.FOLLOWING, user?.id || 0)}
           Icon={BiGroup}
           text="Following"
         />
 
         <MenuItem
-          to={getUserFollowLink(UserFollowPagesTypesEnum.FOLLOWERS)}
+          to={getUserFollowLink(UserFollowPagesTypesEnum.FOLLOWERS, user?.id || 0)}
           Icon={BiSolidGroup}
           text="Followers"
         />

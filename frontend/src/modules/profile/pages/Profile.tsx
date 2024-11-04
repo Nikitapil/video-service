@@ -8,6 +8,9 @@ import { useShowElement } from '../../../hooks/useShowElement.ts';
 import EditProfileModal from '../components/EditProfileModal.tsx';
 import { useGetUserProfileQuery } from '../../../gql/graphql.tsx';
 import { ImSpinner2 } from 'react-icons/im';
+import NotFoundPage from '../../../components/NotFoundPage.tsx';
+import AppButton from '../../../components/ui/AppButton.tsx';
+import FollowButton from '../../shared/follows/components/FollowButton.tsx';
 
 const Profile = () => {
   const { id } = useParams();
@@ -37,46 +40,46 @@ const Profile = () => {
   }
 
   if (!profile) {
-    return null;
+    return <NotFoundPage text="Profile not found" />;
   }
 
   return (
     <MainLayout>
-      <div className="max-w-full pl-[80px] pr-2 pt-[90px] lg:pr-0 2xl:mx-auto">
+      <div className="max-w-full py-10">
         <div className="flex">
           <UserAvatar
             image={profile.image}
             className="!h-24 !w-24 object-cover"
           />
 
-          <div className="ml-5 w-full">
-            <div className="truncate text-[30px] font-bold">User name</div>
-            <div className="truncate text-[18px]">{profile.fullname}</div>
-            <button
-              className="mt-3 flex items-center rounded-md border px-3.5 py-1.5 text-[15px] font-semibold transition-all duration-300 hover:bg-gray-100"
-              onClick={editProfileModalElement.open}
-            >
-              <BsFillPencilFill
-                size="18"
-                className="mr-1 mt-0.5"
-              />
-              <div>Edit Profile</div>
-            </button>
-            <button className="mt-3 flex items-center rounded-md bg-[#f02c56] px-8 py-1.5 text-[15px] font-semibold text-white">
-              Follow
-            </button>
+          <div className="ml-5 flex w-full flex-col items-start gap-3">
+            <div className="text-3xl font-bold">{profile.fullname}</div>
+
+            {profile.isMyProfile && (
+              <AppButton onClick={editProfileModalElement.open}>
+                <div className="flex items-center gap-1">
+                  <BsFillPencilFill
+                    size="18"
+                    className="mr-1 mt-0.5"
+                  />
+                  <span>Edit Profile</span>
+                </div>
+              </AppButton>
+            )}
+
+            <FollowButton user={profile} />
           </div>
         </div>
 
-        <div className="flex items-center pt-4">
-          <div className="mr-4">
-            <span className="font-bold">10k</span>
-            <span className="pl-1.5 text-[15px] font-light text-gray-500">Following</span>
+        <div className="flex items-center gap-3 pt-4">
+          <div>
+            <span className="font-bold">{profile.followingCount}</span>
+            <span className="pl-1.5 text-sm font-light text-gray-500">Following</span>
           </div>
 
-          <div className="mr-4">
-            <span className="font-bold">10k</span>
-            <span className="pl-1.5 text-[15px] font-light text-gray-500">Followers</span>
+          <div>
+            <span className="font-bold">{profile.followersCount}</span>
+            <span className="pl-1.5 text-sm font-light text-gray-500">Followers</span>
           </div>
         </div>
 

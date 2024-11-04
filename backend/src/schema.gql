@@ -170,6 +170,8 @@ type UserProfileType {
   bio: String
   canFollow: Boolean
   email: String!
+  followersCount: Int!
+  followingCount: Int!
   fullname: String!
   id: Int!
   image: String

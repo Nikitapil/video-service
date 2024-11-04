@@ -292,6 +292,8 @@ export type UserProfileType = {
   bio?: Maybe<Scalars['String']['output']>;
   canFollow?: Maybe<Scalars['Boolean']['output']>;
   email: Scalars['String']['output'];
+  followersCount: Scalars['Int']['output'];
+  followingCount: Scalars['Int']['output'];
   fullname: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   image?: Maybe<Scalars['String']['output']>;
@@ -384,7 +386,7 @@ export type GetUserProfileQueryVariables = Exact<{
 }>;
 
 
-export type GetUserProfileQuery = { __typename?: 'Query', getUserProfile: { __typename?: 'UserProfileType', id: number, fullname: string, bio?: string | null, image?: string | null, email: string, isFollowed?: boolean | null, canFollow?: boolean | null, isMyProfile: boolean, posts: Array<{ __typename?: 'PostType', id: number, text: string, video: string }> } };
+export type GetUserProfileQuery = { __typename?: 'Query', getUserProfile: { __typename?: 'UserProfileType', id: number, fullname: string, bio?: string | null, image?: string | null, email: string, isFollowed?: boolean | null, canFollow?: boolean | null, isMyProfile: boolean, followersCount: number, followingCount: number, posts: Array<{ __typename?: 'PostType', id: number, text: string, video: string }> } };
 
 export type LoginUserMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -961,6 +963,8 @@ export const GetUserProfileDocument = gql`
     isFollowed
     canFollow
     isMyProfile
+    followersCount
+    followingCount
     posts {
       id
       text

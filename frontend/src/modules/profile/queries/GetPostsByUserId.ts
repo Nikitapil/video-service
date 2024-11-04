@@ -11,6 +11,8 @@ export const GET_USER_PROFILE = gql`
       isFollowed
       canFollow
       isMyProfile
+      followersCount
+      followingCount
       posts {
         id
         text

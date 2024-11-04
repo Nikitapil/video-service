@@ -118,7 +118,7 @@ const Post = () => {
   }
 
   if (!dataPost?.getPostById) {
-    return <NotFoundPage />;
+    return <NotFoundPage text="Post not found" />;
   }
 
   return (

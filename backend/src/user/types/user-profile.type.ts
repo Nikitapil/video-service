@@ -1,6 +1,6 @@
 import { User } from './user.type';
 import { UserProfileFromDb } from '../types';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { PostType } from '../../post/types/post.type';
 
 interface UserProfileTypeConstructorParameters {
@@ -16,6 +16,12 @@ export class UserProfileType extends User {
   @Field(() => Boolean)
   isMyProfile: boolean;
 
+  @Field(() => Int)
+  followersCount: number;
+
+  @Field(() => Int)
+  followingCount: number;
+
   constructor({
     profile,
     currentUserId
@@ -24,5 +30,7 @@ export class UserProfileType extends User {
 
     this.posts = profile.posts.map((post) => new PostType(post, currentUserId));
     this.isMyProfile = profile.id === currentUserId;
+    this.followersCount = profile._count.followedBy;
+    this.followingCount = profile._count.following;
   }
 }

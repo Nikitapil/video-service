@@ -126,6 +126,12 @@ export class UserService {
         ...getSafeUserSelectFull(currentUserId),
         posts: {
           include: getPostInclude(currentUserId)
+        },
+        _count: {
+          select: {
+            following: true,
+            followedBy: true
+          }
         }
       }
     });

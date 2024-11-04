@@ -3,13 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { IoChatbubbleEllipses } from 'react-icons/io5';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
 import { getPostLink, getProfileLink } from '../../../router/routes.ts';
-import AppButton from '../../../components/ui/AppButton.tsx';
-import { useFollows } from '../../shared/follows/useFollows.ts';
 import PostHashTags from '../../shared/components/PostHashTags.tsx';
 import PostAction from '../../shared/components/PostAction.tsx';
 import { useCallback } from 'react';
 import LikeButton from '../../shared/likes/components/LikeButton.tsx';
 import PostShareButton from '../../shared/components/PostShareButton.tsx';
+import FollowButton from '../../shared/follows/components/FollowButton.tsx';
 
 interface FeedPostProps {
   post: PostType;
@@ -18,8 +17,6 @@ interface FeedPostProps {
 
 const FeedPost = ({ post, onTagClick }: FeedPostProps) => {
   const navigate = useNavigate();
-
-  const { onToggleFollow, isLoading, followButtonText } = useFollows(post.user);
 
   const goToPost = useCallback(() => {
     navigate(getPostLink(post.id));
@@ -43,15 +40,7 @@ const FeedPost = ({ post, onTagClick }: FeedPostProps) => {
             <span className="cursor-pointer font-bold hover:underline">{post.user.fullname}</span>
           </Link>
 
-          {post.user.canFollow && (
-            <AppButton
-              appearance="danger"
-              isLoading={isLoading}
-              text={followButtonText}
-              size="sm"
-              onClick={onToggleFollow}
-            />
-          )}
+          <FollowButton user={post.user} />
         </div>
 
         <div className="max-w-md break-words pb-0.5 text-sm">{post.text}</div>

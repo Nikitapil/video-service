@@ -26,4 +26,8 @@ export interface UserFromDb {
 
 export interface UserProfileFromDb extends UserFromDb {
   posts: PostFromDb[];
+  _count: {
+    followedBy: number;
+    following: number;
+  };
 }

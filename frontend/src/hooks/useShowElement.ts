@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 
-export const useShowElement = () => {
-  const [isShowed, setIsShowed] = useState<boolean>(false);
+export const useShowElement = (initialShowed = false) => {
+  const [isShowed, setIsShowed] = useState<boolean>(initialShowed);
 
   const open = useCallback(() => {
     setIsShowed(true);

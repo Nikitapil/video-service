@@ -116,8 +116,10 @@ export class AuthService {
       data: {
         email: registerDto.email,
         fullname: registerDto.fullname,
-        password: hashedPassword
-      }
+        password: hashedPassword,
+        bio: registerDto.bio
+      },
+      select: safeUserSelect
     });
 
     return this.issueTokens(user, response);

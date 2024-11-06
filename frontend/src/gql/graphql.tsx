@@ -243,6 +243,7 @@ export type RefreshType = {
 };
 
 export type RegisterDto = {
+  bio?: InputMaybe<Scalars['String']['input']>;
   confirmPassword: Scalars['String']['input'];
   email: Scalars['String']['input'];
   fullname: Scalars['String']['input'];
@@ -401,7 +402,7 @@ export type LoginUserMutationVariables = Exact<{
 }>;
 
 
-export type LoginUserMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', user?: { __typename?: 'User', email: string, id: number, fullname: string, image?: string | null } | null } };
+export type LoginUserMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', user?: { __typename?: 'User', email: string, id: number, fullname: string, image?: string | null, bio?: string | null } | null } };
 
 export type LogoutUserMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -418,6 +419,7 @@ export type RegisterUserMutationVariables = Exact<{
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
   confirmPassword: Scalars['String']['input'];
+  bio?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -1063,6 +1065,7 @@ export const LoginUserDocument = gql`
       id
       fullname
       image
+      bio
     }
   }
 }
@@ -1164,9 +1167,9 @@ export type RefreshAuthMutationHookResult = ReturnType<typeof useRefreshAuthMuta
 export type RefreshAuthMutationResult = Apollo.MutationResult<RefreshAuthMutation>;
 export type RefreshAuthMutationOptions = Apollo.BaseMutationOptions<RefreshAuthMutation, RefreshAuthMutationVariables>;
 export const RegisterUserDocument = gql`
-    mutation RegisterUser($fullname: String!, $email: String!, $password: String!, $confirmPassword: String!) {
+    mutation RegisterUser($fullname: String!, $email: String!, $password: String!, $confirmPassword: String!, $bio: String) {
   register(
-    registerInput: {fullname: $fullname, email: $email, password: $password, confirmPassword: $confirmPassword}
+    registerInput: {fullname: $fullname, email: $email, password: $password, confirmPassword: $confirmPassword, bio: $bio}
   ) {
     user {
       id
@@ -1196,6 +1199,7 @@ export type RegisterUserMutationFn = Apollo.MutationFunction<RegisterUserMutatio
  *      email: // value for 'email'
  *      password: // value for 'password'
  *      confirmPassword: // value for 'confirmPassword'
+ *      bio: // value for 'bio'
  *   },
  * });
  */

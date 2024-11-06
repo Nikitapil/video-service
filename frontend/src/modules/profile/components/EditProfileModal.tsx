@@ -215,8 +215,6 @@ const EditProfileModal = ({ showElement }: EditProfileModalProps) => {
                   error={errors?.bio || ''}
                   onChange={(e) => setBio(e.target.value)}
                 ></AppTextarea>
-
-                <div className="text-right text-xs text-gray-500">{bio.length}/80</div>
               </div>
             </div>
           </section>

@@ -7,6 +7,7 @@ import { useLoginUserMutation, useRegisterUserMutation } from '../../../../gql/g
 import { useUserStore } from '../stores/userStore.ts';
 import AppInput from '../../../../components/ui/inputs/AppInput.tsx';
 import AppButton from '../../../../components/ui/AppButton.tsx';
+import AppTextarea from '../../../../components/ui/inputs/AppTextarea.tsx';
 
 const AuthModal = () => {
   const setUser = useUserStore((state) => state.setUser);
@@ -19,7 +20,8 @@ const AuthModal = () => {
     email: '',
     password: '',
     fullname: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    bio: ''
   });
 
   const [registerFn] = useRegisterUserMutation({
@@ -57,7 +59,8 @@ const AuthModal = () => {
       email: '',
       password: '',
       fullname: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      bio: ''
     });
   }, []);
 
@@ -89,7 +92,7 @@ const AuthModal = () => {
     }
   }, [loginFn, setUser]);
 
-  const inputChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+  const inputChangeHandler = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setAuthData((prev) => ({
       ...prev,
       [event.target.name]: event.target.value
@@ -166,6 +169,21 @@ const AuthModal = () => {
                 name="fullname"
                 onChange={inputChangeHandler}
               />
+            </div>
+
+            <div className="mb-3">
+              <AppTextarea
+                id="bio"
+                label="Bio"
+                placeholder="Bio..."
+                name="bio"
+                cols={30}
+                rows={2}
+                maxLength={80}
+                value={authData.bio}
+                error={(errors?.bio as string) || ''}
+                onChange={inputChangeHandler}
+              ></AppTextarea>
             </div>
           </>
         )}

@@ -124,6 +124,7 @@ type RefreshType {
 }
 
 input RegisterDto {
+  bio: String
   confirmPassword: String!
   email: String!
   fullname: String!

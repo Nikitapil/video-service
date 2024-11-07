@@ -11,6 +11,7 @@ import { getImageFileFromCanvas } from '../../../utils/files.ts';
 import Modal from '../../../components/ui/Modal.tsx';
 import AppTextarea from '../../../components/ui/inputs/AppTextarea.tsx';
 import AppButton from '../../../components/ui/AppButton.tsx';
+import AvatarUploader from '../../shared/components/AvatarUploader.tsx';
 
 interface EditProfileModalProps {
   showElement: ShowableElement;
@@ -22,6 +23,8 @@ const EditProfileModal = ({ showElement }: EditProfileModalProps) => {
 
   const [uploadedImage, setUploadedImage] = useState<string | undefined>();
   const [croppedImage, setCroppedImage] = useState<string | undefined>();
+
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
   const [username, setUsername] = useState<string>(user?.fullname || '');
   const [bio, setBio] = useState<string>(user?.bio ?? '');
@@ -111,8 +114,12 @@ const EditProfileModal = ({ showElement }: EditProfileModalProps) => {
     >
       <div className="relative pb-20">
         <h2 className="w-full border-b border-b-gray-300 py-4 text-2xl font-medium">Edit Profile</h2>
-
         <div className="max-h-[65vh] overflow-auto">
+          <AvatarUploader
+            initialImageSrc={imgSrc || ''}
+            loading={false}
+            setAvatarFile={setAvatarFile}
+          />
           <section className="flex w-full flex-col border-b py-4">
             <h3 className="mb-1.5 text-center font-semibold text-gray-700">Profile photo</h3>
 

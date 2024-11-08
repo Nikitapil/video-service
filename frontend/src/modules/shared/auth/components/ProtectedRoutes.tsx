@@ -3,7 +3,11 @@ import { useUserStore } from '../stores/userStore.ts';
 import AuthModal from './AuthModal.tsx';
 import { ImSpinner2 } from 'react-icons/im';
 
-const ProtectedRoutes = ({ children }: { children: ReactNode }) => {
+interface ProtectedRoutesProps {
+  children: ReactNode;
+}
+
+const ProtectedRoutes = ({ children }: ProtectedRoutesProps) => {
   const user = useUserStore((state) => state.user);
   const isLoading = useUserStore((state) => state.isAuthLoading);
 
@@ -13,7 +17,6 @@ const ProtectedRoutes = ({ children }: { children: ReactNode }) => {
         <ImSpinner2
           className="animate-spin"
           size="120"
-          color=""
         />
       </div>
     );

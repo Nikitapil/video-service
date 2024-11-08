@@ -74,7 +74,7 @@ type Mutation {
   logout: String!
   openChatMessages(chatId: String!): SuccessMessageType!
   refreshToken: RefreshType!
-  register(registerInput: RegisterDto!): RegisterResponse!
+  register(image: Upload, registerInput: RegisterDto!): RegisterResponse!
   toggleLikePost(postId: Int!): ToggleLike!
   toggleUserFollow(userToFollowId: Int!): ToggleFollowType!
   updateUser(image: Upload, updateProfileInput: UpdateProfileInputDto!): User!

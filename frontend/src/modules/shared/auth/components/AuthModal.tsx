@@ -8,6 +8,7 @@ import { useUserStore } from '../stores/userStore.ts';
 import AppInput from '../../../../components/ui/inputs/AppInput.tsx';
 import AppButton from '../../../../components/ui/AppButton.tsx';
 import AppTextarea from '../../../../components/ui/inputs/AppTextarea.tsx';
+import AvatarUploader from '../../components/AvatarUploader.tsx';
 
 const AuthModal = () => {
   const setUser = useUserStore((state) => state.setUser);
@@ -23,10 +24,12 @@ const AuthModal = () => {
     confirmPassword: '',
     bio: ''
   });
+  const [avatar, setAvatar] = useState<File | null>(null);
 
-  const [registerFn] = useRegisterUserMutation({
+  const [registerFn, { loading }] = useRegisterUserMutation({
     variables: {
-      ...authData
+      ...authData,
+      image: avatar
     }
   });
 
@@ -185,10 +188,16 @@ const AuthModal = () => {
                 onChange={inputChangeHandler}
               ></AppTextarea>
             </div>
+
+            <AvatarUploader
+              initialImageSrc=""
+              loading={loading}
+              setAvatarFile={setAvatar}
+            />
           </>
         )}
 
-        <div className="ml-auto w-fit">
+        <div className="ml-auto mt-2 w-fit">
           <AppButton
             disabled={isSubmitDisabled}
             appearance="danger"

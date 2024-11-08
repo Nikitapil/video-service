@@ -92,7 +92,7 @@ export class AuthService {
     return null;
   }
 
-  async register(registerDto: RegisterDto, response: Response) {
+  async register(registerDto: RegisterDto, response: Response, image?: string) {
     const existingUser = await this.prismaService.user.findUnique({
       where: { email: registerDto.email }
     });
@@ -117,7 +117,8 @@ export class AuthService {
         email: registerDto.email,
         fullname: registerDto.fullname,
         password: hashedPassword,
-        bio: registerDto.bio
+        bio: registerDto.bio,
+        image
       },
       select: safeUserSelect
     });

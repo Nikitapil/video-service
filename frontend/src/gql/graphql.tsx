@@ -139,6 +139,7 @@ export type MutationOpenChatMessagesArgs = {
 
 
 export type MutationRegisterArgs = {
+  image?: InputMaybe<Scalars['Upload']['input']>;
   registerInput: RegisterDto;
 };
 
@@ -420,6 +421,7 @@ export type RegisterUserMutationVariables = Exact<{
   password: Scalars['String']['input'];
   confirmPassword: Scalars['String']['input'];
   bio?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['Upload']['input']>;
 }>;
 
 
@@ -1167,9 +1169,10 @@ export type RefreshAuthMutationHookResult = ReturnType<typeof useRefreshAuthMuta
 export type RefreshAuthMutationResult = Apollo.MutationResult<RefreshAuthMutation>;
 export type RefreshAuthMutationOptions = Apollo.BaseMutationOptions<RefreshAuthMutation, RefreshAuthMutationVariables>;
 export const RegisterUserDocument = gql`
-    mutation RegisterUser($fullname: String!, $email: String!, $password: String!, $confirmPassword: String!, $bio: String) {
+    mutation RegisterUser($fullname: String!, $email: String!, $password: String!, $confirmPassword: String!, $bio: String, $image: Upload) {
   register(
     registerInput: {fullname: $fullname, email: $email, password: $password, confirmPassword: $confirmPassword, bio: $bio}
+    image: $image
   ) {
     user {
       id
@@ -1200,6 +1203,7 @@ export type RegisterUserMutationFn = Apollo.MutationFunction<RegisterUserMutatio
  *      password: // value for 'password'
  *      confirmPassword: // value for 'confirmPassword'
  *      bio: // value for 'bio'
+ *      image: // value for 'image'
  *   },
  * });
  */

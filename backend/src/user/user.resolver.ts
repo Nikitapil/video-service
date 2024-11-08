@@ -26,11 +26,18 @@ export class UserResolver {
   ) {}
 
   @Mutation(() => RegisterResponse)
-  register(
+  async register(
     @Args('registerInput') registerDto: RegisterDto,
-    @Context() context: { res: Response }
+    @Context() context: { res: Response },
+    @Args('image', { type: () => GraphQLUpload, nullable: true })
+    image?: FileUpload
   ): Promise<RegisterResponse> {
-    return this.authService.register(registerDto, context.res);
+    let imageUrl;
+    if (image) {
+      // TODO переделать на единый сервис по работе с файлами и вызывать это уже внутри других сервисов а не в контроллере
+      imageUrl = await this.userService.storeImageAndGetUrl(image);
+    }
+    return this.authService.register(registerDto, context.res, imageUrl);
   }
 
   @Mutation(() => LoginResponse)

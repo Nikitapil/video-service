@@ -7,6 +7,7 @@ export const REGISTER_USER = gql`
     $password: String!
     $confirmPassword: String!
     $bio: String
+    $image: Upload
   ) {
     register(
       registerInput: {
@@ -16,6 +17,7 @@ export const REGISTER_USER = gql`
         confirmPassword: $confirmPassword
         bio: $bio
       }
+      image: $image
     ) {
       user {
         id

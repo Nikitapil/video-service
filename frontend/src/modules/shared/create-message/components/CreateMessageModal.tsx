@@ -10,9 +10,14 @@ import AppButton from '../../../../components/ui/AppButton.tsx';
 import { useNavigate } from 'react-router-dom';
 import { getChatUrl } from '../../../../router/routes.ts';
 
+interface IUserTo {
+  id: number;
+  fullname: string;
+}
+
 interface CreateMessageModalProps {
   showElement: ShowableElement;
-  userTo?: { id: number; fullname: string } | null;
+  userTo?: IUserTo | null;
 }
 
 const CreateMessageModal = ({ showElement, userTo = null }: CreateMessageModalProps) => {

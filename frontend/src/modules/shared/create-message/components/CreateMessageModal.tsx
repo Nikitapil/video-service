@@ -12,20 +12,22 @@ import { getChatUrl } from '../../../../router/routes.ts';
 
 interface CreateMessageModalProps {
   showElement: ShowableElement;
+  userTo?: { id: number; fullname: string } | null;
 }
 
-const CreateMessageModal = ({ showElement }: CreateMessageModalProps) => {
+const CreateMessageModal = ({ showElement, userTo = null }: CreateMessageModalProps) => {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState<number | null>(null);
+  const [user, setUser] = useState<number | null>(userTo?.id || null);
   const [message, setMessage] = useState('');
 
   const [getUsers, { data }] = useSearchUsersLazyQuery();
   const [createMessage, { loading }] = useCreateMessageMutation();
 
   const usersOptions = useMemo(() => {
-    return data?.getUsers.map((item) => ({ value: item.id, text: item.fullname })) || [];
-  }, [data?.getUsers]);
+    const users = userTo ? [userTo] : data?.getUsers;
+    return users?.map((item) => ({ value: item.id, text: item.fullname })) || [];
+  }, [data?.getUsers, userTo]);
 
   const isCreateButtonDisabled = useMemo(() => loading || !user || !message, [loading, message, user]);
 
@@ -68,6 +70,7 @@ const CreateMessageModal = ({ showElement }: CreateMessageModalProps) => {
             value={user}
             setValue={setUser}
             options={usersOptions}
+            disabled={!!userTo}
             placeholder="Find user"
           />
         </div>

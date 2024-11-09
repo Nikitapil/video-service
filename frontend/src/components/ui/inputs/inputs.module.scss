@@ -1,5 +1,5 @@
 .input {
-  @apply block w-full rounded-md border border-gray-300 bg-indigo-50 resize-none px-3 py-2.5 text-gray-900 outline-none common-transition focus:bg-white
+  @apply block w-full rounded-md border border-gray-300 bg-indigo-50 resize-none px-3 py-2.5 text-gray-900 outline-none common-transition focus:bg-white disabled:bg-gray-200 disabled:cursor-not-allowed
 }
 
 .error {

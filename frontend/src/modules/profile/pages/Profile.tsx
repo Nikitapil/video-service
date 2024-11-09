@@ -13,6 +13,7 @@ import FollowButton from '../../shared/follows/components/FollowButton.tsx';
 import { getUserFollowLink, UserFollowPagesTypesEnum } from '../../../router/routes.ts';
 import Tabs from '../../../components/ui/tabs/Tabs.tsx';
 import ProfilePostsList from '../components/ProfilePostsList.tsx';
+import CreateMessageModal from '../../shared/create-message/components/CreateMessageModal.tsx';
 
 enum EProfileVideoTabs {
   VIDEOS = 'VIDEOS',
@@ -31,6 +32,7 @@ const Profile = () => {
   const pageUserId = useMemo(() => Number(id), [id]);
 
   const editProfileModalElement = useShowElement();
+  const createMessageModalElement = useShowElement();
 
   const { data, loading } = useGetUserProfileQuery({
     variables: {
@@ -96,6 +98,21 @@ const Profile = () => {
             )}
 
             <FollowButton user={profile} />
+
+            {profile.canSendMessage && (
+              <>
+                <AppButton
+                  text="Send Message"
+                  size="sm"
+                  onClick={createMessageModalElement.open}
+                />
+
+                <CreateMessageModal
+                  showElement={createMessageModalElement}
+                  userTo={profile}
+                />
+              </>
+            )}
           </div>
         </section>
 

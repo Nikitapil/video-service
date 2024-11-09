@@ -160,6 +160,7 @@ scalar Upload
 type User {
   bio: String
   canFollow: Boolean
+  canSendMessage: Boolean
   email: String!
   fullname: String!
   id: Int!
@@ -170,6 +171,7 @@ type User {
 type UserProfileType {
   bio: String
   canFollow: Boolean
+  canSendMessage: Boolean
   email: String!
   followersCount: Int!
   followingCount: Int!

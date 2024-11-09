@@ -10,6 +10,7 @@ export const GET_USER_PROFILE = gql`
       email
       isFollowed
       canFollow
+      canSendMessage
       isMyProfile
       followersCount
       followingCount

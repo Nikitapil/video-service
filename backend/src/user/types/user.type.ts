@@ -24,6 +24,9 @@ export class User {
   @Field(() => Boolean, { nullable: true })
   canFollow?: boolean;
 
+  @Field(() => Boolean, { nullable: true })
+  canSendMessage?: boolean;
+
   constructor(userFromDb: UserFromDb, currentUserId: number) {
     this.id = userFromDb.id;
     this.fullname = userFromDb.fullname;
@@ -32,5 +35,6 @@ export class User {
     this.email = userFromDb.email;
     this.isFollowed = !!userFromDb?.followedBy.length;
     this.canFollow = currentUserId !== userFromDb.id;
+    this.canSendMessage = currentUserId !== userFromDb.id;
   }
 }

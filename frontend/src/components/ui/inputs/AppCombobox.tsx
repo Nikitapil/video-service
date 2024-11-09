@@ -14,6 +14,7 @@ interface AppComboboxProps<T extends string | number> {
   setValue: (value: T | null) => void;
   options: IAppComboboxOption<T>[];
   placeholder?: string;
+  disabled?: boolean;
 }
 
 const AppCombobox = <T extends string | number>({
@@ -21,6 +22,7 @@ const AppCombobox = <T extends string | number>({
   setValue,
   options,
   value,
+  disabled,
   placeholder = ''
 }: AppComboboxProps<T>) => {
   const [inputValue, setInputValue] = useState('');
@@ -57,6 +59,7 @@ const AppCombobox = <T extends string | number>({
         onChange={changeHandler}
         onFocus={open}
         placeholder={placeholder}
+        disabled={disabled}
       />
 
       {isShowed && !!options.length && (

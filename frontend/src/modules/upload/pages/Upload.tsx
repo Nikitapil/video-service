@@ -1,8 +1,7 @@
 import UploadLayout from '../../../layouts/UploadLayout.tsx';
-import { ChangeEvent, DragEvent, useEffect, useState } from 'react';
+import { ChangeEvent, DragEvent, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { CREATE_POST } from '../mutations/CreatePost.ts';
-import UploadError from '../components/UploadError.tsx';
 import { FiUploadCloud } from 'react-icons/fi';
 import mobileCase from '../../../assets/images/mobile-case.png';
 import { IoCheckmarkDoneCircleOutline } from 'react-icons/io5';
@@ -17,7 +16,6 @@ const Upload = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [caption, setCaption] = useState('');
   const [tags, setTags] = useState<string>('');
-  const [errorType, setErrorType] = useState<string | null>(null);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -41,11 +39,10 @@ const Upload = () => {
 
   const onDrop = (e: DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
-    setErrorType(null);
     setFileData(e.dataTransfer.files[0]);
     const extension = e.dataTransfer.files[0]?.name.split('.').pop();
     if (extension !== 'mp4') {
-      setErrorType('file');
+      // TODO Показывать тут как-нибудь ошибку что нельзя грузить файлы других форматов
       return;
     }
 
@@ -74,18 +71,8 @@ const Upload = () => {
     }
   };
 
-  useEffect(() => {
-    if (caption.length === 150) {
-      setErrorType('caption');
-      return;
-    }
-
-    setErrorType(null);
-  }, [caption]);
-
   return (
     <>
-      <UploadError errorType={errorType} />
       <UploadLayout>
         <div className="mb-[40px] mt-[80px] w-full rounded-md bg-white px-4 py-6 shadow-lg md:px-10">
           <div>

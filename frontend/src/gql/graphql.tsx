@@ -465,7 +465,7 @@ export type CreatePostMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'PostType', id: number, text: string, video: string } };
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'PostType', id: number } };
 
 export type GetUsersQueryVariables = Exact<{
   search?: InputMaybe<Scalars['String']['input']>;
@@ -1365,8 +1365,6 @@ export const CreatePostDocument = gql`
     mutation CreatePost($text: String!, $video: Upload!, $tags: String) {
   createPost(text: $text, video: $video, tags: $tags) {
     id
-    text
-    video
   }
 }
     `;

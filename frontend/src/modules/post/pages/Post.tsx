@@ -13,7 +13,7 @@ import {
   useGetCommentsByPostIdQuery,
   useGetPostByIdQuery
 } from '../../../gql/graphql.tsx';
-import { getPostLink, getProfileLink, RoutesEnum } from '../../../router/routes.ts';
+import { getPostLink, getPostSearchLink, getProfileLink, RoutesEnum } from '../../../router/routes.ts';
 
 import styles from './post.module.scss';
 import { formatDate } from '../../../utils/dates.ts';
@@ -25,6 +25,7 @@ import AppInput from '../../../components/ui/inputs/AppInput.tsx';
 import AppButton from '../../../components/ui/AppButton.tsx';
 import AppForm from '../../../components/ui/AppForm.tsx';
 import NotFoundPage from '../../../components/NotFoundPage.tsx';
+import PostHashTags from '../../shared/components/PostHashTags.tsx';
 
 const Post = () => {
   const { id } = useParams();
@@ -105,6 +106,10 @@ const Post = () => {
     navigate(RoutesEnum.HOME);
   };
 
+  const searchByHashTag = (tag: string) => {
+    navigate(getPostSearchLink(tag));
+  };
+
   if (loading) {
     return (
       <div className="absolute top-0 flex h-screen w-full items-center justify-center bg-black">
@@ -167,35 +172,42 @@ const Post = () => {
       </section>
 
       <section className="relative flex h-full w-full flex-col bg-white lg:max-w-140">
-        <div className="flex items-center justify-between p-8">
-          <div className="flex items-center gap-3">
-            <Link to={getProfileLink(dataPost.getPostById.user.id)}>
-              <UserAvatar
-                image={dataPost.getPostById.user.image}
-                className="!w-10"
-              />
-            </Link>
+        <div className="p-8">
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Link to={getProfileLink(dataPost.getPostById.user.id)}>
+                <UserAvatar
+                  image={dataPost.getPostById.user.image}
+                  className="!w-10"
+                />
+              </Link>
 
-            <div className="pt-0.5">
-              <h3 className="text-lg font-semibold">{dataPost?.getPostById.user.fullname}</h3>
-              <time className="text-sm font-medium">{postCreatedDate}</time>
+              <div className="pt-0.5">
+                <h3 className="text-lg font-semibold">{dataPost?.getPostById.user.fullname}</h3>
+                <time className="text-sm font-medium">{postCreatedDate}</time>
+              </div>
             </div>
+
+            {dataPost.getPostById.canDelete && (
+              <IconButton
+                Icon={MdOutlineDeleteForever}
+                onClick={confirmDeletePostModal.open}
+              />
+            )}
           </div>
 
-          {dataPost.getPostById.canDelete && (
-            <IconButton
-              Icon={MdOutlineDeleteForever}
-              onClick={confirmDeletePostModal.open}
-            />
-          )}
-        </div>
+          <p className="text-sm">{dataPost.getPostById.text}</p>
 
-        <div className="px-8 text-sm">{dataPost.getPostById.text}</div>
+          <PostHashTags
+            tags={dataPost.getPostById.tags}
+            onTagClick={searchByHashTag}
+          />
 
-        <div className="mb-4 mt-8 flex items-center gap-4 px-8">
-          <LikeButton post={dataPost.getPostById} />
+          <div className="mt-4 flex items-center gap-4">
+            <LikeButton post={dataPost.getPostById} />
 
-          <PostShareButton text={dataPost.getPostById.text} />
+            <PostShareButton text={dataPost.getPostById.text} />
+          </div>
         </div>
 
         <div className="w-full flex-1 overflow-auto border-t-2 bg-gray-100 pb-28">

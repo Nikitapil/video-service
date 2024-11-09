@@ -7,6 +7,7 @@ export const GET_POST_BY_ID = gql`
       text
       video
       createdAt
+      tags
       user {
         id
         email

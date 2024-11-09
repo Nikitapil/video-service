@@ -316,7 +316,7 @@ export type GetPostsQueryVariables = Exact<{
 }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'PostType', id: number, text: string, video: string, createdAt: any, tags: Array<string>, isLiked?: boolean | null, likesCount?: number | null, commentsCount?: number | null, user: { __typename?: 'User', id: number, fullname: string, email: string, image?: string | null, isFollowed?: boolean | null, canFollow?: boolean | null } }> };
+export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'PostType', id: number, text: string, video: string, createdAt: any, tags: Array<string>, isLiked?: boolean | null, likesCount?: number | null, commentsCount?: number | null, canDelete: boolean, user: { __typename?: 'User', id: number, fullname: string, email: string, image?: string | null, isFollowed?: boolean | null, canFollow?: boolean | null } }> };
 
 export type OpenMessagesMutationVariables = Exact<{
   chatId: Scalars['String']['input'];
@@ -371,7 +371,7 @@ export type GetPostByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetPostByIdQuery = { __typename?: 'Query', getPostById: { __typename?: 'PostDetails', id: number, text: string, video: string, createdAt: any, isLiked?: boolean | null, likesCount?: number | null, otherPostIds?: Array<number> | null, canDelete: boolean, user: { __typename?: 'User', id: number, email: string, fullname: string, image?: string | null } } };
+export type GetPostByIdQuery = { __typename?: 'Query', getPostById: { __typename?: 'PostDetails', id: number, text: string, video: string, createdAt: any, tags: Array<string>, isLiked?: boolean | null, likesCount?: number | null, otherPostIds?: Array<number> | null, canDelete: boolean, user: { __typename?: 'User', id: number, email: string, fullname: string, image?: string | null } } };
 
 export type UpdateUserProfileMutationVariables = Exact<{
   fullname?: InputMaybe<Scalars['String']['input']>;
@@ -532,6 +532,7 @@ export const GetPostsDocument = gql`
     isLiked
     likesCount
     commentsCount
+    canDelete
     user {
       id
       fullname
@@ -874,6 +875,7 @@ export const GetPostByIdDocument = gql`
     text
     video
     createdAt
+    tags
     user {
       id
       email

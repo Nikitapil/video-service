@@ -13,6 +13,7 @@ interface AvatarUploaderProps {
 
 const AvatarUploader = ({ initialImageSrc, loading, setAvatarFile }: AvatarUploaderProps) => {
   const cropperRef = useRef<ReactCropperElement>(null);
+
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
 

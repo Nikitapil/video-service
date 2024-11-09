@@ -19,6 +19,10 @@ export const getUsersSearchLink = (search: string) => {
   return `/users/?search=${search}`;
 };
 
+export const getPostSearchLink = (search: string) => {
+  return `/?searchPost=${search}`;
+};
+
 export const getUserFollowLink = (type: UserFollowPagesTypesEnum, userId: number) => `/users/${userId}/${type}`;
 
 export const getPostLink = (id: number) => `/post/${id}`;

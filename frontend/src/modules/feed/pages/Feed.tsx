@@ -7,14 +7,17 @@ import AppButton from '../../../components/ui/AppButton.tsx';
 import { RiSendPlane2Fill } from 'react-icons/ri';
 import { useGetPostsQuery } from '../../../gql/graphql.tsx';
 import AppForm from '../../../components/ui/AppForm.tsx';
+import { useSearchParams } from 'react-router-dom';
 
 const Feed = () => {
-  const [search, setSearch] = useState('');
+  const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState<string>(searchParams.get('searchPost') || '');
 
   const { data, fetchMore, refetch, loading } = useGetPostsQuery({
     variables: {
       skip: 0,
-      take: 2
+      take: 2,
+      search: search
     }
   });
 

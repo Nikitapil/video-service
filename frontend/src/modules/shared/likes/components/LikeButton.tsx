@@ -8,7 +8,7 @@ interface LikeButtonProps {
 }
 
 const LikeButton = ({ post }: LikeButtonProps) => {
-  const [isLiked, setIsLiked] = useState(!!post.isLiked || false);
+  const [isLiked, setIsLiked] = useState(!!post.isLiked);
   const [likesCount, setLikesCount] = useState(post.likesCount || 0);
 
   const [toggleLike] = useLikePostMutation({

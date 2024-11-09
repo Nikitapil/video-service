@@ -1,6 +1,6 @@
 import AppButton from '../../../../components/ui/AppButton.tsx';
 import { User, UserProfileType, useToggleUserFollowMutation } from '../../../../gql/graphql.tsx';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 interface FollowButtonProps {
   user: User | Omit<UserProfileType, 'posts'>;
@@ -8,7 +8,7 @@ interface FollowButtonProps {
 
 const FollowButton = ({ user }: FollowButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isFollowed, setIsFollowed] = useState(false);
+  const [isFollowed, setIsFollowed] = useState(!!user.isFollowed);
 
   const [toggleFollow] = useToggleUserFollowMutation();
 
@@ -24,10 +24,6 @@ const FollowButton = ({ user }: FollowButtonProps) => {
     setIsFollowed(!!data?.toggleUserFollow?.isFollowed);
     setIsLoading(false);
   }, [toggleFollow, user]);
-
-  useEffect(() => {
-    setIsFollowed(!!user.isFollowed);
-  }, [user.isFollowed]);
 
   if (!user.canFollow) {
     return null;

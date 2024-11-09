@@ -88,8 +88,11 @@ export class UserService {
     const userToFollow = await this.prismaService.user.findUnique({
       where: { id: userToFollowId },
       include: {
-        following: true,
-        followedBy: true
+        followedBy: {
+          where: {
+            followedById: currentUserId
+          }
+        }
       }
     });
 

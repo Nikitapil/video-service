@@ -2,12 +2,12 @@ import UploadLayout from '../../../layouts/UploadLayout.tsx';
 import { ChangeEvent, DragEvent, useMemo, useState } from 'react';
 import { FiUploadCloud } from 'react-icons/fi';
 import mobileCase from '../../../assets/images/mobile-case.png';
-import { IoCheckmarkDoneCircleOutline } from 'react-icons/io5';
-import { GiBoxCutter } from 'react-icons/gi';
+import { GiBoxCutter, GiCheckMark } from 'react-icons/gi';
 import AppInput from '../../../components/ui/inputs/AppInput.tsx';
 import { useCreatePostMutation } from '../../../gql/graphql.tsx';
 import { useNavigate } from 'react-router-dom';
 import { getPostLink } from '../../../router/routes.ts';
+import AppButton from '../../../components/ui/AppButton.tsx';
 
 const Upload = () => {
   const navigate = useNavigate();
@@ -23,7 +23,11 @@ const Upload = () => {
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFileData(e.target.files[0]);
+      const file = e.target.files[0];
+      const sizeInGb = file.size / 1024 / 1024 / 1024;
+      if (sizeInGb < 2) {
+        setFileData(e.target.files[0]);
+      }
     }
   };
 
@@ -69,31 +73,31 @@ const Upload = () => {
 
       <div className="mt-1 text-gray-400">Post a video to your account</div>
 
-      <div className="mt-8 gap-6 md:flex">
+      <div className="mt-6 gap-6 md:flex">
         {!fileDisplay && (
           <label
             htmlFor="fileInput"
-            className="mx-auto mb-6 mt-4 flex h-[470px] w-full max-w-[260px] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-3 text-center hover:bg-gray-100 md:mx-0"
+            className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 px-9 py-20 common-transition hover:bg-gray-100"
             onDragOver={(e) => e.preventDefault()}
             onDragEnter={(e) => e.preventDefault()}
             onDrop={onDrop}
           >
             <FiUploadCloud
+              className="text-gray-500"
               size={50}
-              color="#b3b3b1"
             />
 
-            <div className="mt-4 text-[17px]">Select a video to upload</div>
+            <p className="mt-4 text-lg">Select a video to upload</p>
 
-            <div className="mt-1.5 text-[13px] text-gray-500">Or drag and drop a file</div>
+            <p className="mt-1.5 text-sm text-gray-500">Or drag and drop a file</p>
 
-            <div className="mt-12 text-sm text-gray-400">MP4</div>
+            <p className="mt-12 text-sm text-gray-400">MP4</p>
 
-            <div className="mt-2 text-[13px] text-gray-400">Up to 30 minutes</div>
+            <p className="mt-2 text-sm text-gray-400">Up to 30 minutes</p>
 
-            <div className="mt-2 text-[13px] text-gray-400">Less than 2 GB</div>
+            <p className="mt-2 text-sm text-gray-400">Less than 2 GB</p>
 
-            <div className="mt-8 w-[80%] bg-[#f02c56] px-2 py-1.5 text-[15px] text-white">Select file</div>
+            <div className="mt-8 w-full rounded-md bg-red-500 px-2 py-1.5 text-center text-white">Select file</div>
 
             <input
               type="file"
@@ -108,39 +112,39 @@ const Upload = () => {
 
         {fileDisplay && (
           <>
-            <div className="relative mx-auto mb-16 mt-4 flex h-[540px] w-full max-w-[260px] cursor-pointer items-center justify-center rounded-2xl p-3 md:mx-0 md:mb-12">
-              <div className="h-full w-full bg-black" />
-              <img
-                src={mobileCase}
-                alt="mobile case"
-                className="pointer-events-none absolute z-20"
-              />
+            <figure className="mx-auto p-3 md:mx-0 md:mb-12">
+              <div className="relative mb-2 h-140 w-64 cursor-pointer rounded-2xl">
+                <img
+                  src={mobileCase}
+                  alt="mobile case"
+                  className="pointer-events-none relative z-20 h-full"
+                />
 
-              <video
-                src={fileDisplay}
-                autoPlay
-                loop
-                muted
-                controls
-                className="absolute z-10 h-full w-full rounded-xl object-cover p-[13px]"
-              />
+                <video
+                  src={fileDisplay}
+                  autoPlay
+                  loop
+                  muted
+                  controls
+                  className="absolute top-0 z-10 h-full w-full rounded-xl object-cover p-[13px]"
+                />
+              </div>
 
-              <div className="absolute -bottom-12 z-50 flex w-full items-center justify-between rounded-xl border border-gray-300 p-2">
+              <figcaption className="flex w-full items-center justify-between rounded-xl border border-gray-300 p-2">
                 <div className="flex justify-between truncate">
-                  <IoCheckmarkDoneCircleOutline
-                    size="16"
-                    className="min-w-[16px]"
-                  />
-                  <div className="truncate text-ellipsis pl-1 text-[11px]">{fileData?.name}</div>
+                  <GiCheckMark size="16" />
+                  <p className="ml-1 truncate text-ellipsis text-xs">{fileData?.name}</p>
                 </div>
-                <button
-                  className="text-[11px]"
+
+                <AppButton
+                  appearance="transparentDanger"
+                  size="sm"
                   onClick={clearVideo}
                 >
                   Clear
-                </button>
-              </div>
-            </div>
+                </AppButton>
+              </figcaption>
+            </figure>
 
             <div className="mb-6 mt-4">
               <div className="flex bg-[#f8f8f8] px-6 py-4">

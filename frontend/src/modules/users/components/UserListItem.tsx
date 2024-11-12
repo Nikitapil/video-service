@@ -20,6 +20,7 @@ const UserListItem = ({ user }: UserListItemProps) => {
 
       <div>
         <h3 className="text-lg font-semibold">{user.fullname}</h3>
+
         <p className="max-w-80 overflow-hidden text-ellipsis whitespace-nowrap text-gray-600">{user.bio}</p>
       </div>
     </Link>

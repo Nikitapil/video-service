@@ -11,9 +11,8 @@ const UsersList = ({ users, isLoading }: UsersListProps) => {
     return (
       <div className="flex w-full items-center justify-center p-5">
         <ImSpinner2
-          className="ml-1 animate-spin"
+          className="animate-spin"
           size="100"
-          color=""
         />
       </div>
     );

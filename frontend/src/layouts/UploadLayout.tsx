@@ -3,7 +3,7 @@ import { ReactChildrenProps } from '../utils/types.ts';
 
 const UploadLayout = ({ children }: ReactChildrenProps) => {
   return (
-    <div className="bg-gray-100">
+    <div className="min-h-screen bg-gray-100">
       <AppHeader />
 
       <div className="px-4 py-20">

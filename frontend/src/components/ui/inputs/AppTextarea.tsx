@@ -20,7 +20,11 @@ const AppTextarea = ({ placeholder, error, value, name, maxLength, label, id, ..
         {...otherProps}
         className={styles.input}
       />
-      {maxLength && <div className="text-right text-xs text-gray-500">{value.length}/80</div>}
+      {maxLength && (
+        <div className="text-right text-xs text-gray-500">
+          {value.length}/{maxLength}
+        </div>
+      )}
       {error && <span className={styles.error}>{error}</span>}
     </div>
   );

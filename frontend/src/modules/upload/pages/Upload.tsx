@@ -2,7 +2,7 @@ import UploadLayout from '../../../layouts/UploadLayout.tsx';
 import { ChangeEvent, DragEvent, useMemo, useState } from 'react';
 import { FiUploadCloud } from 'react-icons/fi';
 import mobileCase from '../../../assets/images/mobile-case.png';
-import { GiBoxCutter, GiCheckMark } from 'react-icons/gi';
+import { GiCheckMark } from 'react-icons/gi';
 import AppInput from '../../../components/ui/inputs/AppInput.tsx';
 import { useCreatePostMutation } from '../../../gql/graphql.tsx';
 import { useNavigate } from 'react-router-dom';
@@ -146,42 +146,22 @@ const Upload = () => {
               </figcaption>
             </figure>
 
-            <div className="mb-6 mt-4">
-              <div className="flex bg-[#f8f8f8] px-6 py-4">
-                <GiBoxCutter
-                  className="mr-4"
-                  size="20"
-                />
-
-                <div>
-                  <div className="mb-1.5 text-[15px] font-semibold">Divide videos and edit</div>
-
-                  <div className="text-[13px] font-semibold text-gray-400">
-                    You can quickly divide videos into multiple clips ad edit them.
-                  </div>
-                </div>
-
-                <div className="my-auto flex h-full w-full max-w-[130px] justify-end text-center">
-                  <button className="rounded-sm bg-[#f02c56] px-8 py-1.5 text-[15px] text-white">Edit</button>
-                </div>
-              </div>
-
-              <div className="mt-5">
-                <div className="mb-1 text-[15px]">Caption</div>
-                <div className="text-[12px] text-gray-400">{caption.length}</div>
-              </div>
-
-              <input
-                className="w-full rounded-md border p-2.5 focus:outline-none"
+            <div className="mb-6 mt-4 w-full">
+              <AppInput
+                id="caption"
+                label="Caption:"
+                placeholder="Caption..."
                 type="text"
-                maxLength={150}
+                max={150}
                 value={caption}
                 disabled={isUploading}
                 onChange={(e) => setCaption(e.target.value)}
               />
 
-              <div className="mt-3">
+              <div className="mb-4">
                 <AppInput
+                  id="tags"
+                  label="Tags:"
                   placeholder="Put some tags here"
                   value={tags}
                   disabled={isUploading}
@@ -189,22 +169,21 @@ const Upload = () => {
                 />
               </div>
 
-              <div className="flex gap-3">
-                <button
-                  className="mt-8 rounded-sm border px-10 py-2.5 text-[16px] transition-all duration-300 hover:bg-gray-100"
+              <div className="ml-auto flex w-fit gap-3">
+                <AppButton
                   disabled={isUploading}
                   onClick={discard}
                 >
                   Discard
-                </button>
+                </AppButton>
 
-                <button
-                  className="mt-8 rounded-sm border bg-[#f02c56] px-10 py-2.5 text-[16px] text-white"
+                <AppButton
+                  appearance="danger"
                   disabled={isUploading}
                   onClick={handleCreatePost}
                 >
                   Post
-                </button>
+                </AppButton>
               </div>
             </div>
           </>

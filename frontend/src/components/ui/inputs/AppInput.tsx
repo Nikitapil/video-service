@@ -5,6 +5,7 @@ interface AppInputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   max?: number;
   label?: string;
+  value?: string;
 }
 
 const AppInput = ({
@@ -35,6 +36,11 @@ const AppInput = ({
         {...otherProps}
         className={styles.input}
       />
+      {max && (
+        <div className="text-right text-xs text-gray-500">
+          {value?.length}/{max}
+        </div>
+      )}
       {error && <span className={styles.error}>{error}</span>}
     </div>
   );

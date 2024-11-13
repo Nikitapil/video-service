@@ -11,37 +11,55 @@ import { join } from 'path';
 import * as process from 'node:process';
 import { createWriteStream } from 'fs';
 import { GetUsersDto } from './dto/get-users.dto';
-import {
-  getSafeUserSelectFull,
-  safeUserSelect
-} from '../common/db-selects/safe-user-select';
+import { getSafeUserSelectFull } from '../common/db-selects/safe-user-select';
 import { ToggleUserFollowParams } from './types';
 import { getPostInclude } from '../common/db-selects/post-selects';
 import { UserProfileType } from './types/user-profile.type';
+import { Prisma } from '@prisma/client';
+import { User } from './types/user.type';
 @Injectable()
 export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
 
   // TODO filter private user fields and not return posts
-  getUsers(currentUserId: number, dto?: GetUsersDto) {
+  async getUsers(currentUserId: number, dto?: GetUsersDto) {
     const { search } = dto || {};
-    return this.prismaService.user.findMany({
-      where: {
-        fullname: {
-          contains: search || '',
-          mode: 'insensitive'
-        },
-        id: {
-          not: currentUserId
-        }
+
+    const where: Prisma.UserWhereInput = {
+      fullname: {
+        contains: search || '',
+        mode: 'insensitive'
       },
+      id: {
+        not: currentUserId
+      }
+    };
+
+    if (dto.userFollowers) {
+      where.following = {
+        some: {
+          followingId: currentUserId
+        }
+      };
+    } else if (dto.userFollowTo) {
+      where.followedBy = {
+        some: {
+          followedById: currentUserId
+        }
+      };
+    }
+
+    const users = await this.prismaService.user.findMany({
+      where,
       orderBy: {
         createdAt: 'desc'
       },
       take: dto.take,
       skip: dto.skip,
-      select: safeUserSelect
+      select: getSafeUserSelectFull(currentUserId)
     });
+
+    return users.map((user) => new User(user, currentUserId));
   }
 
   async updateProfile(userId: number, data: UpdateProfileDto) {

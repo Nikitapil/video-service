@@ -42,6 +42,8 @@ input GetUsersDto {
   search: String
   skip: Float
   take: Float
+  userFollowTo: Boolean
+  userFollowers: Boolean
 }
 
 input LoginDto {

@@ -25,26 +25,28 @@ export class UserService {
   async getUsers(currentUserId: number, dto?: GetUsersDto) {
     const { search } = dto || {};
 
+    const userFollowId = dto.userFollowers || dto.userFollowTo;
+
     const where: Prisma.UserWhereInput = {
       fullname: {
         contains: search || '',
         mode: 'insensitive'
       },
       id: {
-        not: currentUserId
+        not: userFollowId || currentUserId
       }
     };
 
     if (dto.userFollowers) {
       where.following = {
         some: {
-          followingId: currentUserId
+          followingId: dto.userFollowers
         }
       };
     } else if (dto.userFollowTo) {
       where.followedBy = {
         some: {
-          followedById: currentUserId
+          followedById: dto.userFollowTo
         }
       };
     }

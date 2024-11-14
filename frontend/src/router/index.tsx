@@ -13,7 +13,7 @@ import MainLayout from '../layouts/main/MainLayout.tsx';
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: RoutesEnum.HOME,
     element: (
       <ProtectedRoutes>
         <Feed />
@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
     )
   },
   {
-    path: '/upload',
+    path: RoutesEnum.UPLOAD,
     element: (
       <ProtectedRoutes>
         <Upload />
@@ -29,7 +29,7 @@ export const router = createBrowserRouter([
     )
   },
   {
-    path: '/profile/:id',
+    path: RoutesEnum.PROFILE,
     element: (
       <ProtectedRoutes>
         <Profile />
@@ -37,7 +37,7 @@ export const router = createBrowserRouter([
     )
   },
   {
-    path: '/post/:id',
+    path: RoutesEnum.POST,
     element: (
       <ProtectedRoutes>
         <Post />
@@ -45,7 +45,7 @@ export const router = createBrowserRouter([
     )
   },
   {
-    path: '/users',
+    path: RoutesEnum.USERS,
     element: (
       <ProtectedRoutes>
         <UsersPage />

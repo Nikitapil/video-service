@@ -3,7 +3,10 @@ export enum RoutesEnum {
   HOME = '/',
   MESSAGES = '/messages',
   USERS_FOLLOW = '/users/:userId/:type',
-  CHAT = '/messages/:id'
+  CHAT = '/messages/:id',
+  PROFILE = '/profile/:id',
+  POST = '/post/:id',
+  USERS = '/users'
 }
 
 export enum UserFollowPagesTypesEnum {

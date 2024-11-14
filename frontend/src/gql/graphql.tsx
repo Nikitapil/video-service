@@ -58,8 +58,8 @@ export type GetUsersDto = {
   search?: InputMaybe<Scalars['String']['input']>;
   skip?: InputMaybe<Scalars['Float']['input']>;
   take?: InputMaybe<Scalars['Float']['input']>;
-  userFollowTo?: InputMaybe<Scalars['Boolean']['input']>;
-  userFollowers?: InputMaybe<Scalars['Boolean']['input']>;
+  userFollowTo?: InputMaybe<Scalars['Int']['input']>;
+  userFollowers?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type LoginDto = {
@@ -471,8 +471,8 @@ export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __type
 
 export type GetUsersQueryVariables = Exact<{
   search?: InputMaybe<Scalars['String']['input']>;
-  userFollowers?: InputMaybe<Scalars['Boolean']['input']>;
-  userFollowTo?: InputMaybe<Scalars['Boolean']['input']>;
+  userFollowers?: InputMaybe<Scalars['Int']['input']>;
+  userFollowTo?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
@@ -1401,7 +1401,7 @@ export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutati
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
 export const GetUsersDocument = gql`
-    query GetUsers($search: String, $userFollowers: Boolean, $userFollowTo: Boolean) {
+    query GetUsers($search: String, $userFollowers: Int, $userFollowTo: Int) {
   getUsers(
     getUsersInput: {search: $search, userFollowers: $userFollowers, userFollowTo: $userFollowTo}
   ) {

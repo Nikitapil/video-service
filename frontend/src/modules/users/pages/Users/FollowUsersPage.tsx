@@ -6,12 +6,12 @@ import { UserFollowPagesTypesEnum } from '../../../../router/routes.ts';
 import { useGetUsersQuery } from '../../../../gql/graphql.tsx';
 
 const FollowUsersPage = () => {
-  const { type } = useParams<{ type: UserFollowPagesTypesEnum }>();
+  const { type, userId = 0 } = useParams<{ type: UserFollowPagesTypesEnum; userId: string }>();
 
   const { data, loading } = useGetUsersQuery({
     variables: {
-      userFollowers: type === UserFollowPagesTypesEnum.FOLLOWERS,
-      userFollowTo: type === UserFollowPagesTypesEnum.FOLLOWING
+      userFollowers: type === UserFollowPagesTypesEnum.FOLLOWERS ? +userId : null,
+      userFollowTo: type === UserFollowPagesTypesEnum.FOLLOWING ? +userId : null
     }
   });
 

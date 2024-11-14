@@ -1,5 +1,5 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
+import { Field, InputType, Int } from '@nestjs/graphql';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 
 @InputType()
@@ -9,13 +9,13 @@ export class GetUsersDto extends PaginationDto {
   @IsOptional()
   search?: string;
 
-  @Field(() => Boolean, { nullable: true })
-  @IsBoolean()
+  @Field(() => Int, { nullable: true })
+  @IsInt()
   @IsOptional()
-  userFollowers?: boolean;
+  userFollowers?: number;
 
-  @Field(() => Boolean, { nullable: true })
-  @IsBoolean()
+  @Field(() => Int, { nullable: true })
+  @IsInt()
   @IsOptional()
-  userFollowTo?: boolean;
+  userFollowTo?: number;
 }

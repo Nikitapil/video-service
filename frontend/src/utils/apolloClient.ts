@@ -1,4 +1,12 @@
-import { ApolloClient, ApolloLink, gql, InMemoryCache, NormalizedCacheObject, Observable } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloLink,
+  DefaultContext,
+  gql,
+  InMemoryCache,
+  NormalizedCacheObject,
+  Observable
+} from '@apollo/client';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { onError } from '@apollo/client/link/error';
 
@@ -39,8 +47,7 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
         return new Observable((observer) => {
           refreshToken(client)
             .then((token) => {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              operation.setContext((previousContext: any) => ({
+              operation.setContext((previousContext: DefaultContext) => ({
                 headers: {
                   ...previousContext.headers,
                   authorization: token
@@ -55,9 +62,9 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
     }
   }
 });
-//TODO move all urls to env
+
 const uploadLink = createUploadLink({
-  uri: 'http://localhost:3000/graphql',
+  uri: `${import.meta.env.VITE_APP_BACKEND_BASE_URL}/graphql`,
   credentials: 'include',
   headers: {
     'apollo-require-preflight': 'true'
@@ -65,7 +72,7 @@ const uploadLink = createUploadLink({
 });
 
 export const client = new ApolloClient({
-  uri: 'http://localhost:3000/graphql',
+  uri: `${import.meta.env.VITE_APP_BACKEND_BASE_URL}/graphql`,
   cache: new InMemoryCache({
     typePolicies: {
       Query: {

@@ -5,7 +5,10 @@ const config: CodegenConfig = {
   documents: ['src/**/**/*.ts'],
   generates: {
     './src/gql/graphql.tsx': {
-      plugins: ['typescript', 'typescript-operations', 'typescript-react-apollo']
+      plugins: ['typescript', 'typescript-operations', 'typescript-react-apollo'],
+      config: {
+        skipTypename: true
+      }
     }
   }
 };

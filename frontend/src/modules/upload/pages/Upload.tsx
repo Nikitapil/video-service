@@ -126,7 +126,7 @@ const Upload = () => {
                   loop
                   muted
                   controls
-                  className="absolute top-0 z-10 h-full w-full rounded-xl object-cover p-[13px]"
+                  className="absolute top-0 z-10 h-full w-full rounded-xl object-cover p-3"
                 />
               </div>
 

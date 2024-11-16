@@ -1,6 +1,4 @@
 import { useUserStore } from '../../../modules/shared/auth/stores/userStore.ts';
-import { useMutation } from '@apollo/client';
-import { LOGOUT_USER } from '../../../modules/shared/auth/mutations/Logout.ts';
 import { Link } from 'react-router-dom';
 import { AiOutlineUpload } from 'react-icons/ai';
 import { BsFillPersonFill } from 'react-icons/bs';
@@ -14,6 +12,7 @@ import styles from './styles.module.scss';
 import SearchUsersForm from './SearchUsersForm.tsx';
 import { useShowElement } from '../../../hooks/useShowElement.ts';
 import ConfirmModal from '../../../components/ux/ConfirmModal.tsx';
+import { useLogoutUserMutation } from '../../../gql/graphql.tsx';
 
 const AppHeader = () => {
   const menu = useShowElement();
@@ -25,7 +24,7 @@ const AppHeader = () => {
 
   const { ref: menuRef } = useClickOutside<HTMLDivElement>(() => menu.close());
 
-  const [logoutUser] = useMutation(LOGOUT_USER);
+  const [logoutUser] = useLogoutUserMutation();
 
   const handleLogout = async () => {
     setIsAuthLoading(true);

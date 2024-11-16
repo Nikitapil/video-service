@@ -1,7 +1,4 @@
-import { useQuery } from '@apollo/client';
-import { GET_SUGGESTED_USERS } from './queries/GetSuggestedUsers.ts';
 import { useMemo, useState } from 'react';
-import { GetSuggestedUsersQuery } from '../../../../gql/graphql.ts';
 import MenuItem from './MenuItem.tsx';
 import { AiFillHome } from 'react-icons/ai';
 import { BiGroup, BiSolidGroup } from 'react-icons/bi';
@@ -11,13 +8,14 @@ import { ImSpinner2 } from 'react-icons/im';
 import { BsEnvelope } from 'react-icons/bs';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { useUserStore } from '../../../../modules/shared/auth/stores/userStore.ts';
+import { useGetSuggestedUsersQuery } from '../../../../gql/graphql.tsx';
 
 const SideNav = () => {
   const SHOWED_USERS_LIMIT = 3;
   const [showAllUsers, setShowAllUsers] = useState(false);
-  const user = useUserStore(state => state.user)
+  const user = useUserStore((state) => state.user);
 
-  const { data, loading } = useQuery<GetSuggestedUsersQuery>(GET_SUGGESTED_USERS, {});
+  const { data, loading } = useGetSuggestedUsersQuery();
 
   const displayedUsers = useMemo(() => {
     return showAllUsers ? data?.getUsers : data?.getUsers.slice(0, SHOWED_USERS_LIMIT);

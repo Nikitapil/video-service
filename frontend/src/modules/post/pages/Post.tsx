@@ -21,11 +21,11 @@ import ConfirmModal from '../../../components/ux/ConfirmModal.tsx';
 import { useShowElement } from '../../../hooks/useShowElement.ts';
 import IconButton from '../../../components/ui/IconButton.tsx';
 import PostCommentsList from '../components/PostCommentsList.tsx';
-import AppInput from '../../../components/ui/inputs/AppInput.tsx';
 import AppButton from '../../../components/ui/AppButton.tsx';
 import AppForm from '../../../components/ui/AppForm.tsx';
 import NotFoundPage from '../../../components/NotFoundPage.tsx';
 import PostHashTags from '../../shared/components/PostHashTags.tsx';
+import AppTextarea from '../../../components/ui/inputs/AppTextarea.tsx';
 
 const Post = () => {
   const { id } = useParams();
@@ -219,7 +219,7 @@ const Post = () => {
 
         <AppForm className="absolute bottom-0 flex w-full items-center justify-between gap-3 border-t-2 bg-white px-8 py-5">
           <div className="flex-1">
-            <AppInput
+            <AppTextarea
               placeholder="Add a comment..."
               value={comment}
               onChange={(e) => setComment(e.target.value)}

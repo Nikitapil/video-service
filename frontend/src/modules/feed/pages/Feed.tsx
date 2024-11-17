@@ -1,4 +1,3 @@
-import MainLayout from '../../../layouts/main/MainLayout.tsx';
 import FeedPost from '../components/FeedPost.tsx';
 import { useCallback, useState } from 'react';
 import Observer from '../../../components/Observer.tsx';
@@ -56,38 +55,36 @@ const Feed = () => {
   }, [data?.getPosts.length, fetchMore, search]);
 
   return (
-    <MainLayout>
-      <div className="mx-auto max-w-screen-md py-4">
-        <AppForm
-          className="flex gap-2"
-          onSubmit={onSubmitSearchForm}
-        >
-          <div className="flex-1">
-            <AppInput
-              placeholder="Search posts..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
-
-          <AppButton type="submit">
-            <RiSendPlane2Fill size="20" />
-          </AppButton>
-        </AppForm>
-
-        {!data?.getPosts.length && !loading && <p className="text-center text-xl font-semibold">Posts Not Found</p>}
-
-        {data?.getPosts.map((post) => (
-          <FeedPost
-            key={post.id}
-            post={post}
-            onTagClick={onSearchByTag}
+    <div className="mx-auto max-w-screen-md py-4">
+      <AppForm
+        className="flex gap-2"
+        onSubmit={onSubmitSearchForm}
+      >
+        <div className="flex-1">
+          <AppInput
+            placeholder="Search posts..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
-        ))}
+        </div>
 
-        {(data?.getPosts.length || 0) > 1 && <Observer callback={loadMorePosts} />}
-      </div>
-    </MainLayout>
+        <AppButton type="submit">
+          <RiSendPlane2Fill size="20" />
+        </AppButton>
+      </AppForm>
+
+      {!data?.getPosts.length && !loading && <p className="text-center text-xl font-semibold">Posts Not Found</p>}
+
+      {data?.getPosts.map((post) => (
+        <FeedPost
+          key={post.id}
+          post={post}
+          onTagClick={onSearchByTag}
+        />
+      ))}
+
+      {(data?.getPosts.length || 0) > 1 && <Observer callback={loadMorePosts} />}
+    </div>
   );
 };
 

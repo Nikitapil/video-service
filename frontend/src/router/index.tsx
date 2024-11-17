@@ -16,9 +16,35 @@ export const router = createBrowserRouter([
     path: RoutesEnum.HOME,
     element: (
       <ProtectedRoutes>
-        <Feed />
+        <MainLayout />
       </ProtectedRoutes>
-    )
+    ),
+    children: [
+      {
+        index: true,
+        element: <Feed />
+      },
+      {
+        path: RoutesEnum.PROFILE,
+        element: <Profile />
+      },
+      {
+        path: RoutesEnum.USERS,
+        element: <UsersPage />
+      },
+      {
+        path: RoutesEnum.MESSAGES,
+        element: <Chats />
+      },
+      {
+        path: RoutesEnum.USERS_FOLLOW,
+        element: <FollowUsersPage />
+      },
+      {
+        path: RoutesEnum.CHAT,
+        element: <Chat />
+      }
+    ]
   },
   {
     path: RoutesEnum.UPLOAD,
@@ -29,52 +55,10 @@ export const router = createBrowserRouter([
     )
   },
   {
-    path: RoutesEnum.PROFILE,
-    element: (
-      <ProtectedRoutes>
-        <Profile />
-      </ProtectedRoutes>
-    )
-  },
-  {
     path: RoutesEnum.POST,
     element: (
       <ProtectedRoutes>
         <Post />
-      </ProtectedRoutes>
-    )
-  },
-  {
-    path: RoutesEnum.USERS,
-    element: (
-      <ProtectedRoutes>
-        <UsersPage />
-      </ProtectedRoutes>
-    )
-  },
-  {
-    path: RoutesEnum.MESSAGES,
-    element: (
-      <ProtectedRoutes>
-        <Chats />
-      </ProtectedRoutes>
-    )
-  },
-  {
-    path: RoutesEnum.USERS_FOLLOW,
-    element: (
-      <ProtectedRoutes>
-        <FollowUsersPage />
-      </ProtectedRoutes>
-    )
-  },
-  {
-    path: RoutesEnum.CHAT,
-    element: (
-      <ProtectedRoutes>
-        <MainLayout>
-          <Chat />
-        </MainLayout>
       </ProtectedRoutes>
     )
   }

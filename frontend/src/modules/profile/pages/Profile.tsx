@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import MainLayout from '../../../layouts/main/MainLayout.tsx';
 import { Link, useParams } from 'react-router-dom';
 import { BsFillPencilFill } from 'react-icons/bs';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
@@ -74,7 +73,7 @@ const Profile = () => {
   }
 
   return (
-    <MainLayout>
+    <>
       <div className="max-w-full py-10">
         <section className="flex">
           <UserAvatar
@@ -145,7 +144,7 @@ const Profile = () => {
       </div>
 
       <EditProfileModal showElement={editProfileModalElement} />
-    </MainLayout>
+    </>
   );
 };
 

@@ -1,4 +1,3 @@
-import MainLayout from '../../../../layouts/main/MainLayout.tsx';
 import UsersList from '../../components/UsersList.tsx';
 import { useParams } from 'react-router-dom';
 import { useMemo } from 'react';
@@ -24,15 +23,13 @@ const FollowUsersPage = () => {
   }, [type]);
 
   return (
-    <MainLayout>
-      <div className="py-3">
-        <h2 className="text-center text-xl font-semibold">{title}</h2>
-        <UsersList
-          isLoading={loading}
-          users={users}
-        />
-      </div>
-    </MainLayout>
+    <div className="py-3">
+      <h2 className="text-center text-xl font-semibold">{title}</h2>
+      <UsersList
+        isLoading={loading}
+        users={users}
+      />
+    </div>
   );
 };
 

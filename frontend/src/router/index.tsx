@@ -10,10 +10,12 @@ import Chats from '../modules/messages/pages/Chats.tsx';
 import FollowUsersPage from '../modules/users/pages/Users/FollowUsersPage.tsx';
 import Chat from '../modules/messages/pages/Chat.tsx';
 import MainLayout from '../layouts/main/MainLayout.tsx';
+import NotFoundPage from '../components/NotFoundPage.tsx';
 
 export const router = createBrowserRouter([
   {
     path: RoutesEnum.HOME,
+    errorElement: <NotFoundPage text="Page not found" />,
     element: (
       <ProtectedRoutes>
         <MainLayout />

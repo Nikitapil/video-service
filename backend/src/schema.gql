@@ -40,8 +40,8 @@ type ErrorType {
 
 input GetUsersDto {
   search: String
-  skip: Float
-  take: Float
+  skip: Int
+  take: Int
   userFollowTo: Int
   userFollowers: Int
 }

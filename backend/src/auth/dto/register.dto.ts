@@ -15,7 +15,7 @@ export class RegisterDto {
   fullname: string;
 
   @Field(() => String, { nullable: true })
-  @IsString({ message: 'Fullname must be a string' })
+  @IsString({ message: 'Bio must be a string' })
   @IsOptional()
   bio?: string;
 

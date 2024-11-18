@@ -1,43 +1,20 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import { Request } from 'express';
+import { ExecutionContext, Injectable } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Reflector } from '@nestjs/core';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
-export class GraphQLAuthGuard implements CanActivate {
-  constructor(
-    private readonly jwtService: JwtService,
-    private configService: ConfigService
-  ) {}
-
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const gqlCtx = context.getArgByIndex(2);
-    const request = gqlCtx.req;
-
-    const token = this.extractTokenFromCookie(request);
-
-    if (!token) {
-      throw new UnauthorizedException('Unauthorized');
-    }
-
-    try {
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: this.configService.get('ACCESS_TOKEN_SECRET')
-      });
-      request.user = payload;
-
-      return true;
-    } catch (e) {
-      throw new UnauthorizedException();
-    }
+export class GraphQLAuthGuard extends AuthGuard('jwt') {
+  constructor(private reflector: Reflector) {
+    super();
   }
 
-  extractTokenFromCookie(request: Request) {
-    return request.cookies?.access_token;
+  getRequest(context: ExecutionContext) {
+    const ctx = GqlExecutionContext.create(context);
+    return ctx.getContext().req;
+  }
+
+  canActivate(context: ExecutionContext) {
+    return super.canActivate(context);
   }
 }

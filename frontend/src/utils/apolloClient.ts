@@ -9,6 +9,7 @@ import {
 } from '@apollo/client';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { onError } from '@apollo/client/link/error';
+import { setContext } from '@apollo/client/link/context';
 
 const refreshToken = async (client: ApolloClient<NormalizedCacheObject>) => {
   try {
@@ -71,6 +72,16 @@ const uploadLink = createUploadLink({
   }
 });
 
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('accessToken');
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : ''
+    }
+  };
+});
+
 export const client = new ApolloClient({
   uri: `${import.meta.env.VITE_APP_BACKEND_BASE_URL}/graphql`,
   cache: new InMemoryCache({
@@ -88,9 +99,10 @@ export const client = new ApolloClient({
   }),
   credentials: 'include',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    authorization: `Bearer ${localStorage.getItem('accessToken')}`
   },
-  link: ApolloLink.from([errorLink, uploadLink]),
+  link: ApolloLink.from([authLink, errorLink, uploadLink]),
   defaultOptions: {
     watchQuery: {
       fetchPolicy: 'no-cache'

@@ -6,6 +6,7 @@ import {
   IsString,
   MinLength
 } from 'class-validator';
+import { IsMatch } from '../../common/validators/MatchValidator';
 
 @InputType()
 export class RegisterDto {
@@ -27,6 +28,8 @@ export class RegisterDto {
 
   @Field(() => String)
   @IsNotEmpty({ message: 'Confirm password is required' })
+  @IsString({ message: 'Confirm password must be a string' })
+  @IsMatch('password', { message: 'Confirm password should match password' })
   confirmPassword: string;
 
   @Field(() => String)

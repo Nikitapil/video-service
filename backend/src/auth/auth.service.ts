@@ -123,7 +123,7 @@ export class AuthService {
     const user = await this.validateUser(loginDto);
     if (!user) {
       throw new BadRequestException({
-        invalidCredentials: 'Invalid credentials'
+        password: 'Invalid credentials'
       });
     }
     return this.issueTokens(user, response);

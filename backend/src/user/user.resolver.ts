@@ -5,7 +5,7 @@ import { RegisterResponse } from '../auth/types/RegisterResponse';
 import { RegisterDto } from '../auth/dto/register.dto';
 import { Request, Response } from 'express';
 import { LoginDto } from '../auth/dto/login.dto';
-import { LoginResponse } from '../auth/types/LoginResponse';
+import { LoginResponseType } from '../auth/types/LoginResponse.type';
 import { UseFilters, UseGuards } from '@nestjs/common';
 import { GraphQlErrorFilter } from '../filters/custom-exception.filter';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
@@ -40,11 +40,11 @@ export class UserResolver {
     return this.authService.register(registerDto, context.res, imageUrl);
   }
 
-  @Mutation(() => LoginResponse)
+  @Mutation(() => LoginResponseType)
   login(
     @Args('loginInput') loginDto: LoginDto,
     @Context() context: { res: Response }
-  ): Promise<LoginResponse> {
+  ): Promise<LoginResponseType> {
     return this.authService.login(loginDto, context.res);
   }
 

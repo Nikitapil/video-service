@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Args, Context, Query, Int } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { AuthService } from '../auth/auth.service';
-import { RegisterResponse } from '../auth/types/RegisterResponse';
+import { RegisterResponseType } from '../auth/types/RegisterResponse.type';
 import { RegisterDto } from '../auth/dto/register.dto';
 import { Request, Response } from 'express';
 import { LoginDto } from '../auth/dto/login.dto';
@@ -25,13 +25,13 @@ export class UserResolver {
     private readonly authService: AuthService
   ) {}
 
-  @Mutation(() => RegisterResponse)
+  @Mutation(() => RegisterResponseType)
   async register(
     @Args('registerInput') registerDto: RegisterDto,
     @Context() context: { res: Response },
     @Args('image', { type: () => GraphQLUpload, nullable: true })
     image?: FileUpload
-  ): Promise<RegisterResponse> {
+  ): Promise<RegisterResponseType> {
     let imageUrl;
     if (image) {
       // TODO переделать на единый сервис по работе с файлами и вызывать это уже внутри других сервисов а не в контроллере

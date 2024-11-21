@@ -16,6 +16,7 @@ import { ToggleFollowType } from './types/toggle-follow.type';
 import { User } from './types/user.type';
 import { UpdateProfileInputDto } from './dto/update-profile-input.dto';
 import { UserProfileType } from './types/user-profile.type';
+import { REFRESH_TOKEN_COOKIE } from '../auth/constants';
 
 @UseFilters(GraphQlErrorFilter)
 @Resolver()
@@ -54,10 +55,18 @@ export class UserResolver {
   }
 
   @Mutation(() => RefreshType)
-  refreshToken(
+  async refreshToken(
     @Context() context: { res: Response; req: Request }
   ): Promise<RefreshType> {
-    return this.authService.refreshToken(context.req, context.res);
+    const token = context.req.cookies[REFRESH_TOKEN_COOKIE];
+
+    const { refreshToken, accessToken, user } =
+      await this.authService.refreshToken(token);
+
+    context.res.cookie(REFRESH_TOKEN_COOKIE, refreshToken, {
+      httpOnly: true
+    });
+    return { accessToken, user };
   }
 
   @UseGuards(GraphQLAuthGuard)

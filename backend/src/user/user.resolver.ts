@@ -10,7 +10,7 @@ import { UseFilters, UseGuards } from '@nestjs/common';
 import { GraphQlErrorFilter } from '../filters/custom-exception.filter';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
-import { RefreshType } from '../auth/types/RefreshType';
+import { RefreshType } from '../auth/types/Refresh.type';
 import { GetUsersDto } from './dto/get-users.dto';
 import { ToggleFollowType } from './types/toggle-follow.type';
 import { User } from './types/user.type';

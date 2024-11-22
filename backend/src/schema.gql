@@ -70,7 +70,7 @@ type Mutation {
   login(loginInput: LoginDto!): AuthResponse!
   logout: String!
   openChatMessages(chatId: String!): SuccessMessageType!
-  refreshToken: RefreshType!
+  refreshToken: AuthResponse!
   register(image: Upload, registerInput: RegisterDto!): AuthResponse!
   toggleLikePost(postId: Int!): ToggleLike!
   toggleUserFollow(userToFollowId: Int!): ToggleFollowType!
@@ -113,11 +113,6 @@ type Query {
   getPosts(search: String, skip: Int! = 0, take: Int! = 1): [PostType!]!
   getUserProfile(userId: Int!): UserProfileType!
   getUsers(getUsersInput: GetUsersDto): [User!]!
-}
-
-type RefreshType {
-  accessToken: String!
-  user: User!
 }
 
 input RegisterDto {

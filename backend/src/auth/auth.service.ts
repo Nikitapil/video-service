@@ -22,6 +22,22 @@ export class AuthService {
     private readonly configService: ConfigService
   ) {}
 
+  private issueTokens(user: User) {
+    const payload = { username: user.fullname, sub: user.id };
+
+    const accessToken = this.jwtService.sign(payload, {
+      secret: this.configService.get('ACCESS_TOKEN_SECRET'),
+      expiresIn: this.configService.get('ACCESS_TOKEN_EXPIRES')
+    });
+
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: this.configService.get('REFRESH_TOKEN_SECRET'),
+      expiresIn: this.configService.get('REFRESH_TOKEN_EXPIRES')
+    });
+
+    return { accessToken, refreshToken, user };
+  }
+
   async refreshToken(token: string) {
     if (!token) {
       throw new UnauthorizedException('Refresh token not found');
@@ -48,22 +64,6 @@ export class AuthService {
     const { accessToken, refreshToken } = this.issueTokens(userExists);
 
     return { accessToken, refreshToken, user: userExists };
-  }
-
-  private issueTokens(user: User) {
-    const payload = { username: user.fullname, sub: user.id };
-
-    const accessToken = this.jwtService.sign(payload, {
-      secret: this.configService.get('ACCESS_TOKEN_SECRET'),
-      expiresIn: this.configService.get('ACCESS_TOKEN_EXPIRES')
-    });
-
-    const refreshToken = this.jwtService.sign(payload, {
-      secret: this.configService.get('REFRESH_TOKEN_SECRET'),
-      expiresIn: this.configService.get('REFRESH_TOKEN_EXPIRES')
-    });
-
-    return { accessToken, refreshToken, user };
   }
 
   async validateUser(loginDto: LoginDto) {

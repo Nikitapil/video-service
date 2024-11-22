@@ -19,6 +19,11 @@ export type Scalars = {
   Upload: { input: any; output: any; }
 };
 
+export type AuthResponse = {
+  accessToken: Scalars['String']['output'];
+  user: User;
+};
+
 export type ChatListItemType = {
   chatWithUser: User;
   id: Scalars['String']['output'];
@@ -45,11 +50,6 @@ export type CreateMessageDto = {
   userToId: Scalars['Int']['input'];
 };
 
-export type ErrorType = {
-  code?: Maybe<Scalars['String']['output']>;
-  message: Scalars['String']['output'];
-};
-
 export type GetUsersDto = {
   search?: InputMaybe<Scalars['String']['input']>;
   skip?: InputMaybe<Scalars['Int']['input']>;
@@ -61,11 +61,6 @@ export type GetUsersDto = {
 export type LoginDto = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
-};
-
-export type LoginResponse = {
-  error?: Maybe<ErrorType>;
-  user?: Maybe<User>;
 };
 
 export type MessageType = {
@@ -84,11 +79,11 @@ export type Mutation = {
   createPost: PostType;
   deleteComment?: Maybe<Scalars['String']['output']>;
   deletePost: SuccessMessageType;
-  login: LoginResponse;
+  login: AuthResponse;
   logout: Scalars['String']['output'];
   openChatMessages: SuccessMessageType;
   refreshToken: RefreshType;
-  register: RegisterResponse;
+  register: AuthResponse;
   toggleLikePost: ToggleLike;
   toggleUserFollow: ToggleFollowType;
   updateUser: User;
@@ -242,11 +237,6 @@ export type RegisterDto = {
   password: Scalars['String']['input'];
 };
 
-export type RegisterResponse = {
-  error?: Maybe<ErrorType>;
-  user?: Maybe<User>;
-};
-
 export type SuccessMessageType = {
   message: Scalars['String']['output'];
 };
@@ -390,7 +380,7 @@ export type LoginUserMutationVariables = Exact<{
 }>;
 
 
-export type LoginUserMutation = { login: { user?: { email: string, id: number, fullname: string, image?: string | null, bio?: string | null } | null } };
+export type LoginUserMutation = { login: { accessToken: string, user: { email: string, id: number, fullname: string, image?: string | null, bio?: string | null } } };
 
 export type LogoutUserMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -412,7 +402,7 @@ export type RegisterUserMutationVariables = Exact<{
 }>;
 
 
-export type RegisterUserMutation = { register: { user?: { id: number, fullname: string, email: string, image?: string | null } | null } };
+export type RegisterUserMutation = { register: { accessToken: string, user: { id: number, fullname: string, email: string, image?: string | null } } };
 
 export type CreateMessageMutationVariables = Exact<{
   userId: Scalars['Int']['input'];
@@ -1063,6 +1053,7 @@ export const LoginUserDocument = gql`
       image
       bio
     }
+    accessToken
   }
 }
     `;
@@ -1174,6 +1165,7 @@ export const RegisterUserDocument = gql`
       email
       image
     }
+    accessToken
   }
 }
     `;

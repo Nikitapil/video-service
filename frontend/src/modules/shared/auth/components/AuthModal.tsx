@@ -9,6 +9,7 @@ import AppInput from '../../../../components/ui/inputs/AppInput.tsx';
 import AppButton from '../../../../components/ui/AppButton.tsx';
 import AppTextarea from '../../../../components/ui/inputs/AppTextarea.tsx';
 import AvatarUploader from '../../components/AvatarUploader.tsx';
+import { setAccessToken } from '../helpers.ts';
 
 const AuthModal = () => {
   const setUser = useUserStore((state) => state.setUser);
@@ -74,6 +75,7 @@ const AuthModal = () => {
       const { data } = await registerFn();
 
       if (data?.register.user) {
+        setAccessToken(data.register.accessToken);
         setUser(data.register.user);
       }
     } catch (err: any) {
@@ -88,6 +90,7 @@ const AuthModal = () => {
       const { data } = await loginFn();
 
       if (data?.login.user) {
+        setAccessToken(data.login.accessToken);
         setUser(data.login.user);
       }
     } catch (err: any) {

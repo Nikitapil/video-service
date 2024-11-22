@@ -3,6 +3,7 @@ import { router } from './router';
 import { useUserStore } from './modules/shared/auth/stores/userStore.ts';
 import { useRefreshAuthMutation } from './gql/graphql.tsx';
 import { useCallback, useEffect } from 'react';
+import { setAccessToken } from './modules/shared/auth/helpers.ts';
 
 function App() {
   const setUser = useUserStore((state) => state.setUser);
@@ -15,7 +16,7 @@ function App() {
       setIsAuthLoading(true);
       const { data } = await refresh();
       setUser(data?.refreshToken.user || null);
-      localStorage.setItem('accessToken', data?.refreshToken.accessToken || '');
+      setAccessToken(data?.refreshToken.accessToken || '');
     } catch (e) {
       console.error(e);
     } finally {

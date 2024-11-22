@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthResponse {
+  accessToken: String!
+  user: User!
+}
+
 type ChatListItemType {
   chatWithUser: User!
   id: String!
@@ -46,10 +51,6 @@ input LoginDto {
   password: String!
 }
 
-type LoginResponseType {
-  user: User!
-}
-
 type MessageType {
   author: User!
   chatId: String!
@@ -66,11 +67,11 @@ type Mutation {
   createPost(tags: String, text: String!, video: Upload!): PostType!
   deleteComment(id: Int!): String
   deletePost(id: Int!): SuccessMessageType!
-  login(loginInput: LoginDto!): LoginResponseType!
+  login(loginInput: LoginDto!): AuthResponse!
   logout: String!
   openChatMessages(chatId: String!): SuccessMessageType!
   refreshToken: RefreshType!
-  register(image: Upload, registerInput: RegisterDto!): RegisterResponseType!
+  register(image: Upload, registerInput: RegisterDto!): AuthResponse!
   toggleLikePost(postId: Int!): ToggleLike!
   toggleUserFollow(userToFollowId: Int!): ToggleFollowType!
   updateUser(image: Upload, updateProfileInput: UpdateProfileInputDto!): User!
@@ -125,10 +126,6 @@ input RegisterDto {
   email: String!
   fullname: String!
   password: String!
-}
-
-type RegisterResponseType {
-  user: User!
 }
 
 type SuccessMessageType {

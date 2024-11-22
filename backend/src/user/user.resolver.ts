@@ -1,11 +1,9 @@
 import { Resolver, Mutation, Args, Context, Query, Int } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { AuthService } from '../auth/auth.service';
-import { RegisterResponseType } from '../auth/types/RegisterResponse.type';
 import { RegisterDto } from '../auth/dto/register.dto';
 import { Request, Response } from 'express';
 import { LoginDto } from '../auth/dto/login.dto';
-import { LoginResponseType } from '../auth/types/LoginResponse.type';
 import { UseFilters, UseGuards } from '@nestjs/common';
 import { GraphQlErrorFilter } from '../filters/custom-exception.filter';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
@@ -17,6 +15,7 @@ import { User } from './types/user.type';
 import { UpdateProfileInputDto } from './dto/update-profile-input.dto';
 import { UserProfileType } from './types/user-profile.type';
 import { REFRESH_TOKEN_COOKIE } from '../auth/constants';
+import { AuthResponse } from '../auth/types/AuthResponse.type';
 
 @UseFilters(GraphQlErrorFilter)
 @Resolver()
@@ -26,32 +25,48 @@ export class UserResolver {
     private readonly authService: AuthService
   ) {}
 
-  @Mutation(() => RegisterResponseType)
+  @Mutation(() => AuthResponse)
   async register(
     @Args('registerInput') registerDto: RegisterDto,
     @Context() context: { res: Response },
     @Args('image', { type: () => GraphQLUpload, nullable: true })
     image?: FileUpload
-  ): Promise<RegisterResponseType> {
+  ): Promise<AuthResponse> {
     let imageUrl;
     if (image) {
       // TODO переделать на единый сервис по работе с файлами и вызывать это уже внутри других сервисов а не в контроллере
       imageUrl = await this.userService.storeImageAndGetUrl(image);
     }
-    return this.authService.register(registerDto, context.res, imageUrl);
+
+    const { refreshToken, accessToken, user } = await this.authService.register(
+      registerDto,
+      imageUrl
+    );
+
+    context.res.cookie(REFRESH_TOKEN_COOKIE, refreshToken, {
+      httpOnly: true
+    });
+
+    return { user, accessToken };
   }
 
-  @Mutation(() => LoginResponseType)
-  login(
+  @Mutation(() => AuthResponse)
+  async login(
     @Args('loginInput') loginDto: LoginDto,
     @Context() context: { res: Response }
-  ): Promise<LoginResponseType> {
-    return this.authService.login(loginDto, context.res);
+  ): Promise<AuthResponse> {
+    const { refreshToken, accessToken, user } =
+      await this.authService.login(loginDto);
+    context.res.cookie(REFRESH_TOKEN_COOKIE, refreshToken, {
+      httpOnly: true
+    });
+    return { accessToken, user };
   }
 
   @Mutation(() => String)
-  logout(@Context() context: { res: Response }): Promise<string> {
-    return this.authService.logout(context.res);
+  logout(@Context() context: { res: Response }): string {
+    context.res.clearCookie('refresh_token');
+    return 'Successfully logged out';
   }
 
   @Mutation(() => RefreshType)

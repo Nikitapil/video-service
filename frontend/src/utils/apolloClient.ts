@@ -10,6 +10,7 @@ import {
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
+import { getAccessToken, setAccessToken } from '../modules/shared/auth/helpers.ts';
 
 const refreshToken = async (client: ApolloClient<NormalizedCacheObject>) => {
   try {
@@ -28,7 +29,7 @@ const refreshToken = async (client: ApolloClient<NormalizedCacheObject>) => {
       throw new Error('New access token not received');
     }
 
-    localStorage.setItem('accessToken', newAccessToken);
+    setAccessToken(newAccessToken);
 
     return `Bearer ${newAccessToken}`;
   } catch (err) {
@@ -100,7 +101,7 @@ export const client = new ApolloClient({
   credentials: 'include',
   headers: {
     'Content-Type': 'application/json',
-    authorization: `Bearer ${localStorage.getItem('accessToken')}`
+    authorization: `Bearer ${getAccessToken()}`
   },
   link: ApolloLink.from([authLink, errorLink, uploadLink]),
   defaultOptions: {

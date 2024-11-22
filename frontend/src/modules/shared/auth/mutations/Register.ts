@@ -25,6 +25,7 @@ export const REGISTER_USER = gql`
         email
         image
       }
+      accessToken
     }
   }
 `;

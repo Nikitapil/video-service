@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { getAccessToken } from '../modules/shared/auth/helpers.ts';
 
 export const useSockets = () => {
   const [socket, setSocket] = useState<Socket>();
@@ -11,7 +12,7 @@ export const useSockets = () => {
         transportOptions: {
           polling: {
             extraHeaders: {
-              Authorization: localStorage.getItem('accessToken')
+              Authorization: getAccessToken()
             }
           }
         }

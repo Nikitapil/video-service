@@ -7,7 +7,6 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { Response } from 'express';
 import { User } from '@prisma/client';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
@@ -46,12 +45,12 @@ export class AuthService {
       throw new NotFoundException('User does not exist');
     }
 
-    const { accessToken, refreshToken } = this.createTokens(userExists);
+    const { accessToken, refreshToken } = this.issueTokens(userExists);
 
     return { accessToken, refreshToken, user: userExists };
   }
 
-  private createTokens(user: User) {
+  private issueTokens(user: User) {
     const payload = { username: user.fullname, sub: user.id };
 
     const accessToken = this.jwtService.sign(payload, {
@@ -64,26 +63,7 @@ export class AuthService {
       expiresIn: this.configService.get('REFRESH_TOKEN_EXPIRES')
     });
 
-    return { accessToken, refreshToken };
-  }
-
-  private async issueTokens(user: User, response: Response) {
-    const payload = { username: user.fullname, sub: user.id };
-
-    const accessToken = this.jwtService.sign(payload, {
-      secret: this.configService.get('ACCESS_TOKEN_SECRET'),
-      expiresIn: '150sec'
-    });
-
-    const refreshToken = this.jwtService.sign(payload, {
-      secret: this.configService.get('REFRESH_TOKEN_SECRET'),
-      expiresIn: '7d'
-    });
-
-    response.cookie('access_token', accessToken, { httpOnly: true });
-    response.cookie('refresh_token', refreshToken, { httpOnly: true });
-
-    return { user };
+    return { accessToken, refreshToken, user };
   }
 
   async validateUser(loginDto: LoginDto) {
@@ -97,7 +77,7 @@ export class AuthService {
     return null;
   }
 
-  async register(registerDto: RegisterDto, response: Response, image?: string) {
+  async register(registerDto: RegisterDto, image?: string) {
     const existingUser = await this.prismaService.user.findUnique({
       where: { email: registerDto.email }
     });
@@ -121,22 +101,16 @@ export class AuthService {
       select: safeUserSelect
     });
 
-    return this.issueTokens(user, response);
+    return this.issueTokens(user);
   }
 
-  async login(loginDto: LoginDto, response: Response) {
+  async login(loginDto: LoginDto) {
     const user = await this.validateUser(loginDto);
     if (!user) {
       throw new BadRequestException({
         password: 'Invalid credentials'
       });
     }
-    return this.issueTokens(user, response);
-  }
-
-  async logout(response: Response) {
-    response.clearCookie('access_token');
-    response.clearCookie('refresh_token');
-    return 'Successfully logged out';
+    return this.issueTokens(user);
   }
 }

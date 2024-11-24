@@ -2,7 +2,7 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class LikeType {
-  @Field(() => Boolean)
+  @Field(() => Int)
   id: number;
 
   @Field(() => Int)

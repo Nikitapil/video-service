@@ -4,6 +4,8 @@ import { Request } from 'express';
 import { CommentType } from './types/comment.type';
 import { UseGuards } from '@nestjs/common';
 import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
+import { User } from '../decorators/User.decorator';
+import { TokenUserDto } from '../auth/dto/TokenUser.dto';
 
 @UseGuards(GraphQLAuthGuard)
 @Resolver()
@@ -13,12 +15,9 @@ export class CommentResolver {
   @Query(() => [CommentType])
   getCommentsByPostId(
     @Args('postId', { type: () => Int }) postId: number,
-    @Context() context: { req: Request }
+    @User() user: TokenUserDto
   ): Promise<CommentType[]> {
-    return this.commentService.getCommentsByPostId(
-      postId,
-      context.req.user.sub
-    );
+    return this.commentService.getCommentsByPostId(postId, user.sub);
   }
 
   @Mutation(() => CommentType)

@@ -27,7 +27,10 @@ export class CommentService {
     );
   }
 
-  async createComment(data: CreateCommentDto): Promise<CommentType> {
+  async createComment(
+    currentUserId: number,
+    data: CreateCommentDto
+  ): Promise<CommentType> {
     const post = await this.prismaService.post.findUnique({
       where: { id: data.postId }
     });
@@ -37,11 +40,15 @@ export class CommentService {
     }
 
     const comment = await this.prismaService.comment.create({
-      data,
-      include: getCommentInclude(data.userId)
+      data: {
+        postId: data.postId,
+        text: data.text,
+        userId: currentUserId
+      },
+      include: getCommentInclude(currentUserId)
     });
 
-    return new CommentType({ comment, currentUserId: data.userId });
+    return new CommentType({ comment, currentUserId: currentUserId });
   }
 
   async deleteComment(commentId: number, userId: number): Promise<void> {

@@ -27,10 +27,9 @@ export class CommentResolver {
     @Args('text') text: string,
     @Context() context: { req: Request }
   ): Promise<CommentType> {
-    return this.commentService.createComment({
+    return this.commentService.createComment(context.req.user.sub, {
       postId,
-      text,
-      userId: context.req.user.sub
+      text
     });
   }
 

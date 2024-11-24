@@ -5,10 +5,6 @@ import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 export class CreateCommentDto {
   @Field(() => Int)
   @IsInt()
-  userId: number;
-
-  @Field(() => Int)
-  @IsInt()
   postId: number;
 
   @Field(() => String)

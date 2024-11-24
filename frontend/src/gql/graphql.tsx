@@ -45,6 +45,11 @@ export type CommentType = {
   user: User;
 };
 
+export type CreateCommentDto = {
+  postId: Scalars['Int']['input'];
+  text: Scalars['String']['input'];
+};
+
 export type CreateMessageDto = {
   text: Scalars['String']['input'];
   userToId: Scalars['Int']['input'];
@@ -82,7 +87,7 @@ export type Mutation = {
   login: AuthResponse;
   logout: Scalars['String']['output'];
   openChatMessages: SuccessMessageType;
-  refreshToken: RefreshType;
+  refreshToken: AuthResponse;
   register: AuthResponse;
   toggleLikePost: ToggleLike;
   toggleUserFollow: ToggleFollowType;
@@ -91,8 +96,7 @@ export type Mutation = {
 
 
 export type MutationCreateCommentArgs = {
-  postId: Scalars['Int']['input'];
-  text: Scalars['String']['input'];
+  createCommentInput: CreateCommentDto;
 };
 
 
@@ -222,11 +226,6 @@ export type QueryGetUserProfileArgs = {
 
 export type QueryGetUsersArgs = {
   getUsersInput?: InputMaybe<GetUsersDto>;
-};
-
-export type RefreshType = {
-  accessToken: Scalars['String']['output'];
-  user: User;
 };
 
 export type RegisterDto = {
@@ -704,7 +703,7 @@ export type GetChatsListSuspenseQueryHookResult = ReturnType<typeof useGetChatsL
 export type GetChatsListQueryResult = Apollo.QueryResult<GetChatsListQuery, GetChatsListQueryVariables>;
 export const CreateCommentDocument = gql`
     mutation CreateComment($text: String!, $postId: Int!) {
-  createComment(text: $text, postId: $postId) {
+  createComment(createCommentInput: {text: $text, postId: $postId}) {
     id
   }
 }

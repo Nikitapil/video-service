@@ -1,11 +1,11 @@
-import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CommentService } from './comment.service';
-import { Request } from 'express';
 import { CommentType } from './types/comment.type';
 import { UseGuards } from '@nestjs/common';
 import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
 import { User } from '../decorators/User.decorator';
 import { TokenUserDto } from '../auth/dto/TokenUser.dto';
+import { CreateCommentDto } from './dto/create-comment.dto';
 
 @UseGuards(GraphQLAuthGuard)
 @Resolver()
@@ -22,21 +22,18 @@ export class CommentResolver {
 
   @Mutation(() => CommentType)
   createComment(
-    @Args('postId', { type: () => Int }) postId: number,
-    @Args('text') text: string,
-    @Context() context: { req: Request }
+    @Args('createCommentInput', { type: () => CreateCommentDto })
+    createCommentDto: CreateCommentDto,
+    @User() user: TokenUserDto
   ): Promise<CommentType> {
-    return this.commentService.createComment(context.req.user.sub, {
-      postId,
-      text
-    });
+    return this.commentService.createComment(user.sub, createCommentDto);
   }
 
   @Mutation(() => String, { nullable: true })
   deleteComment(
     @Args('id', { type: () => Int }) id: number,
-    @Context() context: { req: Request }
+    @User() user: TokenUserDto
   ): Promise<void> {
-    return this.commentService.deleteComment(id, context.req.user.sub);
+    return this.commentService.deleteComment(id, user.sub);
   }
 }

@@ -22,6 +22,7 @@ export class CommentService {
       },
       include: getCommentInclude(currentUserId)
     });
+
     return comments.map(
       (comment) => new CommentType({ comment, currentUserId })
     );

@@ -4,7 +4,7 @@ import { ApolloError } from 'apollo-server-express';
 
 @Catch(BadRequestException)
 export class GraphQlErrorFilter implements GqlExceptionFilter {
-  catch(exception: any): any {
+  catch(exception: any) {
     const response = exception.getResponse();
 
     if (typeof response === 'object') {

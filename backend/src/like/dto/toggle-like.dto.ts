@@ -6,8 +6,4 @@ export class ToggleLikeDto {
   @Field(() => Int)
   @IsInt()
   postId: number;
-
-  @Field(() => Int)
-  @IsInt()
-  userId: number;
 }

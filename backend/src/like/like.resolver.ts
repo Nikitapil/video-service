@@ -1,9 +1,10 @@
-import { Args, Context, Int, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Resolver } from '@nestjs/graphql';
 import { LikeService } from './like.service';
-import { Request } from 'express';
 import { UseGuards } from '@nestjs/common';
 import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
 import { ToggleLike } from './types/toggle-like.type';
+import { TokenUserDto } from '../auth/dto/TokenUser.dto';
+import { User } from '../decorators/User.decorator';
 
 @UseGuards(GraphQLAuthGuard)
 @Resolver()
@@ -13,11 +14,10 @@ export class LikeResolver {
   @Mutation(() => ToggleLike)
   toggleLikePost(
     @Args('postId', { type: () => Int }) postId: number,
-    @Context() context: { req: Request }
+    @User() user: TokenUserDto
   ): Promise<ToggleLike> {
-    return this.likeService.toggleLike({
-      postId,
-      userId: context.req.user.sub
+    return this.likeService.toggleLike(user.sub, {
+      postId
     });
   }
 }

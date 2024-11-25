@@ -1,15 +1,16 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MessageType } from './types/Message.type';
 import { UseGuards } from '@nestjs/common';
 import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
 import { CreateMessageDto } from './dto/create-message.dto';
-import { Request } from 'express';
 import { MessagesService } from './messages.service';
 import { SocketService } from '../socket/socket.service';
 import { getChatRoomId } from './helpers/common';
 import { ChatListItemType } from './types/ChatListItem.type';
 import { ChatType } from './types/Chat.type';
 import { SuccessMessageType } from '../common/types/SuccessMessage.type';
+import { TokenUserDto } from '../auth/dto/TokenUser.dto';
+import { User } from '../decorators/User.decorator';
 
 @UseGuards(GraphQLAuthGuard)
 @Resolver()
@@ -23,11 +24,11 @@ export class MessagesResolver {
   async createMessage(
     @Args('CreateMesageInput', { type: () => CreateMessageDto })
     createMessageDto: CreateMessageDto,
-    @Context() context: { req: Request }
+    @User() user: TokenUserDto
   ) {
     const message = await this.messageService.createMessage({
       dto: createMessageDto,
-      authorId: context.req.user.sub
+      authorId: user.sub
     });
 
     this.socketService.sendMessageToRoom({
@@ -39,30 +40,28 @@ export class MessagesResolver {
   }
 
   @Query(() => [ChatListItemType])
-  getChatList(
-    @Context() context: { req: Request }
-  ): Promise<ChatListItemType[]> {
-    return this.messageService.getChatList(context.req.user.sub);
+  getChatList(@User() user: TokenUserDto): Promise<ChatListItemType[]> {
+    return this.messageService.getChatList(user.sub);
   }
 
   @Query(() => ChatType)
   getChat(
-    @Context() context: { req: Request },
+    @User() user: TokenUserDto,
     @Args('chatId', { type: () => String }) chatId: string
   ): Promise<ChatType> {
     return this.messageService.getChat({
-      currentUserId: context.req.user.sub,
+      currentUserId: user.sub,
       chatId
     });
   }
 
   @Mutation(() => SuccessMessageType)
   openChatMessages(
-    @Context() context: { req: Request },
+    @User() user: TokenUserDto,
     @Args('chatId', { type: () => String }) chatId: string
   ): Promise<SuccessMessageType> {
     return this.messageService.openChatMessages({
-      currentUserId: context.req.user.sub,
+      currentUserId: user.sub,
       chatId
     });
   }

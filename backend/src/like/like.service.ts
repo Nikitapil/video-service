@@ -8,6 +8,7 @@ export class LikeService {
 
   async toggleLike(currentUserId: number, data: ToggleLikeDto) {
     const dbData = { userId: currentUserId, postId: data.postId };
+
     const like = await this.prismaService.like.findUnique({
       where: { userId_postId: dbData }
     });

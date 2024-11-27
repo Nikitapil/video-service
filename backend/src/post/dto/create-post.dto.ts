@@ -1,22 +1,18 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { Field, InputType } from '@nestjs/graphql';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
+import { IsFile } from '../../common/validators/IsFile';
 
 @InputType()
 export class CreatePostDto {
-  //TODO get this not from dto but from auth
-  @Field(() => Int)
-  @IsInt()
-  @IsNotEmpty()
-  userId: number;
-
   @Field(() => String)
   @IsString()
   @IsNotEmpty()
   text: string;
 
-  @Field(() => String, { nullable: true })
-  @IsString()
-  video: string;
+  @Field(() => GraphQLUpload, { nullable: true })
+  @IsFile({ mime: ['video/mp4'] })
+  video: FileUpload;
 
   @Field(() => String, { nullable: true })
   @IsString()

@@ -19,16 +19,12 @@ import { getPostInclude } from '../common/db-selects/post-selects';
 export class PostService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async saveVideo(video: {
+  async saveVideo(file: {
     createReadStream: () => any;
     filename: string;
     mimetype: string;
   }): Promise<string> {
-    if (!video || !['video/mp4'].includes(video.mimetype)) {
-      throw new BadRequestException(
-        'Invalid video file format. Only MP4 is allowed.'
-      );
-    }
+    const video = await file;
     const videoName = `${Date.now()}${extname(video.filename)}`;
     const videoPath = `/files/${videoName}`;
     const stream = video.createReadStream();
@@ -49,9 +45,13 @@ export class PostService {
     return videoPath;
   }
 
-  async createPost(data: CreatePostDto): Promise<Post> {
+  async createPost(currentUserId: number, data: CreatePostDto): Promise<Post> {
+    const videoPath = await this.saveVideo(data.video);
+
     const postData = {
-      ...data,
+      userId: currentUserId,
+      text: data.text,
+      video: videoPath,
       tags:
         data.tags
           ?.split(' ')

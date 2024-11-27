@@ -1,13 +1,14 @@
 import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { PostService } from './post.service';
 import { PostType } from './types/post.type';
-import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 import { Request } from 'express';
 import { UseGuards } from '@nestjs/common';
 import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostDetails } from './types/post-details.type';
 import { SuccessMessageType } from '../common/types/SuccessMessage.type';
+import { User } from '../decorators/User.decorator';
+import { TokenUserDto } from '../auth/dto/TokenUser.dto';
 
 @UseGuards(GraphQLAuthGuard)
 @Resolver()
@@ -16,22 +17,11 @@ export class PostResolver {
 
   @Mutation(() => PostType)
   async createPost(
-    @Context() context: { req: Request },
-    @Args({ name: 'video', type: () => GraphQLUpload }) video: FileUpload,
-    @Args('text') text: string,
-    @Args('tags', { type: () => String, nullable: true }) tags: string
+    @User() user: TokenUserDto,
+    @Args('createPostInput', { type: () => CreatePostDto, nullable: true })
+    createPostDto: CreatePostDto
   ) {
-    const userId = context.req.user.sub;
-    const videoPath = await this.postService.saveVideo(video);
-
-    const postData: CreatePostDto = {
-      text,
-      video: videoPath,
-      userId,
-      tags
-    };
-
-    return this.postService.createPost(postData);
+    return this.postService.createPost(user.sub, createPostDto);
   }
 
   @Query(() => PostDetails)

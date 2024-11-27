@@ -55,6 +55,12 @@ export type CreateMessageDto = {
   userToId: Scalars['Int']['input'];
 };
 
+export type CreatePostDto = {
+  tags?: InputMaybe<Scalars['String']['input']>;
+  text: Scalars['String']['input'];
+  video?: InputMaybe<Scalars['Upload']['input']>;
+};
+
 export type GetUsersDto = {
   search?: InputMaybe<Scalars['String']['input']>;
   skip?: InputMaybe<Scalars['Int']['input']>;
@@ -106,9 +112,7 @@ export type MutationCreateMessageArgs = {
 
 
 export type MutationCreatePostArgs = {
-  tags?: InputMaybe<Scalars['String']['input']>;
-  text: Scalars['String']['input'];
-  video: Scalars['Upload']['input'];
+  createPostInput?: InputMaybe<CreatePostDto>;
 };
 
 
@@ -1343,7 +1347,7 @@ export type LikePostMutationResult = Apollo.MutationResult<LikePostMutation>;
 export type LikePostMutationOptions = Apollo.BaseMutationOptions<LikePostMutation, LikePostMutationVariables>;
 export const CreatePostDocument = gql`
     mutation CreatePost($text: String!, $video: Upload!, $tags: String) {
-  createPost(text: $text, video: $video, tags: $tags) {
+  createPost(createPostInput: {text: $text, video: $video, tags: $tags}) {
     id
   }
 }

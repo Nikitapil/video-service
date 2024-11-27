@@ -38,6 +38,12 @@ input CreateMessageDto {
   userToId: Int!
 }
 
+input CreatePostDto {
+  tags: String
+  text: String!
+  video: Upload
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -69,7 +75,7 @@ type MessageType {
 type Mutation {
   createComment(createCommentInput: CreateCommentDto!): CommentType!
   createMessage(CreateMesageInput: CreateMessageDto!): MessageType!
-  createPost(tags: String, text: String!, video: Upload!): PostType!
+  createPost(createPostInput: CreatePostDto): PostType!
   deleteComment(id: Int!): String
   deletePost(id: Int!): SuccessMessageType!
   login(loginInput: LoginDto!): AuthResponse!

@@ -61,6 +61,12 @@ export type CreatePostDto = {
   video?: InputMaybe<Scalars['Upload']['input']>;
 };
 
+export type GetPostsDto = {
+  search?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type GetUsersDto = {
   search?: InputMaybe<Scalars['String']['input']>;
   skip?: InputMaybe<Scalars['Int']['input']>;
@@ -112,7 +118,7 @@ export type MutationCreateMessageArgs = {
 
 
 export type MutationCreatePostArgs = {
-  createPostInput?: InputMaybe<CreatePostDto>;
+  createPostInput: CreatePostDto;
 };
 
 
@@ -217,9 +223,7 @@ export type QueryGetPostByIdArgs = {
 
 
 export type QueryGetPostsArgs = {
-  search?: InputMaybe<Scalars['String']['input']>;
-  skip?: Scalars['Int']['input'];
-  take?: Scalars['Int']['input'];
+  getPostInput: GetPostsDto;
 };
 
 
@@ -507,7 +511,7 @@ export type GetSuggestedUsersSuspenseQueryHookResult = ReturnType<typeof useGetS
 export type GetSuggestedUsersQueryResult = Apollo.QueryResult<GetSuggestedUsersQuery, GetSuggestedUsersQueryVariables>;
 export const GetPostsDocument = gql`
     query GetPosts($skip: Int!, $take: Int!, $search: String) {
-  getPosts(skip: $skip, take: $take, search: $search) {
+  getPosts(getPostInput: {skip: $skip, take: $take, search: $search}) {
     id
     text
     video

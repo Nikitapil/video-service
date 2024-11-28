@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Injectable,
   NotAcceptableException,
   NotFoundException
@@ -14,6 +13,7 @@ import { PostType } from './types/post.type';
 import { unlinkSync, mkdirSync, existsSync } from 'fs';
 import { SuccessMessageType } from '../common/types/SuccessMessage.type';
 import { getPostInclude } from '../common/db-selects/post-selects';
+import { GetPostsParams } from './types';
 
 @Injectable()
 export class PostService {
@@ -85,23 +85,18 @@ export class PostService {
     });
   }
   // TODO take parameters as object
-  async getPosts(
-    skip: number,
-    take: number,
-    currentUserId: number,
-    search?: string
-  ): Promise<PostType[]> {
+  async getPosts({ dto, currentUserId }: GetPostsParams): Promise<PostType[]> {
     const where: Prisma.PostWhereInput = {};
 
-    if (search) {
+    if (dto.search) {
       where.tags = {
-        has: search
+        has: dto.search
       };
     }
     const posts = await this.prismaService.post.findMany({
       where,
-      skip,
-      take,
+      skip: dto.skip,
+      take: dto.take,
       include: getPostInclude(currentUserId),
       orderBy: { createdAt: 'desc' }
     });

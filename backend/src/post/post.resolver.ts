@@ -9,6 +9,7 @@ import { PostDetails } from './types/post-details.type';
 import { SuccessMessageType } from '../common/types/SuccessMessage.type';
 import { User } from '../decorators/User.decorator';
 import { TokenUserDto } from '../auth/dto/TokenUser.dto';
+import { GetPostsDto } from './dto/GetPosts.dto';
 
 @UseGuards(GraphQLAuthGuard)
 @Resolver()
@@ -27,19 +28,20 @@ export class PostResolver {
   @Query(() => PostDetails)
   async getPostById(
     @Args('id', { type: () => Int }) id: number,
-    @Context() context: { req: Request }
+    @User() user: TokenUserDto
   ): Promise<PostDetails> {
-    return this.postService.getPostById(id, context.req.user.sub);
+    return this.postService.getPostById(id, user.sub);
   }
 
   @Query(() => [PostType])
   async getPosts(
-    @Args('skip', { type: () => Int, defaultValue: 0 }) skip: number,
-    @Args('take', { type: () => Int, defaultValue: 1 }) take: number,
-    @Args('search', { type: () => String, nullable: true }) search: string,
-    @Context() context: { req: Request }
+    @Args('getPostInput', { type: () => GetPostsDto }) getPostsDto: GetPostsDto,
+    @User() user: TokenUserDto
   ): Promise<PostType[]> {
-    return this.postService.getPosts(skip, take, context.req.user.sub, search);
+    return this.postService.getPosts({
+      dto: getPostsDto,
+      currentUserId: user.sub
+    });
   }
 
   @Mutation(() => SuccessMessageType)

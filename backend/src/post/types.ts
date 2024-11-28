@@ -1,5 +1,11 @@
 import { UserFromDb } from '../user/types';
 import { LikeType } from '../like/types/like.type';
+import { GetPostsDto } from './dto/GetPosts.dto';
+
+export interface GetPostsParams {
+  dto: GetPostsDto;
+  currentUserId: number;
+}
 
 export interface PostFromDb {
   id: number;

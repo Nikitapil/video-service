@@ -18,7 +18,7 @@ export class PostResolver {
   @Mutation(() => PostType)
   async createPost(
     @User() user: TokenUserDto,
-    @Args('createPostInput', { type: () => CreatePostDto, nullable: true })
+    @Args('createPostInput', { type: () => CreatePostDto })
     createPostDto: CreatePostDto
   ) {
     return this.postService.createPost(user.sub, createPostDto);

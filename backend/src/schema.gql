@@ -75,7 +75,7 @@ type MessageType {
 type Mutation {
   createComment(createCommentInput: CreateCommentDto!): CommentType!
   createMessage(CreateMesageInput: CreateMessageDto!): MessageType!
-  createPost(createPostInput: CreatePostDto): PostType!
+  createPost(createPostInput: CreatePostDto!): PostType!
   deleteComment(id: Int!): String
   deletePost(id: Int!): SuccessMessageType!
   login(loginInput: LoginDto!): AuthResponse!

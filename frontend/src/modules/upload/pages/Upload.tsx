@@ -17,6 +17,10 @@ const Upload = () => {
   const [caption, setCaption] = useState('');
   const [tags, setTags] = useState<string>('');
 
+  const isSubmitBtnDisabled = useMemo(() => {
+    return isUploading || !caption;
+  }, [isUploading, caption]);
+
   const fileDisplay = useMemo(() => {
     return fileData ? URL.createObjectURL(fileData) : null;
   }, [fileData]);
@@ -179,7 +183,7 @@ const Upload = () => {
 
                 <AppButton
                   appearance="danger"
-                  disabled={isUploading}
+                  disabled={isSubmitBtnDisabled}
                   onClick={handleCreatePost}
                 >
                   Post

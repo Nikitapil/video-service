@@ -4,61 +4,34 @@ import {
   NotFoundException
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { extname } from 'path';
-import { createWriteStream } from 'fs';
 import { Post, Prisma } from '@prisma/client';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostDetails } from './types/post-details.type';
 import { PostType } from './types/post.type';
-import { unlinkSync, mkdirSync, existsSync } from 'fs';
+import { unlinkSync } from 'fs';
 import { SuccessMessageType } from '../common/types/SuccessMessage.type';
 import { getPostInclude } from '../common/db-selects/post-selects';
 import { GetPostsParams } from './types';
+import { FilesService } from '../files/files.service';
+import { prepareHashTagsArray } from './utils';
 
 @Injectable()
 export class PostService {
-  constructor(private readonly prismaService: PrismaService) {}
-
-  async saveVideo(file: {
-    createReadStream: () => any;
-    filename: string;
-    mimetype: string;
-  }): Promise<string> {
-    const video = await file;
-    const videoName = `${Date.now()}${extname(video.filename)}`;
-    const videoPath = `/files/${videoName}`;
-    const stream = video.createReadStream();
-    const outputPath = `public${videoPath}`;
-
-    if (!existsSync('public/files')) {
-      mkdirSync('public/files', { recursive: true });
-    }
-
-    const writeStream = createWriteStream(outputPath);
-    stream.pipe(writeStream);
-
-    await new Promise((resolve, reject) => {
-      stream.on('end', resolve);
-      stream.on('error', reject);
-    });
-
-    return videoPath;
-  }
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly filesService: FilesService
+  ) {}
 
   async createPost(currentUserId: number, data: CreatePostDto): Promise<Post> {
-    const videoPath = await this.saveVideo(data.video);
+    const videoPath = await this.filesService.saveFile(data.video);
 
     const postData = {
       userId: currentUserId,
       text: data.text,
       video: videoPath,
-      tags:
-        data.tags
-          ?.split(' ')
-          .map((tag) => tag.replace(/[^a-zA-Z0-9]/g, ''))
-          .filter((tag, index, arr) => !!tag && index === arr.indexOf(tag)) ||
-        []
+      tags: prepareHashTagsArray(data.tags || '')
     };
+
     return this.prismaService.post.create({
       data: postData
     });

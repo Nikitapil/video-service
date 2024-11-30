@@ -12,6 +12,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { CommentModule } from './comment/comment.module';
 import { MessagesModule } from './messages/messages.module';
 import { SocketModule } from './socket/socket.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -35,7 +36,8 @@ import { SocketModule } from './socket/socket.module';
     LikeModule,
     CommentModule,
     MessagesModule,
-    SocketModule
+    SocketModule,
+    FilesModule
   ],
   controllers: [],
   providers: []

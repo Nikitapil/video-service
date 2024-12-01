@@ -112,7 +112,7 @@ export class PostService {
     }
 
     try {
-      unlinkSync(`public${post.video}`);
+      this.filesService.removeFile(post.video);
 
       await this.prismaService.post.delete({
         where: { id }

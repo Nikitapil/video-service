@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { FileUpload } from 'graphql-upload-ts';
-import { createWriteStream, existsSync, mkdirSync } from 'fs';
+import { createWriteStream, existsSync, mkdirSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class FilesService {
@@ -24,5 +24,9 @@ export class FilesService {
     });
 
     return filePath;
+  }
+
+  removeFile(path: string) {
+    unlinkSync(`public${path}`);
   }
 }

@@ -11,7 +11,7 @@ import { PostType } from './types/post.type';
 import { unlinkSync } from 'fs';
 import { SuccessMessageType } from '../common/types/SuccessMessage.type';
 import { getPostInclude } from '../common/db-selects/post-selects';
-import { GetPostsParams } from './types';
+import { GetPostsParams, PostFromDb } from './types';
 import { FilesService } from '../files/files.service';
 import { prepareHashTagsArray } from './utils';
 
@@ -21,6 +21,10 @@ export class PostService {
     private readonly prismaService: PrismaService,
     private readonly filesService: FilesService
   ) {}
+
+  private mapPosts(posts: PostFromDb[], currentUserId: number) {
+    return posts.map((post) => new PostType(post, currentUserId));
+  }
 
   async createPost(currentUserId: number, data: CreatePostDto): Promise<Post> {
     const videoPath = await this.filesService.saveFile(data.video);
@@ -57,7 +61,7 @@ export class PostService {
       currentUserId
     });
   }
-  // TODO take parameters as object
+
   async getPosts({ dto, currentUserId }: GetPostsParams): Promise<PostType[]> {
     const where: Prisma.PostWhereInput = {};
 
@@ -66,6 +70,7 @@ export class PostService {
         has: dto.search
       };
     }
+
     const posts = await this.prismaService.post.findMany({
       where,
       skip: dto.skip,
@@ -73,7 +78,7 @@ export class PostService {
       include: getPostInclude(currentUserId),
       orderBy: { createdAt: 'desc' }
     });
-    return posts.map((post) => new PostType(post, currentUserId));
+    return this.mapPosts(posts, currentUserId);
   }
 
   async getFavoriteUserPosts(
@@ -90,7 +95,7 @@ export class PostService {
       },
       include: getPostInclude(currentUserId)
     });
-    return posts.map((post) => new PostType(post, currentUserId));
+    return this.mapPosts(posts, currentUserId);
   }
 
   async deletePost(id: number, userId: number): Promise<SuccessMessageType> {

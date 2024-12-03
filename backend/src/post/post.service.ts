@@ -8,7 +8,6 @@ import { Post, Prisma } from '@prisma/client';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostDetails } from './types/post-details.type';
 import { PostType } from './types/post.type';
-import { unlinkSync } from 'fs';
 import { SuccessMessageType } from '../common/types/SuccessMessage.type';
 import { getPostInclude } from '../common/db-selects/post-selects';
 import { GetPostsParams, PostFromDb } from './types';

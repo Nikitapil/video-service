@@ -21,10 +21,7 @@ export class SocketGateway {
   @WebSocketServer() public server: Server;
 
   @SubscribeMessage('joinRoom')
-  handleMessage(
-    @MessageBody() roomId: string,
-    @ConnectedSocket() client: Socket
-  ) {
+  joinRoom(@MessageBody() roomId: string, @ConnectedSocket() client: Socket) {
     client.join(roomId);
   }
 

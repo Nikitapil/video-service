@@ -1,5 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
+import { IsFile } from '../../common/validators/IsFile';
 
 @InputType()
 export class UpdateProfileDto {
@@ -13,10 +15,10 @@ export class UpdateProfileDto {
   @IsOptional()
   bio?: string;
 
-  @Field(() => String, { nullable: true })
-  @IsString()
+  @Field(() => GraphQLUpload, { nullable: true })
+  @IsFile({ mime: ['image/jpeg', 'image/png', 'image/jpg'] })
   @IsOptional()
-  image?: string;
+  image?: FileUpload;
 
   @Field(() => String, { nullable: true })
   @IsEmail({}, { message: 'Email must be valid' })

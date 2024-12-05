@@ -17,9 +17,13 @@ import { getPostInclude } from '../common/db-selects/post-selects';
 import { UserProfileType } from './types/user-profile.type';
 import { Prisma } from '@prisma/client';
 import { User } from './types/user.type';
+import { FilesService } from '../files/files.service';
 @Injectable()
 export class UserService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly filesService: FilesService
+  ) {}
 
   // TODO filter private user fields and not return posts
   async getUsers(currentUserId: number, dto?: GetUsersDto) {
@@ -65,6 +69,13 @@ export class UserService {
   }
 
   async updateProfile(userId: number, data: UpdateProfileDto) {
+    const { image, ...restData } = data;
+
+    let imageUrl;
+    if (image) {
+      imageUrl = await this.filesService.saveFile(data.image);
+    }
+
     if (data.email) {
       const existingUser = await this.prismaService.user.findUnique({
         where: { email: data.email }
@@ -75,28 +86,25 @@ export class UserService {
       }
     }
 
-    return this.prismaService.user.update({
+    const saveData: Prisma.UserUpdateInput = {
+      ...restData
+    };
+
+    if (imageUrl) {
+      saveData.image = imageUrl;
+    }
+
+    const updatedUser = await this.prismaService.user.update({
       where: { id: userId },
-      data
+      data: saveData
     });
+
+    return new User(updatedUser, userId);
   }
 
+  //TODO delete this method
   async storeImageAndGetUrl(file: FileUpload) {
-    const { createReadStream, filename } = file;
-
-    const uniqueFilename = `${uuidv4()}_${filename}`;
-
-    const imagePath = join(process.cwd(), 'public', uniqueFilename);
-
-    const imageUrl = `${process.env.APP_URL}/${uniqueFilename}`;
-
-    const readStream = createReadStream();
-    readStream.pipe(createWriteStream(imagePath));
-
-    await new Promise((resolve, reject) => {
-      readStream.on('end', resolve);
-      readStream.on('error', reject);
-    });
+    const imageUrl = await this.filesService.saveFile(file);
 
     return imageUrl;
   }

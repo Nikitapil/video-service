@@ -159,8 +159,7 @@ export type MutationToggleUserFollowArgs = {
 
 
 export type MutationUpdateUserArgs = {
-  image?: InputMaybe<Scalars['Upload']['input']>;
-  updateProfileInput: UpdateProfileInputDto;
+  updateProfileInput: UpdateProfileDto;
 };
 
 export type PostDetails = {
@@ -256,10 +255,11 @@ export type ToggleLike = {
   isLiked: Scalars['Boolean']['output'];
 };
 
-export type UpdateProfileInputDto = {
+export type UpdateProfileDto = {
   bio?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   fullname?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['Upload']['input']>;
 };
 
 export type User = {
@@ -913,8 +913,7 @@ export type GetPostByIdQueryResult = Apollo.QueryResult<GetPostByIdQuery, GetPos
 export const UpdateUserProfileDocument = gql`
     mutation UpdateUserProfile($fullname: String, $bio: String, $email: String, $image: Upload) {
   updateUser(
-    updateProfileInput: {fullname: $fullname, bio: $bio, email: $email}
-    image: $image
+    updateProfileInput: {fullname: $fullname, bio: $bio, email: $email, image: $image}
   ) {
     id
     fullname

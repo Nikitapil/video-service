@@ -11,10 +11,10 @@ import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
 import { GetUsersDto } from './dto/get-users.dto';
 import { ToggleFollowType } from './types/toggle-follow.type';
 import { User } from './types/user.type';
-import { UpdateProfileInputDto } from './dto/update-profile-input.dto';
 import { UserProfileType } from './types/user-profile.type';
 import { REFRESH_TOKEN_COOKIE } from '../auth/constants';
 import { AuthResponse } from '../auth/types/AuthResponse.type';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @UseFilters(GraphQlErrorFilter)
 @Resolver()
@@ -106,20 +106,13 @@ export class UserResolver {
   @Mutation(() => User)
   async updateUser(
     @Context() context: { req: Request },
-    @Args('updateProfileInput', { type: () => UpdateProfileInputDto })
-    updateProfileInput?: UpdateProfileInputDto,
-    @Args('image', { type: () => GraphQLUpload, nullable: true })
-    image?: FileUpload
+    @Args('updateProfileInput', { type: () => UpdateProfileDto })
+    updateProfileDto?: UpdateProfileDto
   ) {
-    let imageUrl;
-    if (image) {
-      imageUrl = await this.userService.storeImageAndGetUrl(image);
-    }
-
-    return this.userService.updateProfile(context.req.user.sub, {
-      ...updateProfileInput,
-      image: imageUrl
-    });
+    return this.userService.updateProfile(
+      context.req.user.sub,
+      updateProfileDto
+    );
   }
 
   @UseGuards(GraphQLAuthGuard)

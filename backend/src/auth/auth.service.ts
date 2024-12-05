@@ -7,12 +7,12 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { User } from '@prisma/client';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './dto/register.dto';
 import { safeUserSelect } from '../common/db-selects/safe-user-select';
 import { TokenUserDto } from './dto/TokenUser.dto';
+import { User } from 'src/user/types/user.type';
 
 @Injectable()
 export class AuthService {
@@ -35,7 +35,7 @@ export class AuthService {
       expiresIn: this.configService.get('REFRESH_TOKEN_EXPIRES')
     });
 
-    return { accessToken, refreshToken, user };
+    return { accessToken, refreshToken, user: new User(user, user.id) };
   }
 
   async refreshToken(token: string) {
@@ -63,7 +63,11 @@ export class AuthService {
 
     const { accessToken, refreshToken } = this.issueTokens(userExists);
 
-    return { accessToken, refreshToken, user: userExists };
+    return {
+      accessToken,
+      refreshToken,
+      user: new User(userExists, userExists.id)
+    };
   }
 
   async validateUser(loginDto: LoginDto) {

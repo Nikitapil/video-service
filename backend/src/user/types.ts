@@ -1,4 +1,5 @@
 import { PostFromDb } from '../post/types';
+import { User } from './types/user.type';
 
 export interface ToggleUserFollowParams {
   currentUserId: number;
@@ -30,4 +31,10 @@ export interface UserProfileFromDb extends UserFromDb {
     followedBy: number;
     following: number;
   };
+}
+
+export interface UserAuthValues {
+  refreshToken: string;
+  accessToken: string;
+  user: User;
 }

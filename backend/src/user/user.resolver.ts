@@ -15,6 +15,7 @@ import { UserProfileType } from './types/user-profile.type';
 import { REFRESH_TOKEN_COOKIE } from '../auth/constants';
 import { AuthResponse } from '../auth/types/AuthResponse.type';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { UserAuthValues } from './types';
 
 @UseFilters(GraphQlErrorFilter)
 @Resolver()
@@ -23,6 +24,19 @@ export class UserResolver {
     private readonly userService: UserService,
     private readonly authService: AuthService
   ) {}
+
+  private async getUserAuthData(
+    serviceMethod: () => Promise<UserAuthValues>,
+    res: Response
+  ) {
+    const { accessToken, refreshToken, user } = await serviceMethod();
+
+    res.cookie(REFRESH_TOKEN_COOKIE, refreshToken, {
+      httpOnly: true
+    });
+
+    return { accessToken, user };
+  }
 
   @Mutation(() => AuthResponse)
   async register(
@@ -37,16 +51,10 @@ export class UserResolver {
       imageUrl = await this.userService.storeImageAndGetUrl(image);
     }
 
-    const { refreshToken, accessToken, user } = await this.authService.register(
-      registerDto,
-      imageUrl
+    return this.getUserAuthData(
+      () => this.authService.register(registerDto, imageUrl),
+      context.res
     );
-
-    context.res.cookie(REFRESH_TOKEN_COOKIE, refreshToken, {
-      httpOnly: true
-    });
-
-    return { user, accessToken };
   }
 
   @Mutation(() => AuthResponse)
@@ -54,12 +62,10 @@ export class UserResolver {
     @Args('loginInput') loginDto: LoginDto,
     @Context() context: { res: Response }
   ): Promise<AuthResponse> {
-    const { refreshToken, accessToken, user } =
-      await this.authService.login(loginDto);
-    context.res.cookie(REFRESH_TOKEN_COOKIE, refreshToken, {
-      httpOnly: true
-    });
-    return { accessToken, user };
+    return this.getUserAuthData(
+      () => this.authService.login(loginDto),
+      context.res
+    );
   }
 
   @Mutation(() => String)
@@ -74,13 +80,10 @@ export class UserResolver {
   ): Promise<AuthResponse> {
     const token = context.req.cookies[REFRESH_TOKEN_COOKIE];
 
-    const { refreshToken, accessToken, user } =
-      await this.authService.refreshToken(token);
-
-    context.res.cookie(REFRESH_TOKEN_COOKIE, refreshToken, {
-      httpOnly: true
-    });
-    return { accessToken, user };
+    return this.getUserAuthData(
+      () => this.authService.refreshToken(token),
+      context.res
+    );
   }
 
   @UseGuards(GraphQLAuthGuard)

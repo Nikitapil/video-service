@@ -6,7 +6,6 @@ import { Request, Response } from 'express';
 import { LoginDto } from '../auth/dto/login.dto';
 import { UseFilters, UseGuards } from '@nestjs/common';
 import { GraphQlErrorFilter } from '../filters/custom-exception.filter';
-import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
 import { GetUsersDto } from './dto/get-users.dto';
 import { ToggleFollowType } from './types/toggle-follow.type';
@@ -41,18 +40,10 @@ export class UserResolver {
   @Mutation(() => AuthResponse)
   async register(
     @Args('registerInput') registerDto: RegisterDto,
-    @Context() context: { res: Response },
-    @Args('image', { type: () => GraphQLUpload, nullable: true })
-    image?: FileUpload
+    @Context() context: { res: Response }
   ): Promise<AuthResponse> {
-    let imageUrl;
-    if (image) {
-      // TODO переделать на единый сервис по работе с файлами и вызывать это уже внутри других сервисов а не в контроллере
-      imageUrl = await this.userService.storeImageAndGetUrl(image);
-    }
-
     return this.getUserAuthData(
-      () => this.authService.register(registerDto, imageUrl),
+      () => this.authService.register(registerDto),
       context.res
     );
   }

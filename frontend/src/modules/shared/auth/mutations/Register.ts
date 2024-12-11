@@ -16,8 +16,8 @@ export const REGISTER_USER = gql`
         password: $password
         confirmPassword: $confirmPassword
         bio: $bio
+        image: $image
       }
-      image: $image
     ) {
       user {
         id

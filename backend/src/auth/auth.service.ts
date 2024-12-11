@@ -13,13 +13,15 @@ import { RegisterDto } from './dto/register.dto';
 import { safeUserSelect } from '../common/db-selects/safe-user-select';
 import { TokenUserDto } from './dto/TokenUser.dto';
 import { User } from 'src/user/types/user.type';
+import { FilesService } from '../files/files.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly filesService: FilesService
   ) {}
 
   private issueTokens(user: User) {
@@ -81,7 +83,7 @@ export class AuthService {
     return null;
   }
 
-  async register(registerDto: RegisterDto, image?: string) {
+  async register(registerDto: RegisterDto) {
     const existingUser = await this.prismaService.user.findUnique({
       where: { email: registerDto.email }
     });
@@ -92,6 +94,11 @@ export class AuthService {
       });
     }
 
+    let imageUrl: string;
+    if (registerDto.image) {
+      imageUrl = await this.filesService.saveFile(registerDto.image);
+    }
+
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
 
     const user = await this.prismaService.user.create({
@@ -100,7 +107,7 @@ export class AuthService {
         fullname: registerDto.fullname,
         password: hashedPassword,
         bio: registerDto.bio,
-        image
+        image: imageUrl
       },
       select: safeUserSelect
     });

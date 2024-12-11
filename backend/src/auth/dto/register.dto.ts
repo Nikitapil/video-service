@@ -7,6 +7,8 @@ import {
   MinLength
 } from 'class-validator';
 import { IsMatch } from '../../common/validators/MatchValidator';
+import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
+import { IsFile } from '../../common/validators/IsFile';
 
 @InputType()
 export class RegisterDto {
@@ -36,4 +38,9 @@ export class RegisterDto {
   @IsNotEmpty({ message: 'Email is required' })
   @IsEmail({}, { message: 'Email must be valid' })
   email: string;
+
+  @Field(() => GraphQLUpload, { nullable: true })
+  @IsFile({ mime: ['image/jpeg', 'image/png', 'image/jpg'] })
+  @IsOptional()
+  image?: FileUpload;
 }

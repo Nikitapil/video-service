@@ -143,7 +143,6 @@ export type MutationOpenChatMessagesArgs = {
 
 
 export type MutationRegisterArgs = {
-  image?: InputMaybe<Scalars['Upload']['input']>;
   registerInput: RegisterDto;
 };
 
@@ -240,6 +239,7 @@ export type RegisterDto = {
   confirmPassword: Scalars['String']['input'];
   email: Scalars['String']['input'];
   fullname: Scalars['String']['input'];
+  image?: InputMaybe<Scalars['Upload']['input']>;
   password: Scalars['String']['input'];
 };
 
@@ -1162,8 +1162,7 @@ export type RefreshAuthMutationOptions = Apollo.BaseMutationOptions<RefreshAuthM
 export const RegisterUserDocument = gql`
     mutation RegisterUser($fullname: String!, $email: String!, $password: String!, $confirmPassword: String!, $bio: String, $image: Upload) {
   register(
-    registerInput: {fullname: $fullname, email: $email, password: $password, confirmPassword: $confirmPassword, bio: $bio}
-    image: $image
+    registerInput: {fullname: $fullname, email: $email, password: $password, confirmPassword: $confirmPassword, bio: $bio, image: $image}
   ) {
     user {
       id

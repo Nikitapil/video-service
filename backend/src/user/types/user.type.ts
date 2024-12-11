@@ -28,6 +28,8 @@ export class User {
   canSendMessage?: boolean;
 
   constructor(userFromDb: UserFromDb, currentUserId: number) {
+    const usersIdsEqual = currentUserId !== userFromDb.id;
+
     this.id = userFromDb.id;
     this.fullname = userFromDb.fullname;
     this.bio = userFromDb.bio;
@@ -36,7 +38,7 @@ export class User {
       : userFromDb.image;
     this.email = userFromDb.email;
     this.isFollowed = !!userFromDb?.followedBy?.length;
-    this.canFollow = currentUserId !== userFromDb.id;
-    this.canSendMessage = currentUserId !== userFromDb.id;
+    this.canFollow = usersIdsEqual;
+    this.canSendMessage = usersIdsEqual;
   }
 }

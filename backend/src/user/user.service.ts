@@ -5,11 +5,6 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { FileUpload } from 'graphql-upload-ts';
-import { v4 as uuidv4 } from 'uuid';
-import { join } from 'path';
-import * as process from 'node:process';
-import { createWriteStream } from 'fs';
 import { GetUsersDto } from './dto/get-users.dto';
 import { getSafeUserSelectFull } from '../common/db-selects/safe-user-select';
 import { ToggleUserFollowParams } from './types';
@@ -18,6 +13,7 @@ import { UserProfileType } from './types/user-profile.type';
 import { Prisma } from '@prisma/client';
 import { User } from './types/user.type';
 import { FilesService } from '../files/files.service';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -25,7 +21,6 @@ export class UserService {
     private readonly filesService: FilesService
   ) {}
 
-  // TODO filter private user fields and not return posts
   async getUsers(currentUserId: number, dto?: GetUsersDto) {
     const { search } = dto || {};
 
@@ -102,13 +97,6 @@ export class UserService {
     return new User(updatedUser, userId);
   }
 
-  //TODO delete this method
-  async storeImageAndGetUrl(file: FileUpload) {
-    const imageUrl = await this.filesService.saveFile(file);
-
-    return imageUrl;
-  }
-
   async toggleFollowUser({
     currentUserId,
     userToFollowId
@@ -166,6 +154,7 @@ export class UserService {
         }
       }
     });
+
     return new UserProfileType({ profile, currentUserId });
   }
 }

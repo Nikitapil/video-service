@@ -10,11 +10,13 @@ import { GraphQLAuthGuard } from '../auth/guards/graphql-auth.guard';
 import { GetUsersDto } from './dto/get-users.dto';
 import { ToggleFollowType } from './types/toggle-follow.type';
 import { User } from './types/user.type';
+import { User as UserDecorator } from '../decorators/User.decorator';
 import { UserProfileType } from './types/user-profile.type';
 import { REFRESH_TOKEN_COOKIE } from '../auth/constants';
 import { AuthResponse } from '../auth/types/AuthResponse.type';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { UserAuthValues } from './types';
+import { TokenUserDto } from '../auth/dto/TokenUser.dto';
 
 @UseFilters(GraphQlErrorFilter)
 @Resolver()
@@ -80,45 +82,42 @@ export class UserResolver {
   @UseGuards(GraphQLAuthGuard)
   @Query(() => [User])
   getUsers(
-    @Context() context: { req: Request },
+    @UserDecorator() user: TokenUserDto,
     @Args('getUsersInput', { type: () => GetUsersDto, nullable: true })
     getUsersDto?: GetUsersDto
   ) {
-    return this.userService.getUsers(context.req.user.sub, getUsersDto);
+    return this.userService.getUsers(user.sub, getUsersDto);
   }
 
   @UseGuards(GraphQLAuthGuard)
   @Query(() => UserProfileType)
   getUserProfile(
-    @Context() context: { req: Request },
+    @UserDecorator() user: TokenUserDto,
     @Args('userId', { type: () => Int }) userId?: number
   ): Promise<UserProfileType> {
-    return this.userService.getUserProfile(userId, context.req.user.sub);
+    return this.userService.getUserProfile(userId, user.sub);
   }
 
   @UseGuards(GraphQLAuthGuard)
   @Mutation(() => User)
   async updateUser(
-    @Context() context: { req: Request },
+    @UserDecorator() user: TokenUserDto,
     @Args('updateProfileInput', { type: () => UpdateProfileDto })
     updateProfileDto?: UpdateProfileDto
   ) {
-    return this.userService.updateProfile(
-      context.req.user.sub,
-      updateProfileDto
-    );
+    return this.userService.updateProfile(user.sub, updateProfileDto);
   }
 
   @UseGuards(GraphQLAuthGuard)
   @Mutation(() => ToggleFollowType)
   async toggleUserFollow(
-    @Context() context: { req: Request },
+    @UserDecorator() user: TokenUserDto,
     @Args('userToFollowId', { type: () => Int })
     userToFollowId?: number
   ): Promise<ToggleFollowType> {
     return this.userService.toggleFollowUser({
       userToFollowId,
-      currentUserId: context.req.user.sub
+      currentUserId: user.sub
     });
   }
 }

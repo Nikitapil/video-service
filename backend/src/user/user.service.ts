@@ -24,7 +24,7 @@ export class UserService {
   async getUsers(currentUserId: number, dto?: GetUsersDto) {
     const { search } = dto || {};
 
-    const userFollowId = dto.userFollowers || dto.userFollowTo;
+    const userFollowId = dto?.userFollowers || dto?.userFollowTo;
 
     const where: Prisma.UserWhereInput = {
       fullname: {
@@ -36,13 +36,13 @@ export class UserService {
       }
     };
 
-    if (dto.userFollowers) {
+    if (dto?.userFollowers) {
       where.following = {
         some: {
           followingId: dto.userFollowers
         }
       };
-    } else if (dto.userFollowTo) {
+    } else if (dto?.userFollowTo) {
       where.followedBy = {
         some: {
           followedById: dto.userFollowTo
@@ -55,8 +55,8 @@ export class UserService {
       orderBy: {
         createdAt: 'desc'
       },
-      take: dto.take,
-      skip: dto.skip,
+      take: dto?.take,
+      skip: dto?.skip,
       select: getSafeUserSelectFull(currentUserId)
     });
 
@@ -68,7 +68,7 @@ export class UserService {
 
     let imageUrl;
     if (image) {
-      imageUrl = await this.filesService.saveFile(data.image);
+      imageUrl = await this.filesService.saveFile(image);
     }
 
     if (data.email) {
@@ -154,6 +154,10 @@ export class UserService {
         }
       }
     });
+
+    if (!profile) {
+      throw new NotFoundException('User not found');
+    }
 
     return new UserProfileType({ profile, currentUserId });
   }

@@ -2,6 +2,7 @@ import { MessageType } from './Message.type';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { ChatFromDb } from '../types';
 import { User } from '../../user/types/user.type';
+import { BadRequestException } from '@nestjs/common';
 
 interface ChatTypeConstructorParams {
   chat: ChatFromDb;
@@ -29,6 +30,10 @@ export class ChatType {
       (user) => user.user.id !== currentUserId
     );
 
-    this.chatWithUser = new User(userWith.user, currentUserId);
+    if (!userWith) {
+      throw new BadRequestException();
+    }
+
+    this.chatWithUser = new User(userWith!.user, currentUserId);
   }
 }

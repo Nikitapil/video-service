@@ -2,6 +2,7 @@ import { MessageType } from './Message.type';
 import { User } from '../../user/types/user.type';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ChatListItemFromDb } from '../types';
+import { BadRequestException } from '@nestjs/common';
 
 interface ChatListItemTypeConstructorParameters {
   chatFromDb: ChatListItemFromDb;
@@ -36,6 +37,10 @@ export class ChatListItemType {
     const oppositeUser = chatFromDb.chatUser.find(
       (user) => user.user.id !== currentUserId
     );
+
+    if (!oppositeUser) {
+      throw new BadRequestException();
+    }
 
     this.chatWithUser = new User(oppositeUser.user, currentUserId);
 

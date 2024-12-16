@@ -30,7 +30,9 @@ async function bootstrap() {
       transform: true,
       exceptionFactory: (errors) => {
         const formattedErrors = errors.reduce((acc, error) => {
-          acc[error.property] = Object.values(error.constraints).join(', ');
+          acc[error.property] = Object.values(error.constraints || []).join(
+            ', '
+          );
           return acc;
         }, {});
 

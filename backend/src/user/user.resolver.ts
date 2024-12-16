@@ -93,7 +93,7 @@ export class UserResolver {
   @Query(() => UserProfileType)
   getUserProfile(
     @UserDecorator() user: TokenUserDto,
-    @Args('userId', { type: () => Int }) userId?: number
+    @Args('userId', { type: () => Int }) userId: number
   ): Promise<UserProfileType> {
     return this.userService.getUserProfile(userId, user.sub);
   }
@@ -103,7 +103,7 @@ export class UserResolver {
   async updateUser(
     @UserDecorator() user: TokenUserDto,
     @Args('updateProfileInput', { type: () => UpdateProfileDto })
-    updateProfileDto?: UpdateProfileDto
+    updateProfileDto: UpdateProfileDto
   ) {
     return this.userService.updateProfile(user.sub, updateProfileDto);
   }
@@ -113,7 +113,7 @@ export class UserResolver {
   async toggleUserFollow(
     @UserDecorator() user: TokenUserDto,
     @Args('userToFollowId', { type: () => Int })
-    userToFollowId?: number
+    userToFollowId: number
   ): Promise<ToggleFollowType> {
     return this.userService.toggleFollowUser({
       userToFollowId,

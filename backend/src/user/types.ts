@@ -16,9 +16,9 @@ export interface UserFromDb {
 
   fullname: string;
 
-  bio?: string;
+  bio?: string | null;
 
-  image?: string;
+  image?: string | null;
 
   email: string;
 

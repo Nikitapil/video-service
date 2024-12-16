@@ -10,10 +10,10 @@ export class User {
   fullname: string;
 
   @Field(() => String, { nullable: true })
-  bio?: string;
+  bio?: string | null;
 
   @Field(() => String, { nullable: true })
-  image?: string;
+  image?: string | null;
 
   @Field(() => String)
   email: string;

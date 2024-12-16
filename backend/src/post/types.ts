@@ -16,7 +16,7 @@ export interface PostFromDb {
 
   video: string;
 
-  user?: UserFromDb;
+  user: UserFromDb;
 
   likes?: LikeType[];
 

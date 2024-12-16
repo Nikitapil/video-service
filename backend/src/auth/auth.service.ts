@@ -14,6 +14,7 @@ import { safeUserSelect } from '../common/db-selects/safe-user-select';
 import { TokenUserDto } from './dto/TokenUser.dto';
 import { User } from 'src/user/types/user.type';
 import { FilesService } from '../files/files.service';
+import { UserFromDb } from '../user/types';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +25,7 @@ export class AuthService {
     private readonly filesService: FilesService
   ) {}
 
-  private issueTokens(user: User) {
+  private issueTokens(user: UserFromDb) {
     const payload = { username: user.fullname, sub: user.id };
 
     const accessToken = this.jwtService.sign(payload, {
@@ -94,7 +95,7 @@ export class AuthService {
       });
     }
 
-    let imageUrl: string;
+    let imageUrl: string | null = null;
     if (registerDto.image) {
       imageUrl = await this.filesService.saveFile(registerDto.image);
     }

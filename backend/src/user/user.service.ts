@@ -13,6 +13,7 @@ import { UserProfileType } from './types/user-profile.type';
 import { Prisma } from '@prisma/client';
 import { User } from './types/user.type';
 import { FilesService } from '../files/files.service';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class UserService {
@@ -62,6 +63,8 @@ export class UserService {
 
     return users.map((user) => new User(user, currentUserId));
   }
+
+  async changePassword(userId: number, dto: ChangePasswordDto) {}
 
   async updateProfile(userId: number, data: UpdateProfileDto) {
     const { image, ...restData } = data;

@@ -13,6 +13,7 @@ import { getUserFollowLink, UserFollowPagesTypesEnum } from '../../../router/rou
 import Tabs from '../../../components/ui/tabs/Tabs.tsx';
 import ProfilePostsList from '../components/ProfilePostsList.tsx';
 import CreateMessageModal from '../../shared/create-message/components/CreateMessageModal.tsx';
+import ChangePasswordModal from '../components/ChangePasswordModal.tsx';
 
 enum EProfileVideoTabs {
   VIDEOS = 'VIDEOS',
@@ -32,6 +33,7 @@ const Profile = () => {
 
   const editProfileModalElement = useShowElement();
   const createMessageModalElement = useShowElement();
+  const changePasswordModalElement = useShowElement();
 
   const { data, loading } = useGetUserProfileQuery({
     variables: {
@@ -85,15 +87,22 @@ const Profile = () => {
             <div className="text-3xl font-bold">{profile.fullname}</div>
 
             {profile.isMyProfile && (
-              <AppButton onClick={editProfileModalElement.open}>
-                <div className="flex items-center gap-1">
-                  <BsFillPencilFill
-                    size="18"
-                    className="mr-1 mt-0.5"
-                  />
-                  <span>Edit Profile</span>
-                </div>
-              </AppButton>
+              <div className="flex gap-3">
+                <AppButton onClick={editProfileModalElement.open}>
+                  <div className="flex items-center gap-1">
+                    <BsFillPencilFill
+                      size="18"
+                      className="mr-1 mt-0.5"
+                    />
+                    <span>Edit Profile</span>
+                  </div>
+                </AppButton>
+
+                <AppButton
+                  text="Change password"
+                  onClick={changePasswordModalElement.open}
+                />
+              </div>
             )}
 
             <FollowButton user={profile} />
@@ -144,6 +153,7 @@ const Profile = () => {
       </div>
 
       <EditProfileModal showElement={editProfileModalElement} />
+      <ChangePasswordModal showElement={changePasswordModalElement} />
     </>
   );
 };

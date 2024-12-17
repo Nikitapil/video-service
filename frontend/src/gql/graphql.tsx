@@ -24,6 +24,12 @@ export type AuthResponse = {
   user: User;
 };
 
+export type ChangePasswordDto = {
+  confirmPassword: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
+  oldPassword: Scalars['String']['input'];
+};
+
 export type ChatListItemType = {
   chatWithUser: User;
   id: Scalars['String']['output'];
@@ -91,6 +97,7 @@ export type MessageType = {
 };
 
 export type Mutation = {
+  changePassword: SuccessMessageType;
   createComment: CommentType;
   createMessage: MessageType;
   createPost: PostType;
@@ -104,6 +111,11 @@ export type Mutation = {
   toggleLikePost: ToggleLike;
   toggleUserFollow: ToggleFollowType;
   updateUser: User;
+};
+
+
+export type MutationChangePasswordArgs = {
+  changePasswordInput: ChangePasswordDto;
 };
 
 
@@ -356,6 +368,15 @@ export type GetPostByIdQueryVariables = Exact<{
 
 
 export type GetPostByIdQuery = { getPostById: { id: number, text: string, video: string, createdAt: any, tags: Array<string>, isLiked?: boolean | null, likesCount?: number | null, otherPostIds?: Array<number> | null, canDelete: boolean, user: { id: number, email: string, fullname: string, image?: string | null } } };
+
+export type ChangePasswordMutationVariables = Exact<{
+  oldPassword: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
+  confirmPassword: Scalars['String']['input'];
+}>;
+
+
+export type ChangePasswordMutation = { changePassword: { message: string } };
 
 export type UpdateUserProfileMutationVariables = Exact<{
   fullname?: InputMaybe<Scalars['String']['input']>;
@@ -910,6 +931,43 @@ export type GetPostByIdQueryHookResult = ReturnType<typeof useGetPostByIdQuery>;
 export type GetPostByIdLazyQueryHookResult = ReturnType<typeof useGetPostByIdLazyQuery>;
 export type GetPostByIdSuspenseQueryHookResult = ReturnType<typeof useGetPostByIdSuspenseQuery>;
 export type GetPostByIdQueryResult = Apollo.QueryResult<GetPostByIdQuery, GetPostByIdQueryVariables>;
+export const ChangePasswordDocument = gql`
+    mutation ChangePassword($oldPassword: String!, $newPassword: String!, $confirmPassword: String!) {
+  changePassword(
+    changePasswordInput: {oldPassword: $oldPassword, newPassword: $newPassword, confirmPassword: $confirmPassword}
+  ) {
+    message
+  }
+}
+    `;
+export type ChangePasswordMutationFn = Apollo.MutationFunction<ChangePasswordMutation, ChangePasswordMutationVariables>;
+
+/**
+ * __useChangePasswordMutation__
+ *
+ * To run a mutation, you first call `useChangePasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangePasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changePasswordMutation, { data, loading, error }] = useChangePasswordMutation({
+ *   variables: {
+ *      oldPassword: // value for 'oldPassword'
+ *      newPassword: // value for 'newPassword'
+ *      confirmPassword: // value for 'confirmPassword'
+ *   },
+ * });
+ */
+export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptions<ChangePasswordMutation, ChangePasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument, options);
+      }
+export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
+export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
+export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const UpdateUserProfileDocument = gql`
     mutation UpdateUserProfile($fullname: String, $bio: String, $email: String, $image: Upload) {
   updateUser(

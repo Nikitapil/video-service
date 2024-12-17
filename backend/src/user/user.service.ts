@@ -14,6 +14,8 @@ import { Prisma } from '@prisma/client';
 import { User } from './types/user.type';
 import { FilesService } from '../files/files.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import * as bcrypt from 'bcrypt';
+import { SuccessMessageType } from '../common/types/SuccessMessage.type';
 
 @Injectable()
 export class UserService {
@@ -64,7 +66,33 @@ export class UserService {
     return users.map((user) => new User(user, currentUserId));
   }
 
-  async changePassword(userId: number, dto: ChangePasswordDto) {}
+  async changePassword(userId: number, dto: ChangePasswordDto) {
+    const user = await this.prismaService.user.findUnique({
+      where: { id: userId }
+    });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    const isOldPasswordValid = await bcrypt.compare(
+      dto.oldPassword,
+      user.password
+    );
+
+    if (!isOldPasswordValid) {
+      throw new BadRequestException({ oldPassword: 'Wrong Password' });
+    }
+
+    const password = await bcrypt.hash(dto.newPassword, 10);
+
+    await this.prismaService.user.update({
+      where: { id: userId },
+      data: {
+        password
+      }
+    });
+
+    return new SuccessMessageType();
+  }
 
   async updateProfile(userId: number, data: UpdateProfileDto) {
     const { image, ...restData } = data;

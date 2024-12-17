@@ -7,6 +7,12 @@ type AuthResponse {
   user: User!
 }
 
+input ChangePasswordDto {
+  confirmPassword: String!
+  newPassword: String!
+  oldPassword: String!
+}
+
 type ChatListItemType {
   chatWithUser: User!
   id: String!
@@ -79,6 +85,7 @@ type MessageType {
 }
 
 type Mutation {
+  changePassword(changePasswordInput: ChangePasswordDto!): SuccessMessageType!
   createComment(createCommentInput: CreateCommentDto!): CommentType!
   createMessage(CreateMesageInput: CreateMessageDto!): MessageType!
   createPost(createPostInput: CreatePostDto!): PostType!

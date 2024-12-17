@@ -17,6 +17,8 @@ import { AuthResponse } from '../auth/types/AuthResponse.type';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { UserAuthValues } from './types';
 import { TokenUserDto } from '../auth/dto/TokenUser.dto';
+import { SuccessMessageType } from '../common/types/SuccessMessage.type';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @UseFilters(GraphQlErrorFilter)
 @Resolver()
@@ -119,5 +121,15 @@ export class UserResolver {
       userToFollowId,
       currentUserId: user.sub
     });
+  }
+
+  @UseGuards(GraphQLAuthGuard)
+  @Mutation(() => SuccessMessageType)
+  changePassword(
+    @UserDecorator() user: TokenUserDto,
+    @Args('changePasswordInput', { type: () => ChangePasswordDto })
+    dto: ChangePasswordDto
+  ): Promise<SuccessMessageType> {
+    return this.userService.changePassword(user.sub, dto);
   }
 }

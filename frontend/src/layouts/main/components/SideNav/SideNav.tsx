@@ -9,11 +9,13 @@ import { BsEnvelope } from 'react-icons/bs';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { useUserStore } from '../../../../modules/shared/auth/stores/userStore.ts';
 import { useGetSuggestedUsersQuery } from '../../../../gql/graphql.tsx';
+import { useAppStore } from '../../../../store/appStore.ts';
 
 const SideNav = () => {
   const SHOWED_USERS_LIMIT = 3;
   const [showAllUsers, setShowAllUsers] = useState(false);
   const user = useUserStore((state) => state.user);
+  const unreadMessages = useAppStore((state) => state.settings.unreadMessagesCount);
 
   const { data, loading } = useGetSuggestedUsersQuery();
 
@@ -51,6 +53,7 @@ const SideNav = () => {
           to={RoutesEnum.MESSAGES}
           Icon={BsEnvelope}
           text="MESSAGES"
+          count={unreadMessages}
         />
 
         <hr className="mt-2" />

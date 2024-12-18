@@ -29,7 +29,7 @@ const Observer = ({ callback }: ObserverProps) => {
   return (
     <div
       ref={loadMoreRef}
-      className="h-1"
+      className="h-3"
     ></div>
   );
 };

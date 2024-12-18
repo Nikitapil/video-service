@@ -6,9 +6,10 @@ interface MenuItemProps {
   text: string;
   to: string;
   iconColor?: string;
+  count?: number;
 }
 
-const MenuItem = ({ Icon, text, iconColor, to }: MenuItemProps) => {
+const MenuItem = ({ Icon, text, iconColor, to, count }: MenuItemProps) => {
   return (
     <Link
       to={to}
@@ -21,6 +22,12 @@ const MenuItem = ({ Icon, text, iconColor, to }: MenuItemProps) => {
         />
 
         <span className="mt-0.5 hidden pl-2 text-lg font-semibold lg:block">{text}</span>
+
+        {count !== undefined && (
+          <span className="ml-3 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 p-2.5 text-white">
+            {count}
+          </span>
+        )}
       </div>
     </Link>
   );

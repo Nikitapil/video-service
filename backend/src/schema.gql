@@ -135,6 +135,7 @@ type Query {
   getFavoriteUserPosts(userId: Int!): [PostType!]!
   getPostById(id: Int!): PostDetails!
   getPosts(getPostInput: GetPostsDto!): [PostType!]!
+  getSettings: SettingsType!
   getUserProfile(userId: Int!): UserProfileType!
   getUsers(getUsersInput: GetUsersDto): [User!]!
 }
@@ -146,6 +147,10 @@ input RegisterDto {
   fullname: String!
   image: Upload
   password: String!
+}
+
+type SettingsType {
+  unreadMessagesCount: Float!
 }
 
 type SuccessMessageType {

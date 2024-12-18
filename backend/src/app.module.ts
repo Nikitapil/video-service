@@ -13,6 +13,7 @@ import { CommentModule } from './comment/comment.module';
 import { MessagesModule } from './messages/messages.module';
 import { SocketModule } from './socket/socket.module';
 import { FilesModule } from './files/files.module';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
@@ -37,7 +38,8 @@ import { FilesModule } from './files/files.module';
     CommentModule,
     MessagesModule,
     SocketModule,
-    FilesModule
+    FilesModule,
+    SettingsModule
   ],
   controllers: [],
   providers: []

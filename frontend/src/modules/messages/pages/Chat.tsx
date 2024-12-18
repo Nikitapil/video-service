@@ -13,10 +13,13 @@ import { RiSendPlane2Fill } from 'react-icons/ri';
 import { useSockets } from '../../../hooks/useSockets.ts';
 import { TMessage } from '../types.ts';
 import { useScrollBottom } from '../../../hooks/useScrollBottom.ts';
+import { useGetAppSettings } from '../../../store/useGetAppSettings.ts';
 
 const Chat = () => {
   const { id } = useParams();
   const { socket, joinRoom } = useSockets();
+
+  const { getSettings } = useGetAppSettings();
 
   const [messages, setMessages] = useState<TMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -37,6 +40,9 @@ const Chat = () => {
   const [openMessages] = useOpenMessagesMutation({
     variables: {
       chatId: id || ''
+    },
+    onCompleted() {
+      getSettings();
     }
   });
 

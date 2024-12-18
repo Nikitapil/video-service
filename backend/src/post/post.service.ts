@@ -70,6 +70,16 @@ export class PostService {
       };
     }
 
+    if (!dto.search) {
+      where.user = {
+        followedBy: {
+          some: {
+            followedById: currentUserId
+          }
+        }
+      };
+    }
+
     const posts = await this.prismaService.post.findMany({
       where,
       skip: dto.skip,

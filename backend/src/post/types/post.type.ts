@@ -26,6 +26,9 @@ export class PostType {
   @Field(() => Boolean)
   canDelete: boolean;
 
+  @Field(() => Boolean)
+  canEdit: boolean;
+
   @Field(() => Number, { nullable: true })
   likesCount?: number;
 
@@ -36,6 +39,8 @@ export class PostType {
   tags: string[];
 
   constructor(postFromDb: PostFromDb, currentUserId: number) {
+    const isUserEqual = postFromDb.user.id === currentUserId;
+
     this.id = postFromDb.id;
     this.text = postFromDb.text;
     this.createdAt = postFromDb.createdAt;
@@ -45,6 +50,7 @@ export class PostType {
     this.tags = postFromDb.tags;
     this.likesCount = postFromDb._count?.likes || 0;
     this.commentsCount = postFromDb._count?.comments || 0;
-    this.canDelete = postFromDb.user.id === currentUserId;
+    this.canDelete = isUserEqual;
+    this.canEdit = isUserEqual;
   }
 }

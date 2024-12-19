@@ -13,6 +13,7 @@ import { getPostInclude } from '../common/db-selects/post-selects';
 import { GetPostsParams, PostFromDb } from './types';
 import { FilesService } from '../files/files.service';
 import { prepareHashTagsArray } from './utils';
+import { EditPostDto } from './dto/edit-post.dto';
 
 @Injectable()
 export class PostService {
@@ -105,6 +106,34 @@ export class PostService {
       include: getPostInclude(currentUserId)
     });
     return this.mapPosts(posts, currentUserId);
+  }
+
+  async editPost(currentUserId: number, dto: EditPostDto) {
+    const post = await this.prismaService.post.findUnique({
+      where: { id: dto.postId },
+      include: getPostInclude(currentUserId)
+    });
+
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
+    const postType = new PostType(post, currentUserId);
+
+    if (!postType.canEdit) {
+      throw new NotAcceptableException();
+    }
+
+    const editedPost = await this.prismaService.post.update({
+      where: { id: dto.postId },
+      data: {
+        tags: prepareHashTagsArray(dto.tags || ''),
+        text: dto.text
+      },
+      include: getPostInclude(currentUserId)
+    });
+
+    return new PostType(editedPost, currentUserId);
   }
 
   async deletePost(id: number, userId: number): Promise<SuccessMessageType> {

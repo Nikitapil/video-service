@@ -9,6 +9,7 @@ import { SuccessMessageType } from '../common/types/SuccessMessage.type';
 import { User } from '../decorators/User.decorator';
 import { TokenUserDto } from '../auth/dto/TokenUser.dto';
 import { GetPostsDto } from './dto/GetPosts.dto';
+import { EditPostDto } from './dto/edit-post.dto';
 
 @UseGuards(GraphQLAuthGuard)
 @Resolver()
@@ -41,6 +42,14 @@ export class PostResolver {
       dto: getPostsDto,
       currentUserId: user.sub
     });
+  }
+
+  @Mutation(() => PostType)
+  async editPost(
+    @Args('editPostInput', { type: () => EditPostDto }) dto: EditPostDto,
+    @User() user: TokenUserDto
+  ) {
+    return this.postService.editPost(user.sub, dto);
   }
 
   @Mutation(() => SuccessMessageType)

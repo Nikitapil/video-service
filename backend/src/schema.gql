@@ -55,6 +55,12 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input EditPostDto {
+  postId: Float!
+  tags: String
+  text: String
+}
+
 input GetPostsDto {
   search: String
   skip: Int
@@ -91,6 +97,7 @@ type Mutation {
   createPost(createPostInput: CreatePostDto!): PostType!
   deleteComment(id: Int!): String
   deletePost(id: Int!): SuccessMessageType!
+  editPost(editPostInput: EditPostDto!): PostType!
   login(loginInput: LoginDto!): AuthResponse!
   logout: String!
   openChatMessages(chatId: String!): SuccessMessageType!
@@ -103,6 +110,7 @@ type Mutation {
 
 type PostDetails {
   canDelete: Boolean!
+  canEdit: Boolean!
   commentsCount: Float
   createdAt: DateTime!
   id: Int!
@@ -117,6 +125,7 @@ type PostDetails {
 
 type PostType {
   canDelete: Boolean!
+  canEdit: Boolean!
   commentsCount: Float
   createdAt: DateTime!
   id: Int!

@@ -1,13 +1,17 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
+import { IsNumber, IsString } from 'class-validator';
 
 @InputType()
 export class EditPostDto {
-  @Field()
+  @Field(() => Int, { nullable: true })
+  @IsNumber()
   postId: number;
 
-  @Field(() => String, { nullable: true })
-  text?: string;
+  @Field(() => String)
+  @IsString()
+  text: string;
 
-  @Field(() => String, { nullable: true })
-  tags?: string;
+  @Field(() => String)
+  @IsString()
+  tags: string;
 }

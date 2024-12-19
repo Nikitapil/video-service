@@ -2,7 +2,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 import { ImCross, ImSpinner2 } from 'react-icons/im';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
-import { MdOutlineDeleteForever } from 'react-icons/md';
+import { MdEdit, MdOutlineDeleteForever } from 'react-icons/md';
 import UserAvatar from '../../shared/components/UserAvatar.tsx';
 import LikeButton from '../../shared/likes/components/LikeButton.tsx';
 import PostShareButton from '../../shared/components/PostShareButton.tsx';
@@ -26,6 +26,7 @@ import AppForm from '../../../components/ui/AppForm.tsx';
 import NotFoundPage from '../../../components/NotFoundPage.tsx';
 import PostHashTags from '../../shared/components/PostHashTags.tsx';
 import AppTextarea from '../../../components/ui/inputs/AppTextarea.tsx';
+import EditPostModal from '../components/EditPostModal.tsx';
 
 const Post = () => {
   const { id } = useParams();
@@ -35,10 +36,15 @@ const Post = () => {
   const [currentPostIdIndex, setCurrentPostIdIndex] = useState(0);
 
   const confirmDeletePostModal = useShowElement();
+  const editPostModal = useShowElement();
 
   const navigate = useNavigate();
 
-  const { data: dataPost, loading } = useGetPostByIdQuery({
+  const {
+    data: dataPost,
+    loading,
+    refetch
+  } = useGetPostByIdQuery({
     variables: {
       id: postIdInt
     }
@@ -188,12 +194,21 @@ const Post = () => {
               </div>
             </div>
 
-            {dataPost.getPostById.canDelete && (
-              <IconButton
-                Icon={MdOutlineDeleteForever}
-                onClick={confirmDeletePostModal.open}
-              />
-            )}
+            <div className="flex gap-3">
+              {dataPost.getPostById.canEdit && (
+                <IconButton
+                  Icon={MdEdit}
+                  onClick={editPostModal.open}
+                />
+              )}
+
+              {dataPost.getPostById.canDelete && (
+                <IconButton
+                  Icon={MdOutlineDeleteForever}
+                  onClick={confirmDeletePostModal.open}
+                />
+              )}
+            </div>
           </div>
 
           <p className="text-sm">{dataPost.getPostById.text}</p>
@@ -241,6 +256,12 @@ const Post = () => {
         showElement={confirmDeletePostModal}
         title="Are you sure you want to delete this post?"
         onConfirm={onDeletePost}
+      />
+
+      <EditPostModal
+        post={dataPost.getPostById}
+        showElement={editPostModal}
+        onSave={refetch}
       />
     </div>
   );

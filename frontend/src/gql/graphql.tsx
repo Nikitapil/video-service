@@ -67,6 +67,12 @@ export type CreatePostDto = {
   video?: InputMaybe<Scalars['Upload']['input']>;
 };
 
+export type EditPostDto = {
+  postId?: InputMaybe<Scalars['Int']['input']>;
+  tags: Scalars['String']['input'];
+  text: Scalars['String']['input'];
+};
+
 export type GetPostsDto = {
   search?: InputMaybe<Scalars['String']['input']>;
   skip?: InputMaybe<Scalars['Int']['input']>;
@@ -103,6 +109,7 @@ export type Mutation = {
   createPost: PostType;
   deleteComment?: Maybe<Scalars['String']['output']>;
   deletePost: SuccessMessageType;
+  editPost: PostType;
   login: AuthResponse;
   logout: Scalars['String']['output'];
   openChatMessages: SuccessMessageType;
@@ -144,6 +151,11 @@ export type MutationDeletePostArgs = {
 };
 
 
+export type MutationEditPostArgs = {
+  editPostInput: EditPostDto;
+};
+
+
 export type MutationLoginArgs = {
   loginInput: LoginDto;
 };
@@ -175,6 +187,7 @@ export type MutationUpdateUserArgs = {
 
 export type PostDetails = {
   canDelete: Scalars['Boolean']['output'];
+  canEdit: Scalars['Boolean']['output'];
   commentsCount?: Maybe<Scalars['Float']['output']>;
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
@@ -189,6 +202,7 @@ export type PostDetails = {
 
 export type PostType = {
   canDelete: Scalars['Boolean']['output'];
+  canEdit: Scalars['Boolean']['output'];
   commentsCount?: Maybe<Scalars['Float']['output']>;
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
@@ -360,6 +374,15 @@ export type DeletePostMutationVariables = Exact<{
 
 export type DeletePostMutation = { deletePost: { message: string } };
 
+export type EditPostMutationVariables = Exact<{
+  postId: Scalars['Int']['input'];
+  text: Scalars['String']['input'];
+  tags: Scalars['String']['input'];
+}>;
+
+
+export type EditPostMutation = { editPost: { id: number } };
+
 export type GetCommentsByPostIdQueryVariables = Exact<{
   postId: Scalars['Int']['input'];
 }>;
@@ -372,7 +395,7 @@ export type GetPostByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetPostByIdQuery = { getPostById: { id: number, text: string, video: string, createdAt: any, tags: Array<string>, isLiked?: boolean | null, likesCount?: number | null, otherPostIds?: Array<number> | null, canDelete: boolean, user: { id: number, email: string, fullname: string, image?: string | null } } };
+export type GetPostByIdQuery = { getPostById: { id: number, text: string, video: string, createdAt: any, tags: Array<string>, isLiked?: boolean | null, likesCount?: number | null, otherPostIds?: Array<number> | null, canDelete: boolean, canEdit: boolean, user: { id: number, email: string, fullname: string, image?: string | null } } };
 
 export type ChangePasswordMutationVariables = Exact<{
   oldPassword: Scalars['String']['input'];
@@ -838,6 +861,41 @@ export function useDeletePostMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutation>;
 export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
 export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
+export const EditPostDocument = gql`
+    mutation EditPost($postId: Int!, $text: String!, $tags: String!) {
+  editPost(editPostInput: {postId: $postId, text: $text, tags: $tags}) {
+    id
+  }
+}
+    `;
+export type EditPostMutationFn = Apollo.MutationFunction<EditPostMutation, EditPostMutationVariables>;
+
+/**
+ * __useEditPostMutation__
+ *
+ * To run a mutation, you first call `useEditPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editPostMutation, { data, loading, error }] = useEditPostMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *      text: // value for 'text'
+ *      tags: // value for 'tags'
+ *   },
+ * });
+ */
+export function useEditPostMutation(baseOptions?: Apollo.MutationHookOptions<EditPostMutation, EditPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditPostMutation, EditPostMutationVariables>(EditPostDocument, options);
+      }
+export type EditPostMutationHookResult = ReturnType<typeof useEditPostMutation>;
+export type EditPostMutationResult = Apollo.MutationResult<EditPostMutation>;
+export type EditPostMutationOptions = Apollo.BaseMutationOptions<EditPostMutation, EditPostMutationVariables>;
 export const GetCommentsByPostIdDocument = gql`
     query GetCommentsByPostId($postId: Int!) {
   getCommentsByPostId(postId: $postId) {
@@ -905,6 +963,7 @@ export const GetPostByIdDocument = gql`
     likesCount
     otherPostIds
     canDelete
+    canEdit
   }
 }
     `;

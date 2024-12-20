@@ -23,7 +23,14 @@ const AppInput = ({
 }: AppInputProps) => {
   return (
     <div>
-      {label && id && <label htmlFor={id}>{label}</label>}
+      {label && id && (
+        <label
+          htmlFor={id}
+          data-testid="input-label"
+        >
+          {label}
+        </label>
+      )}
 
       <input
         type={type}
@@ -37,11 +44,21 @@ const AppInput = ({
         className={styles.input}
       />
       {max && (
-        <div className="text-right text-xs text-gray-500">
+        <div
+          className="text-right text-xs text-gray-500"
+          data-testid="input-max"
+        >
           {value?.length}/{max}
         </div>
       )}
-      {error && <span className={styles.error}>{error}</span>}
+      {error && (
+        <span
+          className={styles.error}
+          data-testid="input-error"
+        >
+          {error}
+        </span>
+      )}
     </div>
   );
 };

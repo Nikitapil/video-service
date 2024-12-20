@@ -53,8 +53,10 @@ const AppCombobox = <T extends string | number>({
     <div
       ref={ref}
       className="relative w-full"
+      data-testid="app-combobox"
     >
       <AppInput
+        data-testid="app-combobox-input"
         value={inputValue}
         onChange={changeHandler}
         onFocus={open}
@@ -63,7 +65,10 @@ const AppCombobox = <T extends string | number>({
       />
 
       {isShowed && !!options.length && (
-        <div className="absolute top-full z-40 max-h-52 w-full overflow-scroll rounded-md border bg-white">
+        <div
+          className="absolute top-full z-40 max-h-52 w-full overflow-scroll rounded-md border bg-white"
+          data-testid="options-container"
+        >
           {options.map((option) => (
             <div
               className="cursor-pointer p-2 hover:bg-blue-100"

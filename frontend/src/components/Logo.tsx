@@ -13,7 +13,12 @@ const Logo = ({ textClassName = '' }: LogoProps) => {
         className="w-7"
       />
 
-      <span className={`text-lg text-black ${textClassName}`}>Video Service</span>
+      <span
+        className={`text-lg text-black ${textClassName}`}
+        data-testid="logo-text"
+      >
+        Video Service
+      </span>
     </div>
   );
 };

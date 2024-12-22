@@ -24,6 +24,7 @@ const Modal = ({ showElement, preventClose, children }: ModalProps) => {
       <div
         className="fixed left-0 top-0 z-30 h-screen w-full bg-black opacity-80"
         role="dialog"
+        data-testid="modal-dialog"
         onClick={close}
       ></div>
 
@@ -31,6 +32,7 @@ const Modal = ({ showElement, preventClose, children }: ModalProps) => {
         {!preventClose && (
           <button
             className="absolute right-2 top-2 text-gray-700 common-transition hover:text-black"
+            data-testid="close-btn"
             tabIndex={0}
             onClick={close}
           >

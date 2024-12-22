@@ -12,6 +12,7 @@ const AppForm = ({ onSubmit, children, ...restProps }: AppFormProps) => {
     <form
       {...restProps}
       onSubmit={submitHandler}
+      data-testid="app-form"
     >
       {children}
     </form>

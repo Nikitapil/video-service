@@ -39,7 +39,10 @@ const AppButton = ({
 
   if (isLoading) {
     return (
-      <div className={className}>
+      <div
+        className={className}
+        data-testid="app-button-loading"
+      >
         <FaSpinner
           size="18"
           className="animate-spin"
@@ -53,6 +56,7 @@ const AppButton = ({
       <Link
         to={to}
         className={className}
+        data-testid="app-button-to"
       >
         {children ? children : text}
       </Link>
@@ -61,6 +65,7 @@ const AppButton = ({
 
   return (
     <button
+      data-testid="app-button"
       className={className}
       {...restProps}
     >

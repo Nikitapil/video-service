@@ -1,13 +1,16 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import AppInput from '../components/ui/inputs/AppInput.tsx';
 
 describe('AppInput', () => {
+  const mockFn = vi.fn();
+
   it('Should render input with label', () => {
     render(
       <AppInput
         id="id"
         label="label"
+        onChange={mockFn}
       />
     );
 
@@ -19,6 +22,7 @@ describe('AppInput', () => {
       <AppInput
         max={10}
         value="a"
+        onChange={mockFn}
       />
     );
 

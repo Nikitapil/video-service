@@ -11,7 +11,12 @@ interface ConfirmModalProps {
 const ConfirmModal = ({ showElement, title, onConfirm }: ConfirmModalProps) => {
   return (
     <Modal showElement={showElement}>
-      <h3 className="mb-5 text-xl font-semibold">{title}</h3>
+      <h3
+        className="mb-5 text-xl font-semibold"
+        data-testid="modal-title"
+      >
+        {title}
+      </h3>
 
       <div className="flex w-full justify-end gap-2">
         <AppButton

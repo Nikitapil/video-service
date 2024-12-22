@@ -16,6 +16,7 @@ const Tab = ({ text, isActive, clickHandler }: TabProps) => {
 
   return (
     <button
+      data-testid="tab"
       className={className}
       onClick={clickHandler}
     >

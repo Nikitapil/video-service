@@ -81,4 +81,25 @@ describe('AppCombobox test', () => {
     expect(setValueHandler).toHaveBeenCalledWith('1');
     waitFor(() => expect(screen.findByTestId('options-container')).not.toBeInTheDocument());
   });
+
+  it('should close options by click outside', () => {
+    const inputHandler = vi.fn();
+    const setValueHandler = vi.fn();
+
+    render(
+      <AppCombobox
+        onInputChange={inputHandler}
+        value=""
+        setValue={setValueHandler}
+        options={[{ value: '1', text: 'first' }]}
+      />
+    );
+
+    const input = screen.getByTestId('app-combobox-input');
+
+    fireEvent.focus(input);
+
+    fireEvent.click(document.body);
+    waitFor(() => expect(screen.findByTestId('options-container')).not.toBeInTheDocument());
+  });
 });

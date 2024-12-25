@@ -26,6 +26,7 @@ const ConfirmModal = ({ showElement, title, onConfirm }: ConfirmModalProps) => {
         />
         <AppButton
           text="Confirm"
+          data-testid="modal-confirm-btn"
           onClick={onConfirm}
         />
       </div>

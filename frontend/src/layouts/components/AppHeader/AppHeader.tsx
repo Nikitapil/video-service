@@ -38,7 +38,10 @@ const AppHeader = () => {
   }
 
   return (
-    <header className="fixed z-30 flex h-16 w-full items-center border-b bg-white">
+    <header
+      className="fixed z-30 flex h-16 w-full items-center border-b bg-white"
+      data-testid="app-header"
+    >
       <div className="container mx-auto flex w-full items-center justify-between gap-4 px-6">
         <Link to={RoutesEnum.HOME}>
           <Logo textClassName="hidden md:block" />
@@ -62,6 +65,7 @@ const AppHeader = () => {
           >
             <button
               className="mt-1"
+              data-testid="profile-btn"
               onClick={() => menu.open()}
             >
               <UserAvatar image={user.image} />
@@ -79,6 +83,7 @@ const AppHeader = () => {
 
                 <button
                   className={styles['menu-item']}
+                  data-testid="logout-btn"
                   onClick={logoutModal.open}
                 >
                   <GrLogout className={styles['menu-icon']} />

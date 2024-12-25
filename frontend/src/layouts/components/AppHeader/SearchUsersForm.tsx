@@ -27,12 +27,14 @@ const SearchUsersForm = () => {
         type="text"
         className="my-2 w-full bg-transparent pl-3 placeholder-gray-500 outline-none"
         placeholder="Search accounts"
+        data-testid="search-user-input"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
 
       <button
         className="border-l border-l-gray-300 px-3 py-1 disabled:cursor-not-allowed disabled:opacity-50"
+        data-testid="search-user-button"
         disabled={!search}
         onClick={onSearch}
       >

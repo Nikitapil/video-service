@@ -61,14 +61,20 @@ const SideNav = () => {
         <h6 className="hidden px-2 pb-2 pt-4 text-xs font-semibold text-gray-600 lg:block">Suggested accounts</h6>
 
         {loading && (
-          <div className="mt-2 px-2">
+          <div
+            className="mt-2 px-2"
+            data-testid="nav-loading"
+          >
             <ImSpinner2 className="h-8 w-8 animate-spin" />
           </div>
         )}
 
         <ul>
           {displayedUsers?.map((user) => (
-            <li key={user.id}>
+            <li
+              key={user.id}
+              data-testid="suggested-users"
+            >
               <SuggestedUser user={user} />
             </li>
           ))}
@@ -77,6 +83,7 @@ const SideNav = () => {
         {isShowMoreBtn && (
           <button
             className="ml-2 flex items-center justify-center gap-1 pl-2 pt-1.5 text-sm text-red-600 common-transition hover:text-red-800 lg:ml-0"
+            data-testid="nav-show-more-btn"
             onClick={() => setShowAllUsers(!showAllUsers)}
           >
             {showAllUsers ? <IoIosArrowUp /> : <IoIosArrowDown />}

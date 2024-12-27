@@ -24,7 +24,10 @@ const MenuItem = ({ Icon, text, iconColor, to, count }: MenuItemProps) => {
         <span className="mt-0.5 hidden pl-2 text-lg font-semibold lg:block">{text}</span>
 
         {count !== undefined && (
-          <span className="ml-3 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 p-2.5 text-white">
+          <span
+            className="ml-3 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 p-2.5 text-white"
+            data-testid="menu-count"
+          >
             {count}
           </span>
         )}

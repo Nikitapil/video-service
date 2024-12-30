@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 
 const MainLayout = () => {
   return (
-    <div>
+    <div data-testid="main-layout">
       <AppHeader />
 
       <div className="container mx-auto flex px-0 lg:px-2.5">

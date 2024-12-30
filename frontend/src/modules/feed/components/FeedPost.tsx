@@ -26,6 +26,7 @@ const FeedPost = ({ post, onTagClick }: FeedPostProps) => {
     <article className="flex border-b py-6">
       <Link
         to={getProfileLink(post.user.id)}
+        data-testid="feed-post-link"
         className="self-start"
       >
         <UserAvatar
@@ -70,7 +71,7 @@ const FeedPost = ({ post, onTagClick }: FeedPostProps) => {
             <PostShareButton text={post.text} />
 
             <PostAction
-              buttonProps={{ Icon: IoChatbubbleEllipses, onClick: goToPost }}
+              buttonProps={{ Icon: IoChatbubbleEllipses, onClick: goToPost, ['data-testid']: 'go-to-post' }}
               count={post.commentsCount || 0}
             />
           </div>

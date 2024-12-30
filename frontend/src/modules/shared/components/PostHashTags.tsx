@@ -17,6 +17,7 @@ const PostHashTags = ({ tags, onTagClick }: PostHashTagsProps) => {
         <button
           key={tag.value}
           className="text-sm text-gray-500 common-transition hover:text-gray-900"
+          data-testid="tag"
           onClick={() => onTagClick(tag.value)}
         >
           {tag.text}

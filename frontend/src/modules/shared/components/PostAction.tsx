@@ -1,7 +1,7 @@
 import IconButton, { IconButtonProps } from '../../../components/ui/IconButton.tsx';
 
 interface PostActionProps {
-  buttonProps: IconButtonProps;
+  buttonProps: IconButtonProps & { ['data-testid']?: string };
   count: number;
   hideCount?: boolean;
 }

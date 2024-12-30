@@ -4,18 +4,18 @@ import { useShowElement } from '../hooks/useShowElement.ts';
 import Modal from '../components/ui/Modal.tsx';
 
 describe('Modal tests', () => {
-  it('should not render closed modal', () => {
+  it('should not render closed modal', async () => {
     const showElement = renderHook(() => useShowElement());
 
     render(<Modal showElement={showElement.result.current}>123</Modal>);
-    waitFor(() => expect(screen.findByTestId('modal-dialog')).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByTestId('modal-dialog')).not.toBeInTheDocument());
   });
 
   it('should render opened modal', () => {
     const showElement = renderHook(() => useShowElement(true));
 
     render(<Modal showElement={showElement.result.current}>123</Modal>);
-    waitFor(() => expect(screen.findByTestId('modal-dialog')).toBeInTheDocument());
+    waitFor(() => expect(screen.getByTestId('modal-dialog')).toBeInTheDocument());
   });
 
   it('should not close modal with preventClose prop', () => {

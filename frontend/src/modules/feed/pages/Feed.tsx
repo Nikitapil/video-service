@@ -63,17 +63,28 @@ const Feed = () => {
         <div className="flex-1">
           <AppInput
             placeholder="Search posts..."
+            data-testid="search-post-input"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
 
-        <AppButton type="submit">
+        <AppButton
+          type="submit"
+          data-testid="search-post-submit"
+        >
           <RiSendPlane2Fill size="20" />
         </AppButton>
       </AppForm>
 
-      {!data?.getPosts.length && !loading && <p className="text-center text-xl font-semibold">Posts Not Found</p>}
+      {!data?.getPosts.length && !loading && (
+        <p
+          className="text-center text-xl font-semibold"
+          data-testid="not-found-text"
+        >
+          Posts Not Found
+        </p>
+      )}
 
       {data?.getPosts.map((post) => (
         <FeedPost

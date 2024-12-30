@@ -12,6 +12,7 @@ export const GET_ALL_POSTS = gql`
       likesCount
       commentsCount
       canDelete
+      canEdit
       user {
         id
         fullname

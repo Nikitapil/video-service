@@ -1,5 +1,5 @@
 import { PostType, User } from '../../gql/graphql.tsx';
-import { ChatListItemType } from '../../modules/messages/types.ts';
+import { ChatListItemType, TMessage } from '../../modules/messages/types.ts';
 
 export const mockedUser: User = {
   bio: '',
@@ -35,4 +35,13 @@ export const mockedChatListItem: ChatListItemType = {
     author: { fullname: 'fullname' }
   },
   chatWithUser: mockedUser
+};
+
+export const mockedMessage: TMessage = {
+  author: mockedUser,
+  chatId: '123',
+  createdAt: new Date(),
+  id: '123',
+  isMyMessage: false,
+  text: 'text'
 };

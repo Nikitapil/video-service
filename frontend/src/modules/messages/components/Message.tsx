@@ -16,7 +16,10 @@ const Message = ({ message }: MessageProps) => {
   }, [message.isMyMessage]);
 
   return (
-    <div className={classes}>
+    <div
+      className={classes}
+      data-testid="message"
+    >
       <h5 className="mb-1 border-b border-b-black pb-1 text-xs font-semibold">{message.author.fullname}</h5>
 
       <p className="text-sm">{message.text}</p>

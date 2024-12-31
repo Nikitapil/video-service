@@ -28,7 +28,10 @@ const ChatListItem = ({ chat }: ChatListItemProps) => {
       </div>
 
       {!!chat.unreadMessagesCount && (
-        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-sm text-white">
+        <div
+          className="flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-sm text-white"
+          data-testid="unread-message-count"
+        >
           {chat.unreadMessagesCount}
         </div>
       )}

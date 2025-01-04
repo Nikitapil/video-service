@@ -82,7 +82,10 @@ const Chat = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-8">
+      <div
+        className="flex items-center justify-center p-8"
+        data-testid="chat-loading"
+      >
         <ImSpinner2
           className="ml-1 animate-spin"
           size="100"
@@ -92,7 +95,14 @@ const Chat = () => {
   }
 
   if (!chat) {
-    return <p className="text-center text-xl font-semibold">Chat Not Found</p>;
+    return (
+      <p
+        className="text-center text-xl font-semibold"
+        data-testid="no-chat-message"
+      >
+        Chat Not Found
+      </p>
+    );
   }
 
   return (
@@ -126,6 +136,7 @@ const Chat = () => {
           <AppTextarea
             value={newMessage}
             placeholder="Write your message here..."
+            data-testid="message-input"
             rows={3}
             disabled={isCreateMessageInProgress}
             onChange={(e) => setNewMessage(e.target.value)}
@@ -133,6 +144,7 @@ const Chat = () => {
 
           <AppButton
             type="submit"
+            data-testid="chat-submit"
             disabled={isCreateMessageInProgress}
           >
             <RiSendPlane2Fill size="20" />

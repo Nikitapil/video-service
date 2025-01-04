@@ -39,6 +39,7 @@ const EditPostModal = ({ post, showElement, onSave }: EditPostModalProps) => {
           label="Caption:"
           placeholder="Caption..."
           type="text"
+          data-testid="caption"
           max={150}
           value={text}
           disabled={loading}
@@ -49,6 +50,7 @@ const EditPostModal = ({ post, showElement, onSave }: EditPostModalProps) => {
           id="tags"
           label="Tags:"
           placeholder="Put some tags here"
+          data-testid="tags"
           value={tags}
           disabled={loading}
           onChange={(e) => setTags(e.target.value)}
@@ -64,6 +66,7 @@ const EditPostModal = ({ post, showElement, onSave }: EditPostModalProps) => {
           <AppButton
             text="Save"
             appearance="danger"
+            data-testid="save-button"
             disabled={loading}
             onClick={onEdit}
           />

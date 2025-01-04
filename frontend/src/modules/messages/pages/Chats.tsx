@@ -10,7 +10,7 @@ const Chats = () => {
   const createMessageModalShowElement = useShowElement();
 
   return (
-    <div>
+    <div data-testid="chats-page">
       <section className="mb-4 flex items-center border-b border-gray-300 p-3">
         <h2 className="flex-1 text-lg font-semibold">Your chat list</h2>
 

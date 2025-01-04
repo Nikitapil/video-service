@@ -8,7 +8,14 @@ interface PostCommentsListProps {
 
 const PostCommentsList = ({ comments, handleDeleteComment }: PostCommentsListProps) => {
   if (!comments.length) {
-    return <h4 className="mt-6 text-center text-xl text-gray-500">No comments...</h4>;
+    return (
+      <h4
+        className="mt-6 text-center text-xl text-gray-500"
+        data-testid="not-found-text"
+      >
+        No comments...
+      </h4>
+    );
   }
 
   return (

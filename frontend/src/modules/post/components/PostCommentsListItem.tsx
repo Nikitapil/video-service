@@ -42,6 +42,7 @@ const PostCommentsListItem = ({ comment, handleDeleteComment }: PostCommentsList
       {comment.canDelete && (
         <IconButton
           Icon={MdOutlineDeleteForever}
+          data-testid="delete-comment"
           onClick={deleteCommentModal.open}
         />
       )}

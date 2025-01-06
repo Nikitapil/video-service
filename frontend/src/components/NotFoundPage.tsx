@@ -7,7 +7,10 @@ interface NotFoundPageProps {
 
 const NotFoundPage = ({ text }: NotFoundPageProps) => {
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center gap-4 bg-black">
+    <div
+      className="flex h-screen w-full flex-col items-center justify-center gap-4 bg-black"
+      data-testid="not-found"
+    >
       <h2
         className="text-3xl text-white"
         data-testid="not-found-text"

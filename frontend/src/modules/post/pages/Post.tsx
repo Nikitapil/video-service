@@ -118,7 +118,10 @@ const Post = () => {
 
   if (loading) {
     return (
-      <div className="absolute top-0 flex h-screen w-full items-center justify-center bg-black">
+      <div
+        className="absolute top-0 flex h-screen w-full items-center justify-center bg-black"
+        data-testid="post-loading"
+      >
         <ImSpinner2
           className="ml-1 animate-spin"
           color="#fff"
@@ -190,7 +193,12 @@ const Post = () => {
 
               <div className="pt-0.5">
                 <h3 className="text-lg font-semibold">{dataPost?.getPostById.user.fullname}</h3>
-                <time className="text-sm font-medium">{postCreatedDate}</time>
+                <time
+                  className="text-sm font-medium"
+                  data-testid="post-created-date"
+                >
+                  {postCreatedDate}
+                </time>
               </div>
             </div>
 

@@ -150,6 +150,7 @@ const Post = () => {
 
         <button
           className={`${styles['video-block-btn']} right-4 top-4`}
+          data-testid="loop-up-button"
           onClick={() => loopThroughPosts(true)}
         >
           <BiChevronUp
@@ -160,6 +161,7 @@ const Post = () => {
 
         <button
           className={`${styles['video-block-btn']} right-4 top-20`}
+          data-testid="loop-down-button"
           onClick={() => loopThroughPosts(false)}
         >
           <BiChevronDown
@@ -206,6 +208,7 @@ const Post = () => {
               {dataPost.getPostById.canEdit && (
                 <IconButton
                   Icon={MdEdit}
+                  data-testid="edit-post-button"
                   onClick={editPostModal.open}
                 />
               )}
@@ -213,6 +216,7 @@ const Post = () => {
               {dataPost.getPostById.canDelete && (
                 <IconButton
                   Icon={MdOutlineDeleteForever}
+                  data-testid="delete-post-button"
                   onClick={confirmDeletePostModal.open}
                 />
               )}
@@ -244,6 +248,7 @@ const Post = () => {
           <div className="flex-1">
             <AppTextarea
               placeholder="Add a comment..."
+              data-testid="comment-input"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               disabled={isCreateCommentInProgress}
@@ -252,6 +257,7 @@ const Post = () => {
 
           <AppButton
             appearance="transparentDanger"
+            data-testid="comment-submit"
             disabled={!comment || isCreateCommentInProgress}
             onClick={addComment}
           >

@@ -13,19 +13,9 @@ import {
 import { mockedComment, mockedExtendedPost, mockedPost } from './__mocks__/mocks.ts';
 import { getMockedObject } from './__mocks__/utils.ts';
 import { formatDate } from '../utils/dates.ts';
+import type { MockedResponse } from '@apollo/client/testing/core';
 
 describe('Post tests', () => {
-  beforeEach(() => {
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
-      return {
-        ...actual,
-        useNavigate: vi.fn(),
-        useSearchParams: vi.fn(() => [new URLSearchParams('')]) // defaults to empty
-      };
-    });
-  });
-
   const getStandardPostRequestMock = (mock = mockedPost) => {
     return {
       request: {
@@ -43,43 +33,19 @@ describe('Post tests', () => {
     };
   };
 
-  it('should render loading state', async () => {
-    render(
-      <MockedProvider mocks={[getStandardPostRequestMock()]}>
-        <MemoryRouter>
-          <Post />
-        </MemoryRouter>
-      </MockedProvider>
-    );
-
-    await waitFor(() => expect(screen.getByTestId('post-loading')).toBeInTheDocument());
-  });
-
-  it('should render empty state', async () => {
-    render(
-      <MockedProvider mocks={[getStandardPostRequestMock()]}>
-        <MemoryRouter>
-          <Post />
-        </MemoryRouter>
-      </MockedProvider>
-    );
-
-    await waitFor(() => expect(screen.getByTestId('not-found')).toBeInTheDocument());
-  });
-
-  it('should render date correctly', async () => {
-    const date = 'Tue Jan 07 2025';
-    const mock = getStandardPostRequestMock(
-      getMockedObject(mockedPost, {
-        createdAt: date
-      })
-    );
+  const renderPostPage = ({
+    mocks,
+    initialEntries = ['/post/1']
+  }: {
+    mocks: ReadonlyArray<MockedResponse<any, any>>;
+    initialEntries?: string[];
+  }) => {
     render(
       <MockedProvider
-        mocks={[mock]}
+        mocks={mocks}
         addTypename={false}
       >
-        <MemoryRouter initialEntries={['/post/1']}>
+        <MemoryRouter initialEntries={initialEntries}>
           <Routes>
             <Route
               path="/post/:id"
@@ -89,6 +55,36 @@ describe('Post tests', () => {
         </MemoryRouter>
       </MockedProvider>
     );
+  };
+
+  beforeEach(() => {
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
+      return {
+        ...actual,
+        useNavigate: vi.fn(),
+        useSearchParams: vi.fn(() => [new URLSearchParams('')]) // defaults to empty
+      };
+    });
+  });
+
+  it('should render loading state', async () => {
+    renderPostPage({ mocks: [getStandardPostRequestMock()], initialEntries: ['/post/2'] });
+
+    await waitFor(() => expect(screen.getByTestId('post-loading')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByTestId('not-found')).toBeInTheDocument());
+  });
+
+  it('should render date correctly', async () => {
+    const date = 'Tue Jan 07 2025';
+
+    const mock = getStandardPostRequestMock(
+      getMockedObject(mockedPost, {
+        createdAt: date
+      })
+    );
+    renderPostPage({ mocks: [mock], initialEntries: ['/post/1'] });
+
     await waitFor(() => {
       return expect(screen.getByTestId('post-created-date').textContent).toBe(formatDate(date));
     });
@@ -96,12 +92,8 @@ describe('Post tests', () => {
 
   it('should call deleteComment method', async () => {
     let deleteMutationCalled = false;
-    const date = 'Tue Jan 07 2025';
-    const mock = getStandardPostRequestMock(
-      getMockedObject(mockedPost, {
-        createdAt: date
-      })
-    );
+    const postMock = getStandardPostRequestMock();
+
     const commentDeleteMock = {
       request: {
         query: DeleteCommentDocument,
@@ -128,21 +120,8 @@ describe('Post tests', () => {
         }
       }
     };
-    render(
-      <MockedProvider
-        mocks={[mock, commentRequestMock, commentDeleteMock]}
-        addTypename={false}
-      >
-        <MemoryRouter initialEntries={['/post/1']}>
-          <Routes>
-            <Route
-              path="/post/:id"
-              element={<Post />}
-            />
-          </Routes>
-        </MemoryRouter>
-      </MockedProvider>
-    );
+
+    renderPostPage({ mocks: [postMock, commentDeleteMock, commentRequestMock] });
 
     await waitFor(() => {
       fireEvent.click(screen.getByTestId('delete-comment'));
@@ -152,39 +131,12 @@ describe('Post tests', () => {
   });
 
   it('should loop through posts', async () => {
-    const mock = getStandardPostRequestMock(getMockedObject(mockedExtendedPost));
+    const postMock = getStandardPostRequestMock(getMockedObject(mockedExtendedPost));
 
     const mockNavigate = vi.fn();
     (useNavigate as any).mockReturnValue(mockNavigate);
 
-    const commentRequestMock = {
-      request: {
-        query: GetCommentsByPostIdDocument,
-        variables: {
-          postId: 1
-        }
-      },
-      result: {
-        data: {
-          getCommentsByPostId: [mockedComment]
-        }
-      }
-    };
-    render(
-      <MockedProvider
-        mocks={[mock, commentRequestMock]}
-        addTypename={false}
-      >
-        <MemoryRouter initialEntries={['/post/1']}>
-          <Routes>
-            <Route
-              path="/post/:id"
-              element={<Post />}
-            />
-          </Routes>
-        </MemoryRouter>
-      </MockedProvider>
-    );
+    renderPostPage({ mocks: [postMock] });
 
     await waitFor(() => {
       fireEvent.click(screen.getByTestId('loop-up-button'));
@@ -194,7 +146,7 @@ describe('Post tests', () => {
   });
 
   it('should no loop through posts', async () => {
-    const mock = getStandardPostRequestMock(
+    const postMock = getStandardPostRequestMock(
       getMockedObject(mockedExtendedPost, {
         otherPostIds: [0]
       })
@@ -203,34 +155,7 @@ describe('Post tests', () => {
     const mockNavigate = vi.fn();
     (useNavigate as any).mockReturnValue(mockNavigate);
 
-    const commentRequestMock = {
-      request: {
-        query: GetCommentsByPostIdDocument,
-        variables: {
-          postId: 1
-        }
-      },
-      result: {
-        data: {
-          getCommentsByPostId: [mockedComment]
-        }
-      }
-    };
-    render(
-      <MockedProvider
-        mocks={[mock, commentRequestMock]}
-        addTypename={false}
-      >
-        <MemoryRouter initialEntries={['/post/1']}>
-          <Routes>
-            <Route
-              path="/post/:id"
-              element={<Post />}
-            />
-          </Routes>
-        </MemoryRouter>
-      </MockedProvider>
-    );
+    renderPostPage({ mocks: [postMock] });
 
     await waitFor(() => {
       fireEvent.click(screen.getByTestId('loop-up-button'));
@@ -240,13 +165,9 @@ describe('Post tests', () => {
   });
 
   it('should call createComment', async () => {
-    const mock = getStandardPostRequestMock(
-      getMockedObject(mockedExtendedPost, {
-        otherPostIds: [0]
-      })
-    );
-
     let createCommentCalled = false;
+
+    const postMock = getStandardPostRequestMock();
 
     const commentCreateMock = {
       request: {
@@ -261,35 +182,7 @@ describe('Post tests', () => {
         return { data: { message: '' } };
       }
     };
-
-    const commentRequestMock = {
-      request: {
-        query: GetCommentsByPostIdDocument,
-        variables: {
-          postId: 1
-        }
-      },
-      result: {
-        data: {
-          getCommentsByPostId: [mockedComment]
-        }
-      }
-    };
-    render(
-      <MockedProvider
-        mocks={[mock, commentRequestMock, commentCreateMock]}
-        addTypename={false}
-      >
-        <MemoryRouter initialEntries={['/post/1']}>
-          <Routes>
-            <Route
-              path="/post/:id"
-              element={<Post />}
-            />
-          </Routes>
-        </MemoryRouter>
-      </MockedProvider>
-    );
+    renderPostPage({ mocks: [postMock, commentCreateMock] });
 
     await waitFor(() => {
       fireEvent.change(screen.getByTestId('comment-input'), { target: { value: 'text' } });
@@ -299,7 +192,7 @@ describe('Post tests', () => {
   });
 
   it('should call deletePost', async () => {
-    const mock = getStandardPostRequestMock(
+    const postMock = getStandardPostRequestMock(
       getMockedObject(mockedExtendedPost, {
         canDelete: true
       })
@@ -320,34 +213,7 @@ describe('Post tests', () => {
       }
     };
 
-    const commentRequestMock = {
-      request: {
-        query: GetCommentsByPostIdDocument,
-        variables: {
-          postId: 1
-        }
-      },
-      result: {
-        data: {
-          getCommentsByPostId: [mockedComment]
-        }
-      }
-    };
-    render(
-      <MockedProvider
-        mocks={[mock, commentRequestMock, postDeleteMock]}
-        addTypename={false}
-      >
-        <MemoryRouter initialEntries={['/post/1']}>
-          <Routes>
-            <Route
-              path="/post/:id"
-              element={<Post />}
-            />
-          </Routes>
-        </MemoryRouter>
-      </MockedProvider>
-    );
+    renderPostPage({ mocks: [postMock, postDeleteMock] });
 
     await waitFor(() => {
       fireEvent.click(screen.getByTestId('delete-post-button'));
@@ -357,9 +223,8 @@ describe('Post tests', () => {
   });
 
   it('should go to search by hashtag', async () => {
-    const mock = getStandardPostRequestMock(
+    const postMock = getStandardPostRequestMock(
       getMockedObject(mockedExtendedPost, {
-        otherPostIds: [0],
         tags: ['test']
       })
     );
@@ -367,34 +232,7 @@ describe('Post tests', () => {
     const mockNavigate = vi.fn();
     (useNavigate as any).mockReturnValue(mockNavigate);
 
-    const commentRequestMock = {
-      request: {
-        query: GetCommentsByPostIdDocument,
-        variables: {
-          postId: 1
-        }
-      },
-      result: {
-        data: {
-          getCommentsByPostId: [mockedComment]
-        }
-      }
-    };
-    render(
-      <MockedProvider
-        mocks={[mock, commentRequestMock]}
-        addTypename={false}
-      >
-        <MemoryRouter initialEntries={['/post/1']}>
-          <Routes>
-            <Route
-              path="/post/:id"
-              element={<Post />}
-            />
-          </Routes>
-        </MemoryRouter>
-      </MockedProvider>
-    );
+    renderPostPage({ mocks: [postMock] });
 
     await waitFor(() => {
       fireEvent.click(screen.getByTestId('tag'));
@@ -403,41 +241,13 @@ describe('Post tests', () => {
   });
 
   it('should have edit post button', async () => {
-    const mock = getStandardPostRequestMock(
+    const postMock = getStandardPostRequestMock(
       getMockedObject(mockedExtendedPost, {
-        otherPostIds: [0],
         canEdit: true
       })
     );
 
-    const commentRequestMock = {
-      request: {
-        query: GetCommentsByPostIdDocument,
-        variables: {
-          postId: 1
-        }
-      },
-      result: {
-        data: {
-          getCommentsByPostId: [mockedComment]
-        }
-      }
-    };
-    render(
-      <MockedProvider
-        mocks={[mock, commentRequestMock]}
-        addTypename={false}
-      >
-        <MemoryRouter initialEntries={['/post/1']}>
-          <Routes>
-            <Route
-              path="/post/:id"
-              element={<Post />}
-            />
-          </Routes>
-        </MemoryRouter>
-      </MockedProvider>
-    );
+    renderPostPage({ mocks: [postMock] });
 
     await waitFor(() => {
       expect(screen.getByTestId('edit-post-button')).toBeInTheDocument();

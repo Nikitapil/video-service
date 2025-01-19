@@ -42,13 +42,17 @@ const ChangePasswordModal = ({ showElement }: ChangePasswordModalProps) => {
     <Modal showElement={showElement}>
       <h2 className="mb-3 text-center text-xl font-bold">Change password</h2>
 
-      <div className="flex flex-col gap-3">
+      <div
+        className="flex flex-col gap-3"
+        data-testid="change-password-modal"
+      >
         <AppInput
           value={formValues.oldPassword}
           placeholder="Your current password"
           label="Current password"
           id="oldPassword"
           type="password"
+          data-testid="current-password-input"
           error={errors?.oldPassword || ''}
           disabled={loading}
           onChange={onInput}
@@ -84,6 +88,7 @@ const ChangePasswordModal = ({ showElement }: ChangePasswordModalProps) => {
           <AppButton
             text="Submit"
             appearance="danger"
+            data-testid="submit-btn"
             onClick={onSubmit}
           />
         </div>

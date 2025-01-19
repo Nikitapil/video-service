@@ -32,7 +32,6 @@ const EditProfileModal = ({ showElement }: EditProfileModalProps) => {
     const input: UpdateUserProfileMutationVariables = {
       fullname: username,
       bio: bio,
-      image: null,
       email: email
     };
 
@@ -64,7 +63,10 @@ const EditProfileModal = ({ showElement }: EditProfileModalProps) => {
       showElement={showElement}
       preventClose={loading}
     >
-      <div className="relative pb-20">
+      <div
+        className="relative pb-20"
+        data-testid="edit-profile-modal"
+      >
         <h2 className="w-full border-b border-b-gray-300 py-4 text-2xl font-medium">Edit Profile</h2>
         <div className="max-h-[65vh] overflow-auto">
           <AvatarUploader
@@ -87,6 +89,7 @@ const EditProfileModal = ({ showElement }: EditProfileModalProps) => {
                   value={username}
                   placeholder="Username"
                   id="username"
+                  data-testid="username-input"
                   max={30}
                   error={errors?.fullname || ''}
                   disabled={loading}
@@ -114,6 +117,7 @@ const EditProfileModal = ({ showElement }: EditProfileModalProps) => {
                   value={email}
                   placeholder="Email"
                   id="email"
+                  data-testid="email-input"
                   max={30}
                   error={errors?.email || ''}
                   disabled={loading}
@@ -135,6 +139,7 @@ const EditProfileModal = ({ showElement }: EditProfileModalProps) => {
               <div className="w-full max-w-md">
                 <AppTextarea
                   id="bio"
+                  data-testid="bio-input"
                   cols={30}
                   rows={2}
                   maxLength={80}
@@ -160,6 +165,7 @@ const EditProfileModal = ({ showElement }: EditProfileModalProps) => {
               text="Save"
               disabled={loading}
               appearance="danger"
+              data-testid="save-button"
               onClick={onSubmit}
             />
           </div>

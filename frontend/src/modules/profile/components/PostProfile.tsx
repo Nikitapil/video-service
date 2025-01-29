@@ -24,7 +24,10 @@ const PostProfile = ({ post }: PostProfileProps) => {
     <Link to={getPostLink(post.id)}>
       <div className="relative max-w-52 cursor-pointer brightness-90 hover:brightness-110">
         {loading && (
-          <div className="absolute left-20 top-20">
+          <div
+            className="absolute left-20 top-20"
+            data-testid="post-loading"
+          >
             <ImSpinner2
               className="animate-spin"
               size="50"
@@ -36,6 +39,7 @@ const PostProfile = ({ post }: PostProfileProps) => {
           ref={videoRef}
           src={post.video}
           className="aspect-[3/4] rounded-md object-cover"
+          data-testid="post-video"
           muted
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}

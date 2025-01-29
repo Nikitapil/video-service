@@ -8,11 +8,25 @@ export interface ProfilePostsListProps {
 
 const ProfilePostsList = ({ posts, loading }: ProfilePostsListProps) => {
   if (loading) {
-    return <p className="text-center text-lg font-semibold">Posts loading...</p>;
+    return (
+      <p
+        className="text-center text-lg font-semibold"
+        data-testid="posts-loading"
+      >
+        Posts loading...
+      </p>
+    );
   }
 
   if (!posts.length) {
-    return <p className="text-center text-lg font-semibold">No posts yet.</p>;
+    return (
+      <p
+        className="text-center text-lg font-semibold"
+        data-testid="empty-text"
+      >
+        No posts yet.
+      </p>
+    );
   }
 
   return (

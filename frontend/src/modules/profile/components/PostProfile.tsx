@@ -22,7 +22,10 @@ const PostProfile = ({ post }: PostProfileProps) => {
 
   return (
     <Link to={getPostLink(post.id)}>
-      <div className="relative max-w-52 cursor-pointer brightness-90 hover:brightness-110">
+      <div
+        className="relative max-w-52 cursor-pointer brightness-90 hover:brightness-110"
+        data-testid="post-profile"
+      >
         {loading && (
           <div
             className="absolute left-20 top-20"

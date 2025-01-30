@@ -61,7 +61,10 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-8">
+      <div
+        className="flex items-center justify-center p-8"
+        data-testid="loading-profile"
+      >
         <ImSpinner2
           className="ml-1 animate-spin"
           size="100"
@@ -76,7 +79,10 @@ const Profile = () => {
 
   return (
     <>
-      <div className="max-w-full py-10">
+      <div
+        className="max-w-full py-10"
+        data-testid="profile-page"
+      >
         <section className="flex">
           <UserAvatar
             image={profile.image}
@@ -87,7 +93,10 @@ const Profile = () => {
             <div className="text-3xl font-bold">{profile.fullname}</div>
 
             {profile.isMyProfile && (
-              <div className="flex gap-3">
+              <div
+                className="flex gap-3"
+                data-testid="my-profile-block"
+              >
                 <AppButton onClick={editProfileModalElement.open}>
                   <div className="flex items-center gap-1">
                     <BsFillPencilFill
@@ -111,6 +120,7 @@ const Profile = () => {
               <>
                 <AppButton
                   text="Send Message"
+                  data-testid="send-message-btn"
                   size="sm"
                   onClick={createMessageModalElement.open}
                 />

@@ -1,4 +1,4 @@
-import { CommentType, GetChatQuery, PostDetails, PostType, User } from '../../gql/graphql.tsx';
+import { CommentType, GetChatQuery, PostDetails, PostType, User, UserProfileType } from '../../gql/graphql.tsx';
 import { ChatListItemType, TMessage } from '../../modules/messages/types.ts';
 
 export const mockedUser: User = {
@@ -63,4 +63,14 @@ export const mockedComment: CommentType = {
   id: 123,
   text: 'text',
   user: mockedUser
+};
+
+export const mockedUserProfile: UserProfileType = {
+  email: 'test@test.test',
+  followersCount: 0,
+  followingCount: 0,
+  fullname: 'Test User',
+  id: 1,
+  isMyProfile: false,
+  posts: []
 };

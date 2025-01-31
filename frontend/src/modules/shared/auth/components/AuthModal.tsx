@@ -118,7 +118,12 @@ const AuthModal = () => {
       showElement={authModalShowElement}
       preventClose={true}
     >
-      <div className="mb-4 text-center text-3xl font-bold">{modeOptions.title}</div>
+      <div
+        className="mb-4 text-center text-3xl font-bold"
+        data-testid="auth-title"
+      >
+        {modeOptions.title}
+      </div>
 
       <AppForm className="mb-3">
         <div className="mb-3">
@@ -127,6 +132,7 @@ const AuthModal = () => {
             error={(errors?.email as string) || ''}
             max={64}
             placeholder="Email"
+            data-testid="email"
             value={authData.email}
             name="email"
             label="Email:"
@@ -137,6 +143,7 @@ const AuthModal = () => {
         <div className="mb-3">
           <AppInput
             id="password"
+            data-testid="password"
             error={(errors?.password as string) || ''}
             max={64}
             placeholder="Password"
@@ -153,6 +160,7 @@ const AuthModal = () => {
             <div className="mb-3">
               <AppInput
                 id="confirmPassword"
+                data-testid="confirmPassword"
                 error={(errors?.confirmPassword as string) || ''}
                 max={64}
                 placeholder="Confirm Password"
@@ -167,6 +175,7 @@ const AuthModal = () => {
             <div className="mb-3">
               <AppInput
                 id="fullname"
+                data-testid="fullname"
                 error={(errors?.fullname as string) || ''}
                 max={64}
                 placeholder="Full name"
@@ -180,6 +189,7 @@ const AuthModal = () => {
             <div className="mb-3">
               <AppTextarea
                 id="bio"
+                data-testid="bio"
                 label="Bio"
                 placeholder="Bio..."
                 name="bio"
@@ -204,6 +214,7 @@ const AuthModal = () => {
           <AppButton
             disabled={isSubmitDisabled}
             appearance="danger"
+            data-testid="submit-btn"
             onClick={submitHandler}
           >
             {modeOptions.submitButtonText}
@@ -212,10 +223,16 @@ const AuthModal = () => {
       </AppForm>
 
       <div className="flex w-full items-center justify-center border-t py-5">
-        <span className="text-sm text-gray-600">{modeOptions.changeModeText}</span>
+        <span
+          className="text-sm text-gray-600"
+          data-testid="change-mode-text"
+        >
+          {modeOptions.changeModeText}
+        </span>
 
         <button
           className="ml-2 rounded p-1 text-sm common-transition hover:bg-gray-100"
+          data-testid="change-mode-btn"
           onClick={onChangeMode}
         >
           {modeOptions.changeModeButtonText}

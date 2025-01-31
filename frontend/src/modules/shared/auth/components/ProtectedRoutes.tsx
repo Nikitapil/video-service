@@ -13,7 +13,10 @@ const ProtectedRoutes = ({ children }: ProtectedRoutesProps) => {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center">
+      <div
+        className="flex h-screen w-full items-center justify-center"
+        data-testid="protectedRoutes-loader"
+      >
         <ImSpinner2
           className="animate-spin"
           size="120"

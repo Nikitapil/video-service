@@ -83,6 +83,7 @@ const CreateMessageModal = ({ showElement, userTo = null }: CreateMessageModalPr
         <AppTextarea
           value={message}
           placeholder="Write your message here..."
+          data-testid="message-input"
           rows={4}
           disabled={loading}
           onChange={(e) => setMessage(e.target.value)}

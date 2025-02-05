@@ -81,6 +81,7 @@ const Upload = () => {
         {!fileDisplay && (
           <label
             htmlFor="fileInput"
+            data-testid="video-uploader"
             className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 px-9 py-20 common-transition hover:bg-gray-100"
             onDragOver={(e) => e.preventDefault()}
             onDragEnter={(e) => e.preventDefault()}
@@ -105,6 +106,7 @@ const Upload = () => {
 
             <input
               type="file"
+              data-testid="upload-input"
               id="fileInput"
               className="hidden"
               accept="video/mp4"
@@ -116,7 +118,10 @@ const Upload = () => {
 
         {fileDisplay && (
           <>
-            <figure className="mx-auto p-3 md:mx-0 md:mb-12">
+            <figure
+              className="mx-auto p-3 md:mx-0 md:mb-12"
+              data-testid="upload-form"
+            >
               <div className="relative mb-2 h-140 w-64 cursor-pointer rounded-2xl">
                 <img
                   src={mobileCase}
@@ -142,6 +147,7 @@ const Upload = () => {
 
                 <AppButton
                   appearance="transparentDanger"
+                  data-testid="clear-video-button"
                   size="sm"
                   onClick={clearVideo}
                 >
@@ -175,6 +181,7 @@ const Upload = () => {
 
               <div className="ml-auto flex w-fit gap-3">
                 <AppButton
+                  data-testid="discard-button"
                   disabled={isUploading}
                   onClick={discard}
                 >

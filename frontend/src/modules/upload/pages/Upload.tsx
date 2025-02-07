@@ -159,6 +159,7 @@ const Upload = () => {
             <div className="mb-6 mt-4 w-full">
               <AppInput
                 id="caption"
+                data-testid="caption-input"
                 label="Caption:"
                 placeholder="Caption..."
                 type="text"
@@ -171,6 +172,7 @@ const Upload = () => {
               <div className="mb-4">
                 <AppInput
                   id="tags"
+                  data-testid="tags-input"
                   label="Tags:"
                   placeholder="Put some tags here"
                   value={tags}
@@ -190,6 +192,7 @@ const Upload = () => {
 
                 <AppButton
                   appearance="danger"
+                  data-testid="create-button"
                   disabled={isSubmitBtnDisabled}
                   onClick={handleCreatePost}
                 >

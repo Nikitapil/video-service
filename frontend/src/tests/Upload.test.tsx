@@ -1,12 +1,21 @@
 import { describe, it, expect, vi, beforeAll } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, useNavigate } from 'react-router-dom';
 import Upload from '../modules/upload/pages/Upload.tsx';
+import { CreatePostDocument } from '../gql/graphql.tsx';
 
 describe('Upload page tests', () => {
   beforeAll(() => {
     global.URL.createObjectURL = vi.fn(() => 'mock-blob-url');
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
+      return {
+        ...actual,
+        useNavigate: vi.fn(),
+        useSearchParams: vi.fn(() => [new URLSearchParams('')]) // defaults to empty
+      };
+    });
   });
 
   it('Should render default page state', async () => {
@@ -136,5 +145,76 @@ describe('Upload page tests', () => {
     fireEvent.click(screen.getByTestId('discard-button'));
 
     await waitFor(() => expect(screen.queryByTestId('upload-form')).not.toBeInTheDocument());
+  });
+
+  it('Should handle createPost', async () => {
+    const file = new File(['video content'], 'test-video.mp4', { type: 'video/mp4' });
+    let isMockCalled = false;
+    const requestMock = {
+      request: {
+        query: CreatePostDocument,
+        variables: { text: '123', tags: '', video: file }
+      },
+      result: () => {
+        isMockCalled = true;
+        return {
+          data: {}
+        };
+      }
+    };
+    render(
+      <MockedProvider mocks={[requestMock]}>
+        <MemoryRouter>
+          <Upload />
+        </MemoryRouter>
+      </MockedProvider>
+    );
+
+    fireEvent.drop(screen.getByTestId('video-uploader'), { dataTransfer: { files: [file] } });
+
+    fireEvent.change(screen.getByTestId('caption-input'), { target: { value: '123' } });
+
+    fireEvent.click(screen.getByTestId('create-button'));
+
+    await waitFor(() => expect(isMockCalled).toBe(true));
+  });
+
+  it('Should handle createPost with tags and navigate', async () => {
+    const file = new File(['video content'], 'test-video.mp4', { type: 'video/mp4' });
+
+    const mockNavigate = vi.fn();
+    (useNavigate as any).mockReturnValue(mockNavigate);
+
+    const requestMock = {
+      request: {
+        query: CreatePostDocument,
+        variables: { text: '123', tags: 'testTag', video: file }
+      },
+      result: () => {
+        return {
+          data: {
+            createPost: {
+              id: 1
+            }
+          }
+        };
+      }
+    };
+    render(
+      <MockedProvider mocks={[requestMock]}>
+        <MemoryRouter>
+          <Upload />
+        </MemoryRouter>
+      </MockedProvider>
+    );
+
+    fireEvent.drop(screen.getByTestId('video-uploader'), { dataTransfer: { files: [file] } });
+
+    fireEvent.change(screen.getByTestId('caption-input'), { target: { value: '123' } });
+    fireEvent.change(screen.getByTestId('tags-input'), { target: { value: 'testTag' } });
+
+    fireEvent.click(screen.getByTestId('create-button'));
+
+    await waitFor(() => expect(useNavigate).toHaveBeenCalled());
   });
 });

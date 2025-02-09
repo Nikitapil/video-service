@@ -24,7 +24,12 @@ const FollowUsersPage = () => {
 
   return (
     <div className="py-3">
-      <h2 className="text-center text-xl font-semibold">{title}</h2>
+      <h2
+        className="text-center text-xl font-semibold"
+        data-testid="title"
+      >
+        {title}
+      </h2>
       <UsersList
         isLoading={loading}
         users={users}

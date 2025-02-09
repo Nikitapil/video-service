@@ -18,7 +18,7 @@ const UserListItem = ({ user }: UserListItemProps) => {
         className="!h-12 !w-12"
       />
 
-      <div>
+      <div data-testid="user-info">
         <h3 className="text-lg font-semibold">{user.fullname}</h3>
 
         <p className="max-w-80 overflow-hidden text-ellipsis whitespace-nowrap text-gray-600">{user.bio}</p>

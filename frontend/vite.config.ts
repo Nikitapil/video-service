@@ -10,7 +10,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './vitest.setup.ts',
     coverage: {
-      provider: 'istanbul'
+      provider: 'istanbul',
+      exclude: ['./src/router/index.tsx', '**/tests/**']
     }
   },
   css: {

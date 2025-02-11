@@ -11,7 +11,16 @@ export default defineConfig({
     setupFiles: './vitest.setup.ts',
     coverage: {
       provider: 'istanbul',
-      exclude: ['./src/router/index.tsx', '**/tests/**']
+      exclude: [
+        './src/router/index.tsx',
+        '**/tests/**',
+        './src/utils/apolloClient.ts',
+        './codegen.ts',
+        'eslint.config.mjs',
+        'tailwind.config.js',
+        '**/dist/**',
+        './src/main.tsx'
+      ]
     }
   },
   css: {

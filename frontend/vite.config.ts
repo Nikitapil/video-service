@@ -19,7 +19,10 @@ export default defineConfig({
         'eslint.config.mjs',
         'tailwind.config.js',
         '**/dist/**',
-        './src/main.tsx'
+        './src/main.tsx',
+        '**/gql/**',
+        '**/queries/**.ts',
+        '**/mutations/**.ts'
       ]
     }
   },

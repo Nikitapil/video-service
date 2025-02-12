@@ -217,4 +217,54 @@ describe('Upload page tests', () => {
 
     await waitFor(() => expect(useNavigate).toHaveBeenCalled());
   });
+
+  it('should call preventDefault on dragOver', async () => {
+    render(
+      <MockedProvider mocks={[]}>
+        <MemoryRouter>
+          <Upload />
+        </MemoryRouter>
+      </MockedProvider>
+    );
+    const dropZone = screen.getByTestId('video-uploader');
+
+    const dragOverEvent = new Event('dragover', { bubbles: true, cancelable: true });
+    dragOverEvent.preventDefault = vi.fn();
+
+    dropZone.dispatchEvent(dragOverEvent);
+
+    await waitFor(() => expect(dragOverEvent.preventDefault).toHaveBeenCalled());
+  });
+
+  it('should call preventDefault on dragEnter', async () => {
+    render(
+      <MockedProvider mocks={[]}>
+        <MemoryRouter>
+          <Upload />
+        </MemoryRouter>
+      </MockedProvider>
+    );
+    const dropZone = screen.getByTestId('video-uploader');
+
+    const dragEnterEvent = new Event('dragenter', { bubbles: true, cancelable: true });
+    dragEnterEvent.preventDefault = vi.fn();
+
+    dropZone.dispatchEvent(dragEnterEvent);
+
+    await waitFor(() => expect(dragEnterEvent.preventDefault).toHaveBeenCalled());
+  });
+
+  it('Should not handle file change without file', async () => {
+    render(
+      <MockedProvider mocks={[]}>
+        <MemoryRouter>
+          <Upload />
+        </MemoryRouter>
+      </MockedProvider>
+    );
+
+    fireEvent.change(screen.getByTestId('upload-input'), { target: { files: null } });
+
+    await waitFor(() => expect(screen.queryByTestId('upload-form')).not.toBeInTheDocument());
+  });
 });

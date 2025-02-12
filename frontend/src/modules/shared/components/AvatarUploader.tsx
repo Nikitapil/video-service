@@ -66,6 +66,7 @@ const AvatarUploader = ({ initialImageSrc, loading, setAvatarFile }: AvatarUploa
 
         <input
           id="image"
+          data-testid="upload-input"
           className="hidden"
           disabled={loading}
           type="file"
@@ -75,7 +76,10 @@ const AvatarUploader = ({ initialImageSrc, loading, setAvatarFile }: AvatarUploa
       </div>
 
       {uploadedImage && (
-        <div className="absolute left-0 top-20 z-50 h-full w-full bg-white">
+        <div
+          className="absolute left-0 top-20 z-50 h-full w-full bg-white"
+          data-testid="cropper-block"
+        >
           <Cropper
             ref={cropperRef}
             style={{ height: '80%', width: '100%' }}
@@ -94,6 +98,7 @@ const AvatarUploader = ({ initialImageSrc, loading, setAvatarFile }: AvatarUploa
             <AppButton
               text="Save image"
               appearance="danger"
+              data-testid="save-cropper"
               onClick={saveCroppedImage}
             />
           </div>

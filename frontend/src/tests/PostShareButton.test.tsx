@@ -15,7 +15,7 @@ describe('PostShareButton tests', () => {
 
   it('calls can share function', () => {
     const canShareMock = vi.fn().mockReturnValue(true);
-    const shareMock = vi.fn();
+    const shareMock = vi.fn(() => Promise.resolve());
     window.navigator.canShare = canShareMock;
     window.navigator.share = shareMock;
     render(<PostShareButton text="qwe" />);

@@ -33,6 +33,18 @@ describe('Post tests', () => {
     };
   };
 
+  const commentDeleteMock = {
+    request: {
+      query: DeleteCommentDocument,
+      variables: {
+        id: 123
+      }
+    },
+    result: () => {
+      return { data: { message: '' } };
+    }
+  };
+
   const renderPostPage = ({
     mocks,
     initialEntries = ['/post/1']
@@ -69,7 +81,7 @@ describe('Post tests', () => {
   });
 
   it('should render loading state', async () => {
-    renderPostPage({ mocks: [getStandardPostRequestMock()], initialEntries: ['/post/2'] });
+    renderPostPage({ mocks: [getStandardPostRequestMock(), commentDeleteMock], initialEntries: ['/post/2'] });
 
     await waitFor(() => expect(screen.getByTestId('post-loading')).toBeInTheDocument());
     await waitFor(() => expect(screen.getByTestId('not-found')).toBeInTheDocument());
@@ -83,7 +95,7 @@ describe('Post tests', () => {
         createdAt: date
       })
     );
-    renderPostPage({ mocks: [mock], initialEntries: ['/post/1'] });
+    renderPostPage({ mocks: [mock, commentDeleteMock], initialEntries: ['/post/1'] });
 
     await waitFor(() => {
       return expect(screen.getByTestId('post-created-date').textContent).toBe(formatDate(date));
@@ -136,7 +148,7 @@ describe('Post tests', () => {
     const mockNavigate = vi.fn();
     (useNavigate as any).mockReturnValue(mockNavigate);
 
-    renderPostPage({ mocks: [postMock] });
+    renderPostPage({ mocks: [postMock, commentDeleteMock] });
 
     await waitFor(() => {
       fireEvent.click(screen.getByTestId('loop-up-button'));
@@ -155,7 +167,7 @@ describe('Post tests', () => {
     const mockNavigate = vi.fn();
     (useNavigate as any).mockReturnValue(mockNavigate);
 
-    renderPostPage({ mocks: [postMock] });
+    renderPostPage({ mocks: [postMock, commentDeleteMock] });
 
     await waitFor(() => {
       fireEvent.click(screen.getByTestId('loop-up-button'));
@@ -182,7 +194,7 @@ describe('Post tests', () => {
         return { data: { message: '' } };
       }
     };
-    renderPostPage({ mocks: [postMock, commentCreateMock] });
+    renderPostPage({ mocks: [postMock, commentCreateMock, commentDeleteMock] });
 
     await waitFor(() => {
       fireEvent.change(screen.getByTestId('comment-input'), { target: { value: 'text' } });
@@ -213,7 +225,7 @@ describe('Post tests', () => {
       }
     };
 
-    renderPostPage({ mocks: [postMock, postDeleteMock] });
+    renderPostPage({ mocks: [postMock, postDeleteMock, commentDeleteMock] });
 
     await waitFor(() => {
       fireEvent.click(screen.getByTestId('delete-post-button'));
@@ -232,7 +244,7 @@ describe('Post tests', () => {
     const mockNavigate = vi.fn();
     (useNavigate as any).mockReturnValue(mockNavigate);
 
-    renderPostPage({ mocks: [postMock] });
+    renderPostPage({ mocks: [postMock, commentDeleteMock] });
 
     await waitFor(() => {
       fireEvent.click(screen.getByTestId('tag'));

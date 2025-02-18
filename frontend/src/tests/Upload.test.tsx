@@ -40,7 +40,7 @@ describe('Upload page tests', () => {
       </MockedProvider>
     );
 
-    fireEvent.change(screen.getByTestId('upload-input'), { target: { value: '' } });
+    fireEvent.change(screen.getByTestId('upload-input'), { target: { value: '', files: null } });
 
     await waitFor(() => expect(screen.queryByTestId('upload-form')).not.toBeInTheDocument());
   });
